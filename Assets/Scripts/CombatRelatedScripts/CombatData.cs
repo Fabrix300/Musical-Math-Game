@@ -17,7 +17,8 @@ public class CombatData : MonoBehaviour
 
     //public GameObject player;
     private string originScene;
-    private float[] previousPlayerPosition = new float[3] { -21f, -1f, 0f };
+    private float[] previousCameraPosition = new float[3] { 0f, 0f, 0f };
+    private float[] previousPlayerPosition = new float[3] { 0f, 0f, 0f };
 
     private void Awake()
     {
@@ -35,9 +36,19 @@ public class CombatData : MonoBehaviour
         previousPlayerPosition[0] = x; previousPlayerPosition[1] = y; previousPlayerPosition[2] = z;
     }
 
-    public float[] getPlayerPosition()
+    public float[] GetPlayerPosition()
     {
         return previousPlayerPosition;
+    }
+
+    public void SetCameraPosition(float x, float y, float z)
+    {
+        previousCameraPosition[0] = x; previousPlayerPosition[1] = y; previousPlayerPosition[2] = z;
+    }
+
+    public float[] GetCameraPosition()
+    {
+        return previousCameraPosition;
     }
 
     public void SetOriginScene(string sceneName)
@@ -45,7 +56,7 @@ public class CombatData : MonoBehaviour
         originScene = sceneName;
     }
 
-    public string getOriginScene()
+    public string GetOriginScene()
     {
         return originScene;
     }

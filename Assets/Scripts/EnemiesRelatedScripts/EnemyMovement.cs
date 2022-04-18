@@ -63,4 +63,11 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void FreezeEnemy()
+    {
+        anim.enabled = false;
+        //Freeze Rotation in Z
+        rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
+    }
+
 }

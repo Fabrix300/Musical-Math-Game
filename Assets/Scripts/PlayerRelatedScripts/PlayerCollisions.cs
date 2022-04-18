@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollisions : MonoBehaviour
 {
+    public GameObject LevelHolder;
+    public Camera LevelCamera;
+
     private PlayerInventory playerInventory;
     private CombatData combatData;
     private ItemWorld itemWorld;
@@ -54,23 +57,26 @@ public class PlayerCollisions : MonoBehaviour
     IEnumerator PassToCombatScene()
     {
         yield return new WaitForSeconds(2);
-        // CONSIDER USE LOADSCENEADDITIVE
-        SceneManager.LoadSceneAsync("Combat" + combatData.getOriginScene());
+        if (LevelHolder != null)
+        {
+            LevelHolder.SetActive(false);
+            LevelCamera.GetComponent<CameraMovement>().inCombat = true;
+            LevelCamera.transform.position = new Vector3(0f, 0f, -10);
+        }
+        SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
     }
 
-    private void StartFight(GameObject gO)
+    private void StartFight(GameObject enemyGO)
     {
-        /*STOP PLAYER*/
-        playerMovement.FreezePlayer();
-        // SHOULD STOP ENEMY AS WELL
-        Enemy enemy = gO.GetComponent<Enemy>();
+        /*STOP PLAYER*/ playerMovement.FreezePlayer();
+        /*STOP ENEMY*/ enemyGO.GetComponent<EnemyMovement>().FreezeEnemy();
+        Enemy enemyComponent = enemyGO.GetComponent<Enemy>();
         //combatManager.SetEnemyToCombatData(enemy.enemyType, enemy.enemyName, enemy.level, enemy.healthPoints,enemy.maxHealthPoints);
-        combatData.SetEnemyToCombat(enemy);
+        combatData.SetEnemyToCombat(enemyComponent);
         combatData.SetOriginScene(SceneManager.GetActiveScene().name);
         combatData.SetPlayerPosition(transform.position.x, transform.position.y, transform.position.z);
-        Debug.Log("Starting fight with a " + enemy);
-        //GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-        //StartCoroutine(PassToCombatScene());
-        //SceneManager.LoadSceneAsync("Combat" + combatData.getOriginScene());
+        combatData.SetCameraPosition(LevelCamera.transform.position.x, LevelCamera.transform.position.y, LevelCamera.transform.position.z);
+        Debug.Log("Starting fight with a " + enemyComponent);
+        StartCoroutine(PassToCombatScene());
     }
 }
