@@ -7,25 +7,28 @@ public class EnergyBar : MonoBehaviour
 {
     public Slider slider;
     public Image energyFill;
+    public Text nameText;
+    public Text levelText;
+    public Image characterImage;
 
-    //private Text healthPointsText;
     private PlayerStats playerStats;
+    private CombatAssets combatAssets;
 
     // Start is called before the first frame update
     void Start()
     {
         playerStats = PlayerStats.instance;
-        //healthPointsText = GetComponentInChildren<Text>();
-        //float playerHealthPoints = playerStats.GetPlayerHealthPoints();
-        //float playerMaxHealthPoints = playerStats.GetPlayerMaxHealthPoints();
-        //healthPointsText.text = Mathf.CeilToInt(playerHealthPoints) + "/" + Mathf.CeilToInt(playerMaxHealthPoints);
+        combatAssets = CombatAssets.instance;
+        nameText.text = playerStats.playerName;
+        levelText.text = playerStats.level.ToString();
+        characterImage.sprite = combatAssets.playerImage;
         slider.maxValue = playerStats.GetPlayerMaxEnergyPoints();
         slider.value = playerStats.GetPlayerEnergyPoints();
         SetSliderColor(slider.value, slider.maxValue);
-        playerStats.OnPlayerHealthPointsChange += UpdateHealth;
+        playerStats.OnPlayerHealthPointsChange += UpdateEnergy;
     }
 
-    public void UpdateHealth()
+    public void UpdateEnergy()
     {
         //healthPointsText.text = Mathf.CeilToInt(playerStats.GetPlayerHealthPoints()) + "/" + Mathf.CeilToInt(playerStats.GetPlayerMaxHealthPoints());
         slider.maxValue = playerStats.GetPlayerMaxEnergyPoints();
@@ -53,5 +56,4 @@ public class EnergyBar : MonoBehaviour
             energyFill.color = new Color32(8, 255, 0, 255);
         }
     }
-
 }

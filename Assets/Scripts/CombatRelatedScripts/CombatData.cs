@@ -17,8 +17,8 @@ public class CombatData : MonoBehaviour
 
     //public GameObject player;
     private string originScene;
-    private float[] previousCameraPosition = new float[3] { 0f, 0f, 0f };
-    private float[] previousPlayerPosition = new float[3] { 0f, 0f, 0f };
+    private Vector3 previousCameraPosition = Vector3.zero;
+    private Vector3 previousPlayerPosition = Vector3.zero;
 
     private void Awake()
     {
@@ -31,35 +31,23 @@ public class CombatData : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SetPlayerPosition(float x, float y, float z)
+    public void SetPreviousPlayerPosition(float x, float y, float z)
     {
         previousPlayerPosition[0] = x; previousPlayerPosition[1] = y; previousPlayerPosition[2] = z;
     }
 
-    public float[] GetPlayerPosition()
-    {
-        return previousPlayerPosition;
-    }
+    public Vector3 GetPreviousPlayerPosition() { return previousPlayerPosition; }
 
-    public void SetCameraPosition(float x, float y, float z)
+    public void SetPreviousCameraPosition(float x, float y, float z)
     {
         previousCameraPosition[0] = x; previousPlayerPosition[1] = y; previousPlayerPosition[2] = z;
     }
 
-    public float[] GetCameraPosition()
-    {
-        return previousCameraPosition;
-    }
+    public Vector3 GetPreviousCameraPosition() { return previousCameraPosition; }
 
-    public void SetOriginScene(string sceneName)
-    {
-        originScene = sceneName;
-    }
+    public void SetOriginScene(string sceneName) { originScene = sceneName; }
 
-    public string GetOriginScene()
-    {
-        return originScene;
-    }
+    public string GetOriginScene() { return originScene; }
 
     /*public void SetEnemyToCombatData(
         EnemyType enemyToCombat,
@@ -76,25 +64,13 @@ public class CombatData : MonoBehaviour
         this.enemyToCombatMaxHealthPoints = maxHealthPoints;
     }*/
 
-    public void SetEnemyToCombat(Enemy enemy)
-    {
-        enemyToCombat = enemy;
-    }
+    public void SetEnemyToCombat(Enemy enemy) { enemyToCombat = enemy; }
 
-    public Enemy GetEnemyToCombat()
-    {
-        return enemyToCombat;
-    }
+    public Enemy GetEnemyToCombat() { return enemyToCombat; }
 
-    /*public void SetPlayer(GameObject player)
-    {
-        this.player = player;
-    }
+    /*public void SetPlayer(GameObject player) { this.player = player; }
 
-    public GameObject GetPlayer()
-    {
-        return player;
-    }
+    public GameObject GetPlayer() { return player; }
     */
 
 }

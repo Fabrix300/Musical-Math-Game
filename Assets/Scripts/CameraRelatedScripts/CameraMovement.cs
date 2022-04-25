@@ -15,29 +15,17 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inCombat == false)
+        if (inCombat == false && player)
         {
-            /*if (player.position.x < 0f && player.position.y < 0f)
-            {
-                transform.position = new Vector3(0f, 0f, transform.position.z);
-            }
-            else if (player.position.y < 0f)
-            {
-                transform.position = new Vector3(player.position.x, 0f, transform.position.z);
-            }
-            else if (player.position.x < 0f)
-            {
-                transform.position = new Vector3(0f, player.position.y, transform.position.z);
-            }
-            else
-            {
-                transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
-            }*/
             transform.position = new Vector3(
                 Mathf.Clamp(player.position.x, MinPositionX, MaxPositionX),
                 Mathf.Clamp(player.position.y, MinPositionY, MaxPositionY),
                 transform.position.z
             );
         }
+    }
+
+    public void FindPlayer() {
+        player = GameObject.Find("Player").transform;
     }
 }

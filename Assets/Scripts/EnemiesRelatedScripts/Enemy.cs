@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum EnemyType
 {
@@ -17,6 +18,8 @@ public class Enemy : MonoBehaviour
     public float healthPoints;
     public float maxHealthPoints;
 
+    public event Action OnPlayerHealthPointsChange;
+
     public void DestroySelf()
     {
         Destroy(gameObject);
@@ -25,6 +28,7 @@ public class Enemy : MonoBehaviour
     public bool Numb(float damage)
     {
         healthPoints -= damage;
+        OnPlayerHealthPointsChange?.Invoke();
         if (healthPoints <= 0f) { healthPoints = 0f; return true; }
         else { return false; }
     }

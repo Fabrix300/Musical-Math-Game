@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public bool inCombat = false;
+
     [SerializeField] private GameObject[] waypoints;
     private int currentWaypointIndex = 0;
     private Rigidbody2D rb2d;
@@ -12,7 +14,7 @@ public class EnemyMovement : MonoBehaviour
     private float dirX;
     [SerializeField] private float speedX;
 
-    private enum MovementState { idle, running }
+    private enum EnemyMovementState { idle, running }
 
     // Start is called before the first frame update
     void Start()
@@ -30,13 +32,13 @@ public class EnemyMovement : MonoBehaviour
             dirX = -1f;
             enemySprite.flipX = false;
         }
-        //anim.SetInteger("state", (int)MovementState.running);
+        anim.SetInteger("state", (int)EnemyMovementState.running);
     }
 
     // Update is called once per frame
     void Update()
     {
-        NonHostileMovement();
+        if (!inCombat) NonHostileMovement();
     }
 
     private void FixedUpdate()
