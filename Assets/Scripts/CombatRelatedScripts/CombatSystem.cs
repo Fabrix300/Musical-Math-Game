@@ -13,7 +13,6 @@ public class CombatSystem : MonoBehaviour
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Text formulationText;
     public Text resultText;
-    public int nroAcciones;
 
     private CombatState state;
     private GameObject enemyPreFab;
@@ -58,8 +57,16 @@ public class CombatSystem : MonoBehaviour
     void PlayerTurn()
     {
         ActivateAnimatorsOfPlayerAnswerHUD();
-        // register input of buttons
+        // register input of buttons DONE;
+        GenerateRandomOperation();
         // check if correct
+    }
+
+    public void GenerateRandomOperation()
+    {
+        float upperLimit = 5f;
+        float lowerLimit = 0.125f;
+        float decimalResult = Random.Range(lowerLimit, upperLimit);
     }
 
     public void OnPressNoteButton(Button clickedButton)
