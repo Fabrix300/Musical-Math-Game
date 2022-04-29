@@ -13,6 +13,7 @@ public class CombatSystem : MonoBehaviour
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Text formulationText;
     public Text resultText;
+    public int nroAcciones;
 
     private CombatState state;
     private GameObject enemyPreFab;
@@ -38,6 +39,7 @@ public class CombatSystem : MonoBehaviour
     {
         InstantiatePlayerAndEnemy();
         SetCombatHUDs();
+        resultText.text = "0";
 
         yield return new WaitForSeconds(2f);
         state = CombatState.PLAYERTURN;
@@ -93,9 +95,17 @@ public class CombatSystem : MonoBehaviour
                     break;
                 }
             case "BackSpace": {
-                    notesInput.RemoveAt(notesInput.Count - 1);
-                    int indexStartOfSubString = formulationText.text.LastIndexOf(" ")-2;
-                    formulationText.text = formulationText.text.Remove(indexStartOfSubString, formulationText.text.Length - indexStartOfSubString);
+                    if (notesInput.Count > 1)
+                    {
+                        notesInput.RemoveAt(notesInput.Count - 1);
+                        int indexStartOfSubString = formulationText.text.LastIndexOf(" ") - 2;
+                        //Debug.Log('"' + formulationText.text + '"');
+                        formulationText.text = formulationText.text.Remove(indexStartOfSubString, formulationText.text.Length - indexStartOfSubString);
+                    } else if (notesInput.Count == 1)
+                    {
+                        notesInput.RemoveAt(notesInput.Count - 1);
+                        formulationText.text = "";
+                    }
                     break;
                 }
         }
