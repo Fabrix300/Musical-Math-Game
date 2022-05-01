@@ -11,8 +11,10 @@ public class CombatSystem : MonoBehaviour
     public EnemyEnergyBar enemyEnergyBar;
     public Image enemyRequestImage;
     public PlayerAnswerHUDTransitions[] HUDElements;
+    public Button[] noteButtonsAndDeleteButton;
     public Text formulationText;
     public Text resultText;
+    public Text enemyRequestText;
 
     private CombatState state;
     private GameObject enemyPreFab;
@@ -20,6 +22,7 @@ public class CombatSystem : MonoBehaviour
     private GameObject playerPreFab;
 
     private List<float> notesInput = new();
+    private float enemyRequestDecimal;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
 
@@ -58,15 +61,17 @@ public class CombatSystem : MonoBehaviour
     {
         ActivateAnimatorsOfPlayerAnswerHUD();
         // register input of buttons DONE;
-        GenerateRandomOperation();
+        GenerateRandomOperationForEnemyRequest();
         // check if correct
     }
 
-    public void GenerateRandomOperation()
+    public void GenerateRandomOperationForEnemyRequest()
     {
-        float upperLimit = 5f;
-        float lowerLimit = 0.125f;
-        float decimalResult = Random.Range(lowerLimit, upperLimit);
+        float upperLimit = 40;
+        float lowerLimit = 6;
+        int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
+        enemyRequestDecimal = 0.125f * multiplicatorResult;
+        enemyRequestText.text = ConvertToFractionString(enemyRequestDecimal);
     }
 
     public void OnPressNoteButton(Button clickedButton)
@@ -116,24 +121,21 @@ public class CombatSystem : MonoBehaviour
                     break;
                 }
         }
-        CalculateResult();
-        //StartCoroutine(PlayerAction());
-    }
-
-    void EndCombat()
-    {
-        if (state == CombatState.WON)
+        //CalculateResult();
+        resultText.text = ConvertToFractionString(SumNotesInputValues());
+        if(CheckResult())
         {
-            Debug.Log("You won!");
-        }
-        else if (state == CombatState.LOST)
-        {
-            Debug.Log("You lost.");
+            StartCoroutine(PlayerAction());
         }
     }
 
     IEnumerator PlayerAction()
     {
+        DisableNoteButtonsAndDeleteButton();
+        yield return new WaitForSeconds(1f);
+        //Show ui element that indicates correct
+        TriggerEndAnimationOfHUDElements();
+        //make fox sing
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue());
 
         // UPDATE ENEMY HUD
@@ -152,7 +154,7 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-    private void CalculateResult()
+    /*private void CalculateResult()
     {
         float numerator = 0f;
         for (int i = 0; i < notesInput.Count; i++)
@@ -177,6 +179,49 @@ public class CombatSystem : MonoBehaviour
         {
             resultText.text = numerator.ToString();
         }
+    }*/
+
+    void EndCombat()
+    {
+        if (state == CombatState.WON)
+        {
+            Debug.Log("You won!");
+        }
+        else if (state == CombatState.LOST)
+        {
+            Debug.Log("You lost.");
+        }
+    }
+
+    private bool CheckResult()
+    {
+        if (enemyRequestDecimal == SumNotesInputValues())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private string ConvertToFractionString(float numerator)
+    {
+        string test = numerator.ToString();
+        int indexOfDot = test.LastIndexOf(".");
+        if (indexOfDot > -1) //has decimals!
+        {
+            int numberOfDecimals = test.Length - 1 - indexOfDot;
+            float multiplicator = Mathf.Pow(10f, numberOfDecimals);
+            float denominator = 1f;
+            numerator *= multiplicator;
+            denominator *= multiplicator;
+            int gcd = GCD((int)numerator, (int)denominator);
+            numerator /= gcd;
+            denominator /= gcd;
+            return numerator.ToString() + "/" + denominator.ToString();
+        }
+        else
+        {
+            return numerator.ToString();
+        }
     }
 
     private int GCD(int a, int b)
@@ -189,6 +234,29 @@ public class CombatSystem : MonoBehaviour
             b = Remainder;
         }
         return a;
+    }
+
+    private float SumNotesInputValues()
+    {
+        float result = 0f;
+        for (int i = 0; i < notesInput.Count; i++) result += notesInput[i];
+        return result;
+    }
+
+    public void DisableNoteButtonsAndDeleteButton()
+    {
+        for (int i = 0; i < noteButtonsAndDeleteButton.Length; i++)
+        {
+            noteButtonsAndDeleteButton[i].interactable = false;
+        }
+    }
+
+    public void TriggerEndAnimationOfHUDElements()
+    {
+        for (int i = 0; i < HUDElements.Length; i++)
+        {
+            HUDElements[i].TriggerEndAnimation();
+        }
     }
 
     public void ActivateAnimatorsOfPlayerAnswerHUD()

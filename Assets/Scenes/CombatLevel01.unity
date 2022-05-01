@@ -458,7 +458,7 @@ GameObject:
   - component: {fileID: 140141752}
   - component: {fileID: 140141751}
   m_Layer: 0
-  m_Name: CorcheaImg
+  m_Name: BackSpaceImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3655,7 +3655,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -4458,8 +4458,15 @@ MonoBehaviour:
   - {fileID: 844282058}
   - {fileID: 441217284}
   - {fileID: 103011456}
+  noteButtonsAndDeleteButton:
+  - {fileID: 1921571046}
+  - {fileID: 1532996707}
+  - {fileID: 581654269}
+  - {fileID: 674293945}
+  - {fileID: 745513019}
   formulationText: {fileID: 575815970}
   resultText: {fileID: 1680689639}
+  enemyRequestText: {fileID: 1263796762}
 --- !u!1 &1675439415
 GameObject:
   m_ObjectHideFlags: 0
