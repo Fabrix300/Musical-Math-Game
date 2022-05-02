@@ -12,6 +12,8 @@ public class CombatSystem : MonoBehaviour
     public Image enemyRequestImage;
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Button[] noteButtonsAndDeleteButton;
+    public Animator congratsMessageAnimator;
+    public RequestTimer timer;
     public Text formulationText;
     public Text resultText;
     public Text enemyRequestText;
@@ -23,6 +25,8 @@ public class CombatSystem : MonoBehaviour
 
     private List<float> notesInput = new();
     private float enemyRequestDecimal;
+    private bool isPlayerFirstTurn = true;
+    private bool isFirstTimeActivatingCongratsMessageAnimator = true;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
 
@@ -34,6 +38,7 @@ public class CombatSystem : MonoBehaviour
         enemyPreFab = combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType);
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
 
+        timer.OnTimerEnd += RequestTimeEnd;
         StartCoroutine(SetupBattle());
     }
 
@@ -46,23 +51,39 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         state = CombatState.PLAYERTURN;
         PlayerTurn();
-        // set a timer
     }
 
     IEnumerator EnemyTurn()
     {
         //Attack the player or heal or whatever
-        //Update HUDS
-        yield return new WaitForSeconds(2f);
+        bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
+        yield return new WaitForSeconds(1f);
+
         //check if player is dead, actualizar estados y pasar a endcombat o playerTurn;
+        if (isPlayerDead)
+        {
+            state = CombatState.LOST;
+            EndCombat();
+        } else
+        {
+            state = CombatState.PLAYERTURN;
+            PlayerTurn();
+        }
     }
 
     void PlayerTurn()
     {
-        ActivateAnimatorsOfPlayerAnswerHUD();
-        // register input of buttons DONE;
+        if(isPlayerFirstTurn)
+        {
+            ActivateAnimatorsOfPlayerAnswerHUD();
+        } 
+        else
+        {
+            TriggerStartAnimationOfHUDElements();
+        }
         GenerateRandomOperationForEnemyRequest();
-        // check if correct
+
+        timer.RunTimer();
     }
 
     public void GenerateRandomOperationForEnemyRequest()
@@ -121,65 +142,79 @@ public class CombatSystem : MonoBehaviour
                     break;
                 }
         }
-        //CalculateResult();
         resultText.text = ConvertToFractionString(SumNotesInputValues());
         if(CheckResult())
         {
+            timer.StopTimer();
+            DisableNoteButtonsAndDeleteButton();
             StartCoroutine(PlayerAction());
         }
     }
 
+    public void RequestTimeEnd()
+    {
+        timer.StopTimer();
+        DisableNoteButtonsAndDeleteButton();
+        StartCoroutine(PlayerActionButTimeEnded());
+    }
+
+    IEnumerator PlayerActionButTimeEnded()
+    {
+        yield return new WaitForSeconds(0.8f);
+        TriggerEndAnimationOfHUDElements();
+        yield return new WaitForSeconds(2f);
+        EnableNoteButtonsAndDeleteButton();
+        resultText.text = "0";
+        formulationText.text = "";
+        notesInput.Clear();
+        //make fox sing
+        /*bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
+
+        yield return new WaitForSeconds(1.5f);*/
+        state = CombatState.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
+        isPlayerFirstTurn = false;
+    }
+
     IEnumerator PlayerAction()
     {
-        DisableNoteButtonsAndDeleteButton();
+        yield return new WaitForSeconds(0.3f);
+        if(isFirstTimeActivatingCongratsMessageAnimator)
+        {
+            EnableCongratsMessageAnimator();
+            isFirstTimeActivatingCongratsMessageAnimator = false;
+        }
+        else
+        { 
+            TriggerStartAnimationOfCongratsMessage();
+        }
         yield return new WaitForSeconds(1f);
-        //Show ui element that indicates correct
         TriggerEndAnimationOfHUDElements();
+        yield return new WaitForSeconds(0.8f);
+        TriggerEndAnimationOfCongratsMessage();
+        yield return new WaitForSeconds(1.5f);
+        EnableNoteButtonsAndDeleteButton();
+        resultText.text = "0";
+        formulationText.text = "";
+        notesInput.Clear();
         //make fox sing
-        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue());
+        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
 
-        // UPDATE ENEMY HUD
-
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
         if (isEnemyDead)
         {
             state = CombatState.WON;
             EndCombat();
+            isPlayerFirstTurn = false;
         }
         else
         {
             state = CombatState.ENEMYTURN;
             StartCoroutine(EnemyTurn());
+            isPlayerFirstTurn = false;
         }
     }
-
-    /*private void CalculateResult()
-    {
-        float numerator = 0f;
-        for (int i = 0; i < notesInput.Count; i++)
-        {
-            numerator += notesInput[i];
-        }
-        string test = numerator.ToString();
-        int indexOfDot = test.LastIndexOf(".");
-        if (indexOfDot > -1) //has decimals!
-        {
-            int numberOfDecimals = test.Length - 1 - indexOfDot;
-            float multiplicator = Mathf.Pow(10f, numberOfDecimals);
-            float denominator = 1f;
-            numerator *= multiplicator;
-            denominator *= multiplicator;
-            int gcd = GCD((int)numerator, (int)denominator);
-            numerator /= gcd;
-            denominator /= gcd;
-            resultText.text = numerator.ToString() + "/" + denominator.ToString();
-        } 
-        else
-        {
-            resultText.text = numerator.ToString();
-        }
-    }*/
 
     void EndCombat()
     {
@@ -243,11 +278,42 @@ public class CombatSystem : MonoBehaviour
         return result;
     }
 
+    public void TriggerEndAnimationOfCongratsMessage()
+    {
+        congratsMessageAnimator.SetInteger("state", 1);
+    }
+
+    public void TriggerStartAnimationOfCongratsMessage()
+    {
+        congratsMessageAnimator.SetInteger("state", 0);
+    }
+
+    public void EnableCongratsMessageAnimator()
+    {
+        congratsMessageAnimator.enabled = true;
+    }
+
+    public void EnableNoteButtonsAndDeleteButton()
+    {
+        for (int i = 0; i < noteButtonsAndDeleteButton.Length; i++)
+        {
+            noteButtonsAndDeleteButton[i].interactable = true;
+        }
+    }
+
     public void DisableNoteButtonsAndDeleteButton()
     {
         for (int i = 0; i < noteButtonsAndDeleteButton.Length; i++)
         {
             noteButtonsAndDeleteButton[i].interactable = false;
+        }
+    }
+
+    public void TriggerStartAnimationOfHUDElements()
+    {
+        for (int i = 0; i < HUDElements.Length; i++)
+        {
+            HUDElements[i].TriggerStartAnimation();
         }
     }
 

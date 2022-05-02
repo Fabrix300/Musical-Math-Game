@@ -21,17 +21,17 @@ public class EnemyEnergyBar : MonoBehaviour
             nameText.text = enemyComp.enemyName;
             levelText.text = enemyComp.level.ToString();
             enemyImage.sprite = combatAssets.GetEnemyImage(enemyComp.enemyType);
-            slider.maxValue = enemyComp.healthPoints;
-            slider.value = enemyComp.maxHealthPoints;
+            slider.maxValue = enemyComp.maxHealthPoints;
+            slider.value = enemyComp.healthPoints;
             SetSliderColor(slider.value, slider.maxValue);
-            enemyComp.OnPlayerHealthPointsChange += UpdateEnergy;
+            enemyComp.OnEnemyHealthPointsChange += UpdateEnergy;
         } 
     }
 
     public void UpdateEnergy()
     {
-        slider.maxValue = enemyComp.healthPoints;
-        slider.value = enemyComp.maxHealthPoints;
+        slider.maxValue = enemyComp.maxHealthPoints;
+        slider.value = enemyComp.healthPoints;
         SetSliderColor(slider.value, slider.maxValue);
     }
 

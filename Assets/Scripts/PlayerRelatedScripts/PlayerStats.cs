@@ -36,7 +36,7 @@ public class PlayerStats : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void NumbPlayer(float damage)
+    public bool NumbPlayer(float damage)
     {
         if (playerDead == false)
         {
@@ -47,8 +47,11 @@ public class PlayerStats : MonoBehaviour
             if (playerEnergyPoints <= 0f)
             {
                 Die();
+                return true;
             }
+            return false;
         }
+        return true;
     }
 
     public virtual void Die()

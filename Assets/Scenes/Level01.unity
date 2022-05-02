@@ -4530,6 +4530,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2140335059}
     m_Modifications:
+    - target: {fileID: 1757133372648816784, guid: f2378329540c86e4fa1028982098b151, type: 3}
+      propertyPath: damage
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1757133372648816785, guid: f2378329540c86e4fa1028982098b151, type: 3}
       propertyPath: waypoints.Array.data[0]
       value: 

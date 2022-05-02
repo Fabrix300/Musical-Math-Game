@@ -15,10 +15,11 @@ public class Enemy : MonoBehaviour
     public EnemyType enemyType;
     public string enemyName;
     public int level;
+    public float damage;
     public float healthPoints;
     public float maxHealthPoints;
 
-    public event Action OnPlayerHealthPointsChange;
+    public event Action OnEnemyHealthPointsChange;
 
     public void DestroySelf()
     {
@@ -28,9 +29,14 @@ public class Enemy : MonoBehaviour
     public bool Numb(float damage)
     {
         healthPoints -= damage;
-        OnPlayerHealthPointsChange?.Invoke();
+        OnEnemyHealthPointsChange?.Invoke();
         if (healthPoints <= 0f) { healthPoints = 0f; return true; }
         else { return false; }
+    }
+
+    public float GetTotalDamage()
+    {
+        return damage * level;
     }
 
     public void SetAll(
@@ -42,7 +48,7 @@ public class Enemy : MonoBehaviour
     )
     {
         this.enemyType = enemyType;
-        this.enemyName = name;
+        enemyName = name;
         this.level = level;
         this.healthPoints = healthPoints;
         this.maxHealthPoints = maxHealthPoints;

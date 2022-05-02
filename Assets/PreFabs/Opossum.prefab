@@ -151,6 +151,7 @@ MonoBehaviour:
   enemyType: 2
   enemyName: "Zarig\xFCeya"
   level: 1
+  damage: 3
   healthPoints: 20
   maxHealthPoints: 20
 --- !u!114 &1757133372648816785
