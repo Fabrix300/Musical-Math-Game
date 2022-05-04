@@ -40,7 +40,7 @@ public class CombatData : MonoBehaviour
 
     public void SetPreviousCameraPosition(float x, float y, float z)
     {
-        previousCameraPosition[0] = x; previousPlayerPosition[1] = y; previousPlayerPosition[2] = z;
+        previousCameraPosition = new Vector3(x, y, z);
     }
 
     public Vector3 GetPreviousCameraPosition() { return previousCameraPosition; }

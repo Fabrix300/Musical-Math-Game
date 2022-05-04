@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
 
     public string savedSceneName = "Level01";
     public Camera gameCamera;
+    public Animator crossFadeTransition;
 
     private GameObject player;
+    private GameObject activeLevelHolder;
     private CombatData combatData;
 
     private void Awake()
@@ -44,19 +46,50 @@ public class GameManager : MonoBehaviour
         combatData.SetEnemyToCombat(enemyGO.GetComponent<Enemy>());
         combatData.SetOriginScene(savedSceneName);
         combatData.SetPreviousPlayerPosition(transform.position.x, transform.position.y, transform.position.z);
-        combatData.SetPreviousCameraPosition(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z);
-        StartCoroutine(PassToCombatScene(levelHolder));
+        combatData.SetPreviousCameraPosition(gameCamera.transform.position.x, gameCamera.transform.position.y, -10f);
+        Debug.Log(combatData.GetPreviousCameraPosition());
+        activeLevelHolder = levelHolder;
+        StartCoroutine(PassToCombatScene(activeLevelHolder));
     }
 
     IEnumerator PassToCombatScene(GameObject levelHolder)
     {
-        yield return new WaitForSeconds(2);
+        crossFadeTransition.SetInteger("state", 0);
+        yield return new WaitForSeconds(1f);
         if (levelHolder != null)
         {
             levelHolder.SetActive(false);
             gameCamera.GetComponent<CameraMovement>().inCombat = true;
             gameCamera.transform.position = new Vector3(0f, 0f, -10);
         }
-        SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+        crossFadeTransition.SetInteger("state", 1);
+    }
+
+    public void ComeBackFromCombatScene()
+    {
+        //Set info to player, check state of enemy and destroy it when win etc (Maybe not necesary)
+        StartCoroutine(UnloadCombatScene());
+    }
+
+    IEnumerator UnloadCombatScene()
+    {
+        crossFadeTransition.SetInteger("state", 0);
+        yield return new WaitForSeconds(1f);
+        combatData.GetEnemyToCombat().DestroySelf();
+        gameCamera.transform.position = combatData.GetPreviousCameraPosition();
+        gameCamera.GetComponent<CameraMovement>().inCombat = false;
+        player.GetComponent<PlayerMovement>().UnfreezePlayer();
+        activeLevelHolder.SetActive(true);
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("Combat" + combatData.GetOriginScene(), UnloadSceneOptions.None);
+        while (!asyncUnload.isDone)
+        {
+            yield return null;
+        }
+        crossFadeTransition.SetInteger("state", 1);
     }
 }

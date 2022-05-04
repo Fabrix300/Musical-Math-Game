@@ -106,6 +106,14 @@ public class PlayerMovement : MonoBehaviour
         anim.enabled = false;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         //rb.velocity = Vector2.zero;
+        SetInCombat(true);
+    }
+
+    public void UnfreezePlayer()
+    {
+        anim.enabled = true;
+        rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+        //rb.velocity = Vector2.zero;
         SetInCombat(false);
     }
 }

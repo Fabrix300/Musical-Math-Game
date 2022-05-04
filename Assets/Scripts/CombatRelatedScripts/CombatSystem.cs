@@ -29,11 +29,13 @@ public class CombatSystem : MonoBehaviour
     private bool isFirstTimeActivatingCongratsMessageAnimator = true;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
+    private GameManager gameManager;
 
     void Start()
     {
         state = CombatState.NONE;
         combatData = CombatData.instance; playerStats = PlayerStats.instance; combatAssets = CombatAssets.instance;
+        gameManager = GameManager.instance;
         playerPreFab = combatAssets.playerPreFab;
         enemyPreFab = combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType);
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
@@ -206,7 +208,7 @@ public class CombatSystem : MonoBehaviour
         {
             state = CombatState.WON;
             EndCombat();
-            isPlayerFirstTurn = false;
+            //isPlayerFirstTurn = false;
         }
         else
         {
@@ -221,6 +223,7 @@ public class CombatSystem : MonoBehaviour
         if (state == CombatState.WON)
         {
             Debug.Log("You won!");
+            gameManager.ComeBackFromCombatScene();
         }
         else if (state == CombatState.LOST)
         {
