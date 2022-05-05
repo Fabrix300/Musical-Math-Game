@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class PlayerInventory : MonoBehaviour
 
     // Inventory of items
     private List<ItemWorld> itemList;
+
+    public event Action OnCherryCollected;
 
     private void Awake()
     {
@@ -40,6 +43,7 @@ public class PlayerInventory : MonoBehaviour
             }
             if (!itemAlreadyInInventory)
             {
+                Debug.Log(item.amount);
                 itemList.Add(item);
             }
         }
@@ -47,6 +51,15 @@ public class PlayerInventory : MonoBehaviour
         {
             itemList.Add(item);
         }
+        if (item.item.itemName == Item.ItemName.Cherry)
+        {
+            OnCherryCollected?.Invoke();
+        }
+    }
+
+    public List<ItemWorld> GetItemList()
+    {
+        return itemList;
     }
 
     public int CountItems()
