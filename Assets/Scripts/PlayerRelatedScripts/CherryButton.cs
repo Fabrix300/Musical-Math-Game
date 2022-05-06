@@ -20,7 +20,10 @@ public class CherryButton : MonoBehaviour
 
     public void RefreshCherriesText()
     {
-        cherriesCounterText.text = GetCherriesItemInInventory().amount.ToString();
+        if (cherriesCounterText != null)
+        {
+            cherriesCounterText.text = GetCherriesItemInInventory().amount.ToString();
+        }
     }
 
     public void OnCherryButtonPressed()
