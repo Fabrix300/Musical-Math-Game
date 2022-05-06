@@ -8,24 +8,42 @@ public class CherryButton : MonoBehaviour
     public Text cherriesCounterText;
 
     private PlayerInventory playerInventory;
+    private PlayerStats playerStats;
 
     private void Start()
     {
         playerInventory = PlayerInventory.instance;
+        playerStats = PlayerStats.instance;
         playerInventory.OnCherryCollected += RefreshCherriesText;
     }
 
     public void RefreshCherriesText()
     {
-        int cherriesCount= 0;
+        cherriesCounterText.text = GetCherriesItemInInventory().amount.ToString();
+    }
+
+    public void OnCherryButtonPressed()
+    {
+        ItemWorld cherryItem = GetCherriesItemInInventory();
+        if (cherryItem.amount >= 1 && playerStats.GetPlayerEnergyPoints() < playerStats.GetPlayerMaxEnergyPoints())
+        {
+            cherryItem.amount--;
+            playerStats.HealPlayer(cherryItem.amountOfEnergyRestored);
+        }
+        RefreshCherriesText();
+    }
+
+    public ItemWorld GetCherriesItemInInventory()
+    {
+        ItemWorld cherryItem = null;
         List<ItemWorld> itemList = playerInventory.GetItemList();
         foreach (ItemWorld itemWorld in itemList)
         {
             if (itemWorld.item.itemName == Item.ItemName.Cherry)
             {
-                cherriesCount= itemWorld.amount;
+                cherryItem = itemWorld;
             }
         }
-        cherriesCounterText.text = cherriesCount.ToString();
+        return cherryItem;
     }
 }

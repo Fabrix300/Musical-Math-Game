@@ -54,6 +54,16 @@ public class PlayerStats : MonoBehaviour
         return true;
     }
 
+    public void HealPlayer(float pointsHealed)
+    {
+        if (playerDead == false && playerEnergyPoints < playerMaxEnergyPoints)
+        {
+            playerEnergyPoints += pointsHealed;
+            playerEnergyPoints = Mathf.Clamp(playerEnergyPoints, 0, playerMaxEnergyPoints);
+            OnPlayerHealthPointsChange?.Invoke();
+        }
+    }
+
     public virtual void Die()
     {
         playerDead = true;
