@@ -15,6 +15,7 @@ public class CherryButton : MonoBehaviour
         playerInventory = PlayerInventory.instance;
         playerStats = PlayerStats.instance;
         playerInventory.OnCherryCollected += RefreshCherriesText;
+        RefreshCherriesText();
     }
 
     public void RefreshCherriesText()
