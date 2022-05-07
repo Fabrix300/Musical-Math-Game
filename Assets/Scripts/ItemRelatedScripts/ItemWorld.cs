@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class ItemWorld : MonoBehaviour
 {
-    public Item item;
-    public int amount;
-    public int amountOfEnergyRestored;
+    public ItemObject item;
 
     public void DestroySelf ()
     {

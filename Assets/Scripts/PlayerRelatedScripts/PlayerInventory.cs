@@ -8,7 +8,7 @@ public class PlayerInventory : MonoBehaviour
     public static PlayerInventory instance;
 
     // Inventory of items
-    private List<ItemWorld> itemList;
+    private List<ItemObject> itemList;
 
     public event Action OnCherryCollected;
 
@@ -25,25 +25,24 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
-        itemList = new List<ItemWorld>();
+        itemList = new List<ItemObject>();
     }
 
-    public void AddItem(ItemWorld item)
+    public void AddItem(ItemObject item)
     {
-        if (item.item.IsStackable())
+        if (item.IsStackable())
         {
             bool itemAlreadyInInventory = false;
-            foreach (ItemWorld inventoryItem in itemList)
+            foreach (ItemObject itemObjectInInventory in itemList)
             {
-                if (inventoryItem.item.itemName == item.item.itemName)
+                if (itemObjectInInventory.itemName == item.itemName)
                 {
-                    inventoryItem.amount += item.amount;
+                    itemObjectInInventory.amount += item.amount;
                     itemAlreadyInInventory = true;
                 }
             }
             if (!itemAlreadyInInventory)
             {
-                Debug.Log(item.amount);
                 itemList.Add(item);
             }
         }
@@ -51,13 +50,13 @@ public class PlayerInventory : MonoBehaviour
         {
             itemList.Add(item);
         }
-        if (item.item.itemName == Item.ItemName.Cherry)
+        if (item.itemName == ItemName.Cherry)
         {
             OnCherryCollected?.Invoke();
         }
     }
 
-    public List<ItemWorld> GetItemList()
+    public List<ItemObject> GetItemList()
     {
         return itemList;
     }

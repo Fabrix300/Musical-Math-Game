@@ -10,7 +10,6 @@ public class PlayerCollisions : MonoBehaviour
 
     private PlayerInventory playerInventory;
     private GameManager gameManager;
-    private ItemWorld itemWorld;
 
     // Start is called before the first frame update
     void Start()
@@ -26,12 +25,12 @@ public class PlayerCollisions : MonoBehaviour
         // Checking if its an item
         if (gO.GetComponent<ItemWorld>())
         {
-            itemWorld = collision.gameObject.GetComponent<ItemWorld>();
+            ItemWorld itemWorld = gO.GetComponent<ItemWorld>();
             if (playerInventory)
             {
-                playerInventory.AddItem(itemWorld);
-                itemWorld.DestroySelf();
+                playerInventory.AddItem(itemWorld.item);
                 Debug.Log(itemWorld.item.itemName + " collected!" + "\n" + "Items in Inventory: " + playerInventory.CountItems());
+                itemWorld.DestroySelf();
             }
         }
 

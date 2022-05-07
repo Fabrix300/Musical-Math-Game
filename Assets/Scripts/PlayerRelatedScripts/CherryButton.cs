@@ -22,30 +22,33 @@ public class CherryButton : MonoBehaviour
     {
         if (cherriesCounterText != null)
         {
-            cherriesCounterText.text = GetCherriesItemInInventory().amount.ToString();
+            cherriesCounterText.text = GetCherryItemInInventory().amount.ToString();
         }
     }
 
     public void OnCherryButtonPressed()
     {
-        ItemWorld cherryItem = GetCherriesItemInInventory();
-        if (cherryItem.amount >= 1 && playerStats.GetPlayerEnergyPoints() < playerStats.GetPlayerMaxEnergyPoints())
+        ItemObject cherryItem = GetCherryItemInInventory();
+        if(cherryItem is HealerObject)
         {
-            cherryItem.amount--;
-            playerStats.HealPlayer(cherryItem.amountOfEnergyRestored);
+            if (cherryItem.amount >= 1 && playerStats.GetPlayerEnergyPoints() < playerStats.GetPlayerMaxEnergyPoints())
+            {
+                cherryItem.amount--;
+                playerStats.HealPlayer((cherryItem as HealerObject).amountOfEnergyRestored);
+            }
+            RefreshCherriesText();
         }
-        RefreshCherriesText();
     }
 
-    public ItemWorld GetCherriesItemInInventory()
+    public ItemObject GetCherryItemInInventory()
     {
-        ItemWorld cherryItem = null;
-        List<ItemWorld> itemList = playerInventory.GetItemList();
-        foreach (ItemWorld itemWorld in itemList)
+        ItemObject cherryItem = null;
+        List<ItemObject> itemList = playerInventory.GetItemList();
+        foreach (ItemObject itemObjectInInventory in itemList)
         {
-            if (itemWorld.item.itemName == Item.ItemName.Cherry)
+            if (itemObjectInInventory.itemName == ItemName.Cherry)
             {
-                cherryItem = itemWorld;
+                cherryItem = itemObjectInInventory;
             }
         }
         return cherryItem;

@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841b188585df101418cf4483203c97c3, type: 3}
+  m_Script: {fileID: 11500000, guid: e64806ea7d69fd448a76cd282bb32976, type: 3}
   m_Name: Cherry
   m_EditorClassIdentifier: 
+  itemName: 0
   itemType: 0
-  amount: 0
+  amount: 1
+  amountOfEnergyRestored: 6
