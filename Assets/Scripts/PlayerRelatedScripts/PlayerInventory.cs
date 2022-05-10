@@ -11,6 +11,7 @@ public class PlayerInventory : MonoBehaviour
     private List<ItemObject> itemList;
 
     public event Action OnCherryCollected;
+    //public event Action OnCherryUsed;
 
     private void Awake()
     {
@@ -43,17 +44,49 @@ public class PlayerInventory : MonoBehaviour
             }
             if (!itemAlreadyInInventory)
             {
-                itemList.Add(item);
+                ItemObject newItemObj = new ItemObject();
+                newItemObj.amount = item.amount;
+                newItemObj.itemName = item.itemName;
+                newItemObj.itemType = item.itemType;
+                itemList.Add(newItemObj);
             }
         }
         else
         {
+            ItemObject newItemObj = new ItemObject();
+            newItemObj.amount = item.amount;
+            newItemObj.itemName = item.itemName;
+            newItemObj.itemType = item.itemType;
+            itemList.Add(newItemObj);
             itemList.Add(item);
         }
         if (item.itemName == ItemName.Cherry)
         {
+            Debug.Log("Cherry Collected");
             OnCherryCollected?.Invoke();
         }
+    }
+
+    public bool ReduceAmountOfItem(ItemName itemName)
+    {
+        foreach (ItemObject itemObjectInInventory in itemList)
+        {
+            if (itemObjectInInventory.itemName == itemName)
+            {
+                itemObjectInInventory.amount--;
+                if (itemObjectInInventory.amount <= 0) 
+                {
+                    return itemList.Remove(itemObjectInInventory);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void ConsumeItem(ItemName itemName)
+    {
+        
     }
 
     public List<ItemObject> GetItemList()

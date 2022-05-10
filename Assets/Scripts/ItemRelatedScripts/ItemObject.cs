@@ -12,7 +12,7 @@ public enum ItemType
     Healer
 }
 
-public abstract class ItemObject : ScriptableObject
+public class ItemObject : ScriptableObject
 {
     public ItemName itemName;
     public ItemType itemType;

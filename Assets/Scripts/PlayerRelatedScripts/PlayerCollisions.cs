@@ -29,7 +29,7 @@ public class PlayerCollisions : MonoBehaviour
             if (playerInventory)
             {
                 playerInventory.AddItem(itemWorld.item);
-                Debug.Log(itemWorld.item.itemName + " collected!" + "\n" + "Items in Inventory: " + playerInventory.CountItems());
+                //Debug.Log(itemWorld.item.itemName + " collected!" + "\n" + "Items in Inventory: " + playerInventory.CountItems());
                 itemWorld.DestroySelf();
             }
         }

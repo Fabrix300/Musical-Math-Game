@@ -24,12 +24,15 @@ public class PlayerMovement : MonoBehaviour
         playerCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 3f;
+
+        /*MOBILE*/
+        dirX = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(inCombat == false)
+        /*if(inCombat == false)
         {
             dirX = Input.GetAxisRaw("Horizontal");
 
@@ -37,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.AddForce(Vector2.up * jumpForce);
             }
-        }
+        }*/
 
         UpdateAnimation();
     }
@@ -115,5 +118,34 @@ public class PlayerMovement : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
         //rb.velocity = Vector2.zero;
         SetInCombat(false);
+    }
+
+    public void Jump()
+    {
+        if (inCombat == false && IsGrounded())
+        {
+            //jumpSoundEffect.Play();
+            //rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeedY);
+            rb.AddForce(Vector2.up * jumpForce);
+        }
+    }
+
+    public void StopMoving()
+    {
+        dirX = 0f;
+    }
+    public void MoveLeft()
+    {
+        if (inCombat == false)
+        {
+            dirX = -1f;
+        }
+    }
+    public void MoveRight()
+    {
+        if (inCombat == false)
+        {
+            dirX = 1f;
+        }
     }
 }

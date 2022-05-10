@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,42 +16,17 @@ public class CherryButton : MonoBehaviour
         playerInventory = PlayerInventory.instance;
         playerStats = PlayerStats.instance;
         playerInventory.OnCherryCollected += RefreshCherriesText;
+        /*TEST*/ //playerInventory.OnCherryUsed += RefreshCherriesText;
         RefreshCherriesText();
     }
 
     public void RefreshCherriesText()
-    {
-        if (cherriesCounterText != null)
-        {
-            cherriesCounterText.text = GetCherryItemInInventory().amount.ToString();
-        }
+    { 
+
     }
 
     public void OnCherryButtonPressed()
     {
-        ItemObject cherryItem = GetCherryItemInInventory();
-        if(cherryItem is HealerObject)
-        {
-            if (cherryItem.amount >= 1 && playerStats.GetPlayerEnergyPoints() < playerStats.GetPlayerMaxEnergyPoints())
-            {
-                cherryItem.amount--;
-                playerStats.HealPlayer((cherryItem as HealerObject).amountOfEnergyRestored);
-            }
-            RefreshCherriesText();
-        }
-    }
-
-    public ItemObject GetCherryItemInInventory()
-    {
-        ItemObject cherryItem = null;
-        List<ItemObject> itemList = playerInventory.GetItemList();
-        foreach (ItemObject itemObjectInInventory in itemList)
-        {
-            if (itemObjectInInventory.itemName == ItemName.Cherry)
-            {
-                cherryItem = itemObjectInInventory;
-            }
-        }
-        return cherryItem;
+        
     }
 }
