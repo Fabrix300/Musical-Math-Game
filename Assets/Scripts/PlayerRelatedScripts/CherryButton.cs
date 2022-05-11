@@ -22,11 +22,11 @@ public class CherryButton : MonoBehaviour
 
     public void RefreshCherriesText()
     { 
-
+        //refrescar texto de las cerezas
     }
 
     public void OnCherryButtonPressed()
     {
-        
+        // Consumir cereza
     }
 }
