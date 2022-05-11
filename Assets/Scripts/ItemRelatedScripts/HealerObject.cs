@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewHealerItem", menuName = "Inventory System/Items/Healer")]
 public class HealerObject : ItemObject
 {
     public float amountOfEnergyRestored;
 
-    private void Awake()
+    public HealerObject(ItemName _itemName, int _amount, float _amountOfEnergyRestored)
     {
+        itemName = _itemName;
         itemType = ItemType.Healer;
+        amount = _amount;
+        amountOfEnergyRestored = _amountOfEnergyRestored;
     }
 }

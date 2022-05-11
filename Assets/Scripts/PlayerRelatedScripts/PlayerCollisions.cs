@@ -23,13 +23,12 @@ public class PlayerCollisions : MonoBehaviour
     {
         GameObject gO = collision.gameObject;
         // Checking if its an item
-        if (gO.GetComponent<ItemWorld>())
+        if (gO.GetComponent<CherryItemWorld>())
         {
-            ItemWorld itemWorld = gO.GetComponent<ItemWorld>();
+            CherryItemWorld itemWorld = gO.GetComponent<CherryItemWorld>();
             if (playerInventory)
             {
-                playerInventory.AddItem(itemWorld.item);
-                //Debug.Log(itemWorld.item.itemName + " collected!" + "\n" + "Items in Inventory: " + playerInventory.CountItems());
+                playerInventory.AddItem(itemWorld.healerObject);
                 itemWorld.DestroySelf();
             }
         }

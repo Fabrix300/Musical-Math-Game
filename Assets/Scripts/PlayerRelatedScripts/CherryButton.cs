@@ -21,12 +21,13 @@ public class CherryButton : MonoBehaviour
     }
 
     public void RefreshCherriesText()
-    { 
-        //refrescar texto de las cerezas
+    {
+        //traer item y chequear su amount
     }
 
     public void OnCherryButtonPressed()
     {
-        // Consumir cereza
+        //reducir cantidad     
+        //curar jugador
     }
 }
