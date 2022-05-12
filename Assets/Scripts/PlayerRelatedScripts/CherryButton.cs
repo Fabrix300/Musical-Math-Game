@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CherryButton : MonoBehaviour
 {
     public Text cherriesCounterText;
+    public Button cherryButton;
 
     private PlayerInventory playerInventory;
     private PlayerStats playerStats;
@@ -22,12 +23,44 @@ public class CherryButton : MonoBehaviour
 
     public void RefreshCherriesText()
     {
-        //traer item y chequear su amount
+        HealerObject cherryObject = (HealerObject) playerInventory.GetItem(ItemName.Cherry);
+        if (cherryObject != null)
+        {
+            cherriesCounterText.text = cherryObject.amount.ToString();
+        }
     }
 
     public void OnCherryButtonPressed()
     {
-        //reducir cantidad     
-        //curar jugador
+        StartCoroutine(HealPlayerOnButtonPressed());
+    }
+
+    private IEnumerator HealPlayerOnButtonPressed()
+    {
+        cherryButton.interactable = false;
+        if (playerStats.GetIsPlayerAlive() &&
+            playerStats.GetPlayerEnergyPoints() < playerStats.GetPlayerMaxEnergyPoints()
+            )
+        { 
+            int cherriesUsed = playerInventory.ReduceAmountOfItem(ItemName.Cherry, 1);
+            if (cherriesUsed > 0) 
+            {
+                int playerLevel = playerStats.level;
+                HealerObject cherryObject = (HealerObject) playerInventory.GetItem(ItemName.Cherry);
+                if (playerStats.HealPlayer(
+                    cherryObject.amountOfEnergyRestored * cherriesUsed + playerLevel
+                ))
+                {
+                    yield return new WaitForSeconds(1f);
+                    cherryButton.interactable = true;
+                    RefreshCherriesText();
+                }
+                else
+                {
+                    _ = playerInventory.AddAmountOfItem(ItemName.Cherry, 1);
+                }
+            }
+        }
+        cherryButton.interactable = true;
     }
 }

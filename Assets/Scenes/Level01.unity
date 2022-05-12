@@ -5446,6 +5446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cherriesCounterText: {fileID: 1006576094}
+  cherryButton: {fileID: 902514349}
 --- !u!1 &2082946593
 GameObject:
   m_ObjectHideFlags: 0

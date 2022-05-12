@@ -77,10 +77,12 @@ public class CombatSystem : MonoBehaviour
     {
         if(isPlayerFirstTurn)
         {
+            Debug.Log("activating first time");
             ActivateAnimatorsOfPlayerAnswerHUD();
         } 
         else
         {
+            Debug.Log("activating");
             TriggerStartAnimationOfHUDElements();
         }
         GenerateRandomOperationForEnemyRequest();
@@ -91,7 +93,7 @@ public class CombatSystem : MonoBehaviour
     public void GenerateRandomOperationForEnemyRequest()
     {
         float upperLimit = 40;
-        float lowerLimit = 6;
+        float lowerLimit = 5;
         int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
         enemyRequestDecimal = 0.125f * multiplicatorResult;
         enemyRequestText.text = ConvertToFractionString(enemyRequestDecimal);
@@ -199,7 +201,7 @@ public class CombatSystem : MonoBehaviour
         resultText.text = "0";
         formulationText.text = "";
         notesInput.Clear();
-        //make fox sing
+        //make fox singggg
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
 
         yield return new WaitForSeconds(1.5f);

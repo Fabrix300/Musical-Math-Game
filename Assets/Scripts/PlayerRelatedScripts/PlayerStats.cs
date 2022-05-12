@@ -9,9 +9,9 @@ public class PlayerStats : MonoBehaviour
     public static PlayerStats instance;
 
     // Life or mana idk
+    private bool isPlayerAlive = true;
     private float playerEnergyPoints = 20;
     private float playerMaxEnergyPoints = 20;
-    private bool playerDead = false;
 
     // STATS
     public int level;
@@ -38,7 +38,7 @@ public class PlayerStats : MonoBehaviour
 
     public bool NumbPlayer(float damage)
     {
-        if (playerDead == false)
+        if (isPlayerAlive)
         {
             //damage -= (damage * (0.01f * armor.GetValue()));
             playerEnergyPoints -= damage;
@@ -56,7 +56,7 @@ public class PlayerStats : MonoBehaviour
 
     public bool HealPlayer(float pointsHealed)
     {
-        if (playerDead == false && playerEnergyPoints < playerMaxEnergyPoints)
+        if (isPlayerAlive && playerEnergyPoints < playerMaxEnergyPoints)
         {
             playerEnergyPoints += pointsHealed;
             playerEnergyPoints = Mathf.Clamp(playerEnergyPoints, 0, playerMaxEnergyPoints);
@@ -68,9 +68,14 @@ public class PlayerStats : MonoBehaviour
 
     public virtual void Die()
     {
-        playerDead = true;
+        isPlayerAlive = false;
         //DIE IN SOME WAY
         Debug.Log("player died.");
+    }
+
+    public bool GetIsPlayerAlive()
+    {
+        return isPlayerAlive;
     }
 
     public float GetPlayerEnergyPoints()

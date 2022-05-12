@@ -3636,6 +3636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cherriesCounterText: {fileID: 894703672}
+  cherryButton: {fileID: 0}
 --- !u!1 &877701718
 GameObject:
   m_ObjectHideFlags: 0
@@ -5427,6 +5428,8 @@ MonoBehaviour:
   fill: {fileID: 600303245}
   totalTime: 20
   graceTime: 3
+  maxValueOfMultiplicator: 2.5
+  minValueOfMultiplicator: 1.01
   stopped: 0
 --- !u!114 &1570998076
 MonoBehaviour:

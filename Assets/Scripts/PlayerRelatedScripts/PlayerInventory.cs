@@ -9,7 +9,7 @@ public class PlayerInventory : MonoBehaviour
 
     // Inventory of items
     //private List<ItemObject> itemList;
-    private HealerObject cherryHolder = new HealerObject(ItemName.Cherry, 0, 6);
+    private HealerObject cherryHolder = new HealerObject(ItemName.Cherry, 0);
 
     public event Action OnCherryCollected;
     //public event Action OnCherryUsed;
@@ -30,6 +30,58 @@ public class PlayerInventory : MonoBehaviour
         //itemList = new List<ItemObject>();
     }
 
+    public int ReduceAmountOfItem(ItemName itemName, int amountToReduce)
+    {
+        switch (itemName)
+        {
+            case ItemName.Cherry:
+                {
+                    if (cherryHolder.amount == 0)
+                    {
+                        return 0;
+                    }
+                    else if (cherryHolder.amount < amountToReduce)
+                    {
+                        int temp = cherryHolder.amount;
+                        cherryHolder.amount = 0;
+                        return temp;
+                    }
+                    else
+                    {
+                        cherryHolder.amount -= amountToReduce;
+                        return amountToReduce;
+                    }
+                }
+        }
+        return 0;
+    }
+
+    public bool AddAmountOfItem(ItemName itemName, int amountToAdd)
+    {
+        switch (itemName)
+        {
+            case ItemName.Cherry:
+                {
+                    cherryHolder.amount += amountToAdd;
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    public ItemObject GetItem(ItemName itemName)
+    {
+        switch (itemName)
+        {
+            case ItemName.Cherry:
+                {
+                    HealerObject cherryHolderCopy = cherryHolder;
+                    return cherryHolderCopy;
+                }
+        }
+        return null;
+    }
+
     public void AddItem(ItemObject item)
     {
         switch (item.itemName)
@@ -40,6 +92,8 @@ public class PlayerInventory : MonoBehaviour
                     {
                         HealerObject hOHolder = (HealerObject) item;
                         cherryHolder.amount += hOHolder.amount;
+                        Debug.Log("New Amount of Cherries: " + cherryHolder.amount);
+                        OnCherryCollected?.Invoke();
                     }
                     break;
                 }
@@ -80,5 +134,5 @@ public class PlayerInventory : MonoBehaviour
         }*/
     }
 
-    public HealerObject cherryObject = new HealerObject(ItemName.Cherry, 1, 6);
+    public HealerObject cherryObject = new HealerObject(ItemName.Cherry, 1);
 }

@@ -10,6 +10,8 @@ public class RequestTimer : MonoBehaviour
     public Image fill;
     public float totalTime;
     public float graceTime;
+    public float maxValueOfMultiplicator;
+    public float minValueOfMultiplicator;
     public bool stopped = true;
 
     public event Action OnTimerEnd;
@@ -62,7 +64,7 @@ public class RequestTimer : MonoBehaviour
     {
         if (stopped)
         {
-            return 2.1f - (1.1f - ((slider.value / totalTime) * 1.1f));
+            return maxValueOfMultiplicator - (minValueOfMultiplicator - ((slider.value / totalTime) * minValueOfMultiplicator));
         }
         return 1f;
     }
