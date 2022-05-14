@@ -25,8 +25,6 @@ public class CombatSystem : MonoBehaviour
 
     private List<float> notesInput = new();
     private float enemyRequestDecimal;
-    private bool isPlayerFirstTurn = true;
-    private bool isFirstTimeActivatingCongratsMessageAnimator = true;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
     private GameManager gameManager;
@@ -53,50 +51,25 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         state = CombatState.PLAYERTURN;
         PlayerTurn();
-    }
-
-    IEnumerator EnemyTurn()
-    {
-        //Attack the player or heal or whatever
-        bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
-        yield return new WaitForSeconds(1f);
-
-        //check if player is dead, actualizar estados y pasar a endcombat o playerTurn;
-        if (isPlayerDead)
-        {
-            state = CombatState.LOST;
-            EndCombat();
-        } else
-        {
-            state = CombatState.PLAYERTURN;
-            PlayerTurn();
-        }
+        yield return null;
     }
 
     void PlayerTurn()
     {
-        if(isPlayerFirstTurn)
+        if (GenerateRandomOperationForEnemyRequest())
         {
-            Debug.Log("activating first time");
-            ActivateAnimatorsOfPlayerAnswerHUD();
-        } 
-        else
-        {
-            Debug.Log("activating");
             TriggerStartAnimationOfHUDElements();
         }
-        GenerateRandomOperationForEnemyRequest();
-
         timer.RunTimer();
     }
 
-    public void GenerateRandomOperationForEnemyRequest()
+    public bool GenerateRandomOperationForEnemyRequest()
     {
-        float upperLimit = 40;
-        float lowerLimit = 5;
+        float upperLimit = 40; float lowerLimit = 5;
         int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
         enemyRequestDecimal = 0.125f * multiplicatorResult;
         enemyRequestText.text = ConvertToFractionString(enemyRequestDecimal);
+        return true;
     }
 
     public void OnPressNoteButton(Button clickedButton)
@@ -158,12 +131,12 @@ public class CombatSystem : MonoBehaviour
     public void RequestTimeEnd()
     {
         timer.StopTimer();
-        DisableNoteButtonsAndDeleteButton();
         StartCoroutine(PlayerActionButTimeEnded());
     }
 
     IEnumerator PlayerActionButTimeEnded()
     {
+        DisableNoteButtonsAndDeleteButton();
         yield return new WaitForSeconds(0.8f);
         TriggerEndAnimationOfHUDElements();
         yield return new WaitForSeconds(2f);
@@ -171,27 +144,14 @@ public class CombatSystem : MonoBehaviour
         resultText.text = "0";
         formulationText.text = "";
         notesInput.Clear();
-        //make fox sing
-        /*bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
-
-        yield return new WaitForSeconds(1.5f);*/
         state = CombatState.ENEMYTURN;
         StartCoroutine(EnemyTurn());
-        isPlayerFirstTurn = false;
     }
 
     IEnumerator PlayerAction()
     {
         yield return new WaitForSeconds(0.3f);
-        if(isFirstTimeActivatingCongratsMessageAnimator)
-        {
-            EnableCongratsMessageAnimator();
-            isFirstTimeActivatingCongratsMessageAnimator = false;
-        }
-        else
-        { 
-            TriggerStartAnimationOfCongratsMessage();
-        }
+        TriggerStartAnimationOfCongratsMessage();
         yield return new WaitForSeconds(1f);
         TriggerEndAnimationOfHUDElements();
         yield return new WaitForSeconds(0.8f);
@@ -210,13 +170,30 @@ public class CombatSystem : MonoBehaviour
         {
             state = CombatState.WON;
             EndCombat();
-            //isPlayerFirstTurn = false;
         }
         else
         {
             state = CombatState.ENEMYTURN;
             StartCoroutine(EnemyTurn());
-            isPlayerFirstTurn = false;
+        }
+    }
+
+    IEnumerator EnemyTurn()
+    {
+        //Attack the player or heal or whatever
+        bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
+        yield return new WaitForSeconds(1f);
+
+        //check if player is dead, actualizar estados y pasar a endcombat o playerTurn;
+        if (isPlayerDead)
+        {
+            state = CombatState.LOST;
+            EndCombat();
+        }
+        else
+        {
+            state = CombatState.PLAYERTURN;
+            PlayerTurn();
         }
     }
 
@@ -285,18 +262,18 @@ public class CombatSystem : MonoBehaviour
 
     public void TriggerEndAnimationOfCongratsMessage()
     {
-        congratsMessageAnimator.SetInteger("state", 1);
+        congratsMessageAnimator.SetInteger("state", 2);
     }
 
     public void TriggerStartAnimationOfCongratsMessage()
     {
-        congratsMessageAnimator.SetInteger("state", 0);
+        congratsMessageAnimator.SetInteger("state", 1);
     }
 
-    public void EnableCongratsMessageAnimator()
+    /*public void EnableCongratsMessageAnimator()
     {
         congratsMessageAnimator.enabled = true;
-    }
+    }*/
 
     public void EnableNoteButtonsAndDeleteButton()
     {
@@ -330,13 +307,13 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-    public void ActivateAnimatorsOfPlayerAnswerHUD()
+    /*public void ActivateAnimatorsOfPlayerAnswerHUD()
     {
         for(int i = 0; i < HUDElements.Length; i++)
         {
             HUDElements[i].ActivateAnimatorAndStartAnimation();
         }
-    }
+    }*/
 
     public void InstantiatePlayerAndEnemy() {
         GameObject playerGO = Instantiate(playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);

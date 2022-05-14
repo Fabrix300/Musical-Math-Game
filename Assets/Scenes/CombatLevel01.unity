@@ -398,7 +398,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -63}
+  m_AnchoredPosition: {x: 0, y: -64}
   m_SizeDelta: {x: 526.97, y: 114.8792}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &103011454
@@ -409,7 +409,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 103011452}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: bcf8dd4174a855042911be4900923d11, type: 2}
   m_CullingMode: 0
@@ -1337,7 +1337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 681, y: -49}
+  m_AnchoredPosition: {x: 677, y: -49}
   m_SizeDelta: {x: 526.97, y: 72.2147}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &441217283
@@ -1348,7 +1348,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441217281}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 58da8e6b3b9b8704aa2ec8b378438d0f, type: 2}
   m_CullingMode: 0
@@ -2658,7 +2658,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596210701}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 61d1a87d7e3ea38429459ca54886fedf, type: 2}
   m_CullingMode: 0
@@ -2691,7 +2691,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596210701}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 0.0001
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -3417,7 +3417,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 844282055}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: af89de9a2794ba643869a4500285fe79, type: 2}
   m_CullingMode: 0
@@ -6549,7 +6549,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013776456}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 763ce854add4d1641b21639b61906716, type: 2}
   m_CullingMode: 0
@@ -6569,7 +6569,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013776456}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 0.0001
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

@@ -13,11 +13,11 @@ public class PlayerAnswerHUDTransitions : MonoBehaviour
 
     public void TriggerStartAnimation()
     {
-        transition.SetInteger("state", 0);
+        transition.SetInteger("state", 1);
     }
 
     public void TriggerEndAnimation()
     {
-        transition.SetInteger("state", 1);
+        transition.SetInteger("state", 2);
     }
 }

@@ -18,10 +18,13 @@ public class RequestTimer : MonoBehaviour
 
     private bool stopTimer;
     private float actualTime;
+    private float graceTimeCopy;
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
+        slider.maxValue = totalTime;
+        slider.value = totalTime;
         slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
@@ -30,12 +33,14 @@ public class RequestTimer : MonoBehaviour
     {
         if (!stopped)
         {
-            if (Mathf.Abs(actualTime - Time.time) >= graceTime)
+            graceTimeCopy -= Time.deltaTime;
+            if (graceTimeCopy < -graceTime)
             {
-                float time = totalTime - Mathf.Abs(actualTime + graceTime - Time.time);
+                float time = totalTime - Mathf.Abs(actualTime + 2*graceTime - Time.time);
                 if (time <= 0f)
                 {
                     stopTimer = true;
+                    Debug.Log("Time ended");
                     OnTimerEnd?.Invoke();
                 }
                 if (stopTimer == false)
@@ -48,11 +53,12 @@ public class RequestTimer : MonoBehaviour
 
     public void RunTimer()
     {
-        stopped = false;
         slider.maxValue = totalTime;
         slider.value = totalTime;
-        stopTimer = false;
+        graceTimeCopy = graceTime;
         actualTime = Time.time;
+        stopTimer = false;
+        stopped = false;
     }
 
     public void StopTimer()
