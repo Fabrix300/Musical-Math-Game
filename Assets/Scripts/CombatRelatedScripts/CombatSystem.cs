@@ -24,16 +24,18 @@ public class CombatSystem : MonoBehaviour
     private GameObject playerPreFab;
 
     private List<float> notesInput = new();
+    private List<Sound[]> musicalNotes;
     private float enemyRequestDecimal;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
-    private GameManager gameManager;
+    private GameManager gameManager; private AudioManager audioManager;
 
     void Start()
     {
         state = CombatState.NONE;
         combatData = CombatData.instance; playerStats = PlayerStats.instance; combatAssets = CombatAssets.instance;
-        gameManager = GameManager.instance;
+        gameManager = GameManager.instance; audioManager = AudioManager.instance;
+        musicalNotes = new List<Sound[]>(audioManager.musicalNotes);
         playerPreFab = combatAssets.playerPreFab;
         enemyPreFab = combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType);
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
@@ -160,9 +162,50 @@ public class CombatSystem : MonoBehaviour
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
         formulationText.text = "";
-        notesInput.Clear();
+        
         //make fox singggg
+
+        for (int i = 0; i < notesInput.Count; i++)
+        {
+            //audioManager.PlayNote(note, notesInput[i]);
+            Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
+            switch (notesInput[i]) 
+            {
+                case 1f: 
+                    {
+                        AudioSource aS = noteArray[0].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;                    
+                    }
+                case 0.5f: 
+                    {
+                        AudioSource aS = noteArray[1].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+                case 0.25f: 
+                    {
+                        AudioSource aS = noteArray[2].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+                case 0.125f: 
+                    {
+                        AudioSource aS = noteArray[3].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+
+        //////////////////
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
+        notesInput.Clear();
 
         yield return new WaitForSeconds(1.5f);
 
@@ -202,6 +245,7 @@ public class CombatSystem : MonoBehaviour
         if (state == CombatState.WON)
         {
             Debug.Log("You won!");
+            StartCoroutine(audioManager.Crossfade("CombatLevel01", "Level01"));
             gameManager.ComeBackFromCombatScene();
         }
         else if (state == CombatState.LOST)
@@ -321,6 +365,21 @@ public class CombatSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPreFab, new Vector3(5.5f, 10f, 0f), Quaternion.identity);
         SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         playerGO.GetComponent<PlayerMovement>().SetInCombat(true);
+        /**/
+
+        foreach (Sound[] sArray in musicalNotes)
+        {
+            foreach (Sound s in sArray)
+            {
+                s.source = playerGO.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                s.source.volume = s.volume;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+            }
+        }
+
+        /**/
         enemyGO.GetComponent<EnemyMovement>().inCombat = true;
         enemyGO.GetComponent<Animator>().SetInteger("state", 0);
         enemyEnemyComp = enemyGO.GetComponent<Enemy>();

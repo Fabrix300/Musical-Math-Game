@@ -10,12 +10,14 @@ public class PlayerCollisions : MonoBehaviour
 
     private PlayerInventory playerInventory;
     private GameManager gameManager;
+    private AudioManager audioManager;
 
     // Start is called before the first frame update
     void Start()
     {
         playerInventory = PlayerInventory.instance;
         gameManager = GameManager.instance;
+        audioManager = AudioManager.instance;
         mainCamera = Camera.main;
     }
 
@@ -48,6 +50,7 @@ public class PlayerCollisions : MonoBehaviour
         if (gO.GetComponent<Enemy>())
         {
             //StartFight(gO);
+            StartCoroutine(audioManager.Crossfade("Level01", "CombatLevel01"));
             gameManager.StartAFight(gO, levelHolder);
         }
     }
