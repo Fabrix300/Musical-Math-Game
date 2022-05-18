@@ -153,7 +153,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &75897845
 MonoBehaviour:
@@ -168,217 +168,251 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - clip: {fileID: 8300000, guid: 8057a355405743f42919425f147b5d9d, type: 3}
+  - clip: {fileID: 8300000, guid: 88d504a4816472e47ad1357cb53932c5, type: 3}
     name: Level01
     volume: 0.3
     pitch: 1
     loop: 1
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: bc2750bd85d33e949933a22c11db000f, type: 3}
+  - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
     name: CombatLevel01
     volume: 0.3
     pitch: 1
     loop: 1
+    playOnAwake: 0
     source: {fileID: 0}
   CNote:
-  - clip: {fileID: 8300000, guid: b9ae0f357776b3a43b3f014fd4ba915b, type: 3}
+  - clip: {fileID: 8300000, guid: c8afe59215b790344aed495fec90c1c7, type: 3}
     name: C-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: cc87a39bab3efc04eaecf47017a04b18, type: 3}
+  - clip: {fileID: 8300000, guid: bfbd829146f36ed449cc9cdee5317ed9, type: 3}
     name: C-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: d2e2c15a5565a0645b7870c70856c441, type: 3}
+  - clip: {fileID: 8300000, guid: 0df6df3ff53e63644b30fb0e9adaef50, type: 3}
     name: C-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 9dd26fc57fac5fc41a85bba4ced2a7ab, type: 3}
+  - clip: {fileID: 8300000, guid: ce09aeb014b342f4285096530383fd54, type: 3}
     name: C-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   DNote:
-  - clip: {fileID: 8300000, guid: e054c9ed8f1377e4ba075db0f291139c, type: 3}
+  - clip: {fileID: 8300000, guid: 433b2fb1316715b418e748abadee3d57, type: 3}
     name: D-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 262b04a1cde7d5946b250a68736d74c7, type: 3}
+  - clip: {fileID: 8300000, guid: 04d23a17b4f3b9848bd01914c566d329, type: 3}
     name: D-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: ccd683f994552844ea33ce683d6c9d2a, type: 3}
+  - clip: {fileID: 8300000, guid: 556296b37d742f24d9a8e77ca9272cab, type: 3}
     name: D-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 5c0e230f8b090c7439e60de6d34592c8, type: 3}
+  - clip: {fileID: 8300000, guid: 77e2fabda41bd7243bc058b27fa35a66, type: 3}
     name: D-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   ENote:
-  - clip: {fileID: 8300000, guid: 0da53c7d318866542ba06a37eb3f9136, type: 3}
+  - clip: {fileID: 8300000, guid: a5d00150dd76ed44392c0a26e24e8daf, type: 3}
     name: E-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: fc25fea39f0065e4fa1d7515e4d02398, type: 3}
+  - clip: {fileID: 8300000, guid: 98fc1dae8adf53641a920ecfcae00dc6, type: 3}
     name: E-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 5436deb2a5a07904f94ab72b71a8281a, type: 3}
+  - clip: {fileID: 8300000, guid: 50f52b31494d61347b297f97d796264b, type: 3}
     name: E-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: dbeea4ae48bcaf4478c264f47dbc17b4, type: 3}
+  - clip: {fileID: 8300000, guid: e5ecd4291ee170f4fadbe4f8285ddd1c, type: 3}
     name: E-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   FNote:
-  - clip: {fileID: 8300000, guid: 301db40653fcd0b438ccbf406936ff10, type: 3}
+  - clip: {fileID: 8300000, guid: b0791576eafbcb1429002f179e123f7d, type: 3}
     name: F-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 1dad2e32f3515fc46b587d584f5318c7, type: 3}
+  - clip: {fileID: 8300000, guid: a0fd8a6caec755348ab06c187645c9b0, type: 3}
     name: F-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 691e05c5b20bde847a5e211612133061, type: 3}
+  - clip: {fileID: 8300000, guid: 88f19b97066c2de4d916bac1a1bf551b, type: 3}
     name: F-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: f004a96038770cf40b88a44b754810a5, type: 3}
+  - clip: {fileID: 8300000, guid: 2f487664df23b2e4d90d2c44208bec17, type: 3}
     name: F-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   GNote:
-  - clip: {fileID: 8300000, guid: 36260b08e2668e342a2adc3cbad48762, type: 3}
+  - clip: {fileID: 8300000, guid: 15be253cec4b22b4d905976f9402c05f, type: 3}
     name: G-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 37fda0a60c02e004e8f912194c3edf3a, type: 3}
+  - clip: {fileID: 8300000, guid: 4083da4a69b18fd46805f6b2c71c5de1, type: 3}
     name: G-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 1f614d4fceee135439cc822e5e17a412, type: 3}
+  - clip: {fileID: 8300000, guid: fd10ba75364c4d24ebe7c26005160fbc, type: 3}
     name: G-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: a91dff9f5b6ee4d439b5ab6bee45dd06, type: 3}
+  - clip: {fileID: 8300000, guid: d4219386630c92047908e2fdb58f8f0f, type: 3}
     name: G-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   ANote:
-  - clip: {fileID: 8300000, guid: 5f59d11f8ee798a44aea3a75c1bc062e, type: 3}
+  - clip: {fileID: 8300000, guid: 197f1a25cbb52044a806d2840b456a09, type: 3}
     name: A-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 16037713bc3532142afa5855f423bf82, type: 3}
+  - clip: {fileID: 8300000, guid: cfbe584f15e5585499c0072963fb3224, type: 3}
     name: A-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: ff16ab433dc74f64b9cf3f3a350b373e, type: 3}
+  - clip: {fileID: 8300000, guid: dcd98c9519392104baad7a444e4166da, type: 3}
     name: A-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 01c485058a96ebf4f946e9a2f8965a7a, type: 3}
+  - clip: {fileID: 8300000, guid: 08b91e579e7be48458badb4478acab0d, type: 3}
     name: A-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   BNote:
-  - clip: {fileID: 8300000, guid: db85dd51a921c4345a495826232202ab, type: 3}
+  - clip: {fileID: 8300000, guid: b74389ce5cb024e49bd61c1b31fff457, type: 3}
     name: B-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: b914763f39636ba42acda65295c1a752, type: 3}
+  - clip: {fileID: 8300000, guid: 1add19f8ec674fb4da135e4cb9c98ad6, type: 3}
     name: B-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 79eef845911709345ae9a3d8cae22ee1, type: 3}
+  - clip: {fileID: 8300000, guid: f76b1e76af48eac479b4bc1f86501c3d, type: 3}
     name: B-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: cdc5a2bfbe08eee43888060489607101, type: 3}
+  - clip: {fileID: 8300000, guid: 1ade02033765ca04088b12cc5794b49f, type: 3}
     name: B-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
   COctaveNote:
-  - clip: {fileID: 8300000, guid: 6f302d41c0005704dbb8fbe7372b90a1, type: 3}
+  - clip: {fileID: 8300000, guid: 3a20f2000f4b2ee4091459e85f29baab, type: 3}
     name: C'-1
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 9f58a5c776f1f154fa270e36fdc828d8, type: 3}
+  - clip: {fileID: 8300000, guid: 49f0934a6d93bd04cbc5b704406fa428, type: 3}
     name: C'-1.2
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: d8eaf71a1da0a9042a5a8e060bdec51f, type: 3}
+  - clip: {fileID: 8300000, guid: 18270d7d6f021c04fb9047fb208bc070, type: 3}
     name: C'-1.4
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
-  - clip: {fileID: 8300000, guid: 9cc3ecab6f4e4ac42be2cd4c76954905, type: 3}
+  - clip: {fileID: 8300000, guid: 3f19f2fece99fce4f8bfb8374361db12, type: 3}
     name: C'-1.8
     volume: 0.7
     pitch: 1
     loop: 0
+    playOnAwake: 0
     source: {fileID: 0}
 --- !u!1 &188585717
 GameObject:
@@ -621,7 +655,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &545450650
 MonoBehaviour:

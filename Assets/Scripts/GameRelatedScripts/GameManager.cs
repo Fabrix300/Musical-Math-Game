@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private GameObject activeLevelHolder;
     private CombatData combatData;
+    private AudioManager audioManager;
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     {
         LoadSavedScene();
         combatData = CombatData.instance;
+        audioManager = AudioManager.instance;
     }
 
     public void LoadSavedScene()
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
     IEnumerator PassToCombatScene(GameObject levelHolder)
     {
         crossFadeTransition.SetInteger("state", 0);
+        StartCoroutine(audioManager.Crossfade(savedSceneName, "CombatLevel01"));
         yield return new WaitForSeconds(1f);
         if (levelHolder != null)
         {
@@ -79,6 +82,7 @@ public class GameManager : MonoBehaviour
     IEnumerator UnloadCombatScene()
     {
         crossFadeTransition.SetInteger("state", 0);
+        StartCoroutine(audioManager.Crossfade("CombatLevel01", savedSceneName));
         yield return new WaitForSeconds(1f);
         combatData.GetEnemyToCombat().DestroySelf();
         gameCamera.transform.position = combatData.GetPreviousCameraPosition();

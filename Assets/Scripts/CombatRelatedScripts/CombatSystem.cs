@@ -245,7 +245,6 @@ public class CombatSystem : MonoBehaviour
         if (state == CombatState.WON)
         {
             Debug.Log("You won!");
-            StartCoroutine(audioManager.Crossfade("CombatLevel01", "Level01"));
             gameManager.ComeBackFromCombatScene();
         }
         else if (state == CombatState.LOST)

@@ -39,6 +39,7 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+            s.source.playOnAwake = s.playOnAwake;
         }
 
         musicalNotes.Add(CNote);
@@ -73,14 +74,15 @@ public class AudioManager : MonoBehaviour
         Sound s = Array.Find(sounds, sound => sound.name == song1);
         Sound s2 = Array.Find(sounds, sound => sound.name == song2);
         float currentTime = 0;
+        float sourceVolume = s.source.volume;
         while (currentTime < 1f)
         {
+            s.source.volume = Mathf.Lerp(sourceVolume, 0f, currentTime / 1f);
             currentTime += Time.deltaTime;
-            s.source.volume = Mathf.Lerp(0.3f, 0f, currentTime / 1f);
             yield return null;
         }
         s.source.Stop();
-        s.source.volume = 0.3f;
+        s.source.volume = sourceVolume;
         s2.source.Play();
     }
 }
