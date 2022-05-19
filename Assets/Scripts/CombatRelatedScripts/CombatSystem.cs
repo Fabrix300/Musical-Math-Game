@@ -22,6 +22,7 @@ public class CombatSystem : MonoBehaviour
     private GameObject enemyPreFab;
     private Enemy enemyEnemyComp;
     private GameObject playerPreFab;
+    private GameObject playerGO;
 
     private List<float> notesInput = new();
     private List<Sound[]> musicalNotes;
@@ -162,9 +163,9 @@ public class CombatSystem : MonoBehaviour
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
         formulationText.text = "";
-        
-        //make fox singggg
 
+        //make fox singggg
+        playerGO.GetComponent<Animator>().SetInteger("state", 4);
         for (int i = 0; i < notesInput.Count; i++)
         {
             //audioManager.PlayNote(note, notesInput[i]);
@@ -201,6 +202,7 @@ public class CombatSystem : MonoBehaviour
                     }
             }
         }
+        playerGO.GetComponent<Animator>().SetInteger("state", 0);
         yield return new WaitForSeconds(0.5f);
 
         //////////////////
@@ -359,7 +361,7 @@ public class CombatSystem : MonoBehaviour
     }*/
 
     public void InstantiatePlayerAndEnemy() {
-        GameObject playerGO = Instantiate(playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
+        playerGO = Instantiate(playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
         SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         GameObject enemyGO = Instantiate(enemyPreFab, new Vector3(5.5f, 10f, 0f), Quaternion.identity);
         SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
