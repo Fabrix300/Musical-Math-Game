@@ -10,12 +10,13 @@ public class PlayerCollisions : MonoBehaviour
 
     private PlayerInventory playerInventory;
     private GameManager gameManager;
+    private AudioManager audioManager;
 
     // Start is called before the first frame update
     void Start()
     {
         playerInventory = PlayerInventory.instance;
-        gameManager = GameManager.instance;
+        gameManager = GameManager.instance; audioManager = AudioManager.instance;
         mainCamera = Camera.main;
     }
 
@@ -28,6 +29,7 @@ public class PlayerCollisions : MonoBehaviour
             CherryItemWorld itemWorld = gO.GetComponent<CherryItemWorld>();
             if (playerInventory)
             {
+                audioManager.Play("ItemCollected");
                 playerInventory.AddItem(itemWorld.healerObject);
                 itemWorld.DestroySelf();
             }

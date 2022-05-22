@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
 
     public void DestroySelf()
     {
+        Debug.Log("Destroying enemy");
         Destroy(gameObject);
     }
 
