@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public enum EnemyType
@@ -18,8 +19,14 @@ public class Enemy : MonoBehaviour
     public float damage;
     public float healthPoints;
     public float maxHealthPoints;
+    public Text levelText;
 
     public event Action OnEnemyHealthPointsChange;
+
+    private void Start()
+    {
+        levelText.text = level.ToString();
+    }
 
     public void DestroySelf()
     {

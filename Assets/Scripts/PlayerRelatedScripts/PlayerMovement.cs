@@ -8,6 +8,9 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed;
     public bool inCombat = false;
 
+    /*Audio*/
+    public AudioSource jumpAS;
+
     private float dirX;
     private Rigidbody2D rb;
     private CapsuleCollider2D playerCollider;
@@ -84,11 +87,7 @@ public class PlayerMovement : MonoBehaviour
             spriteRenderer.flipX = true;
             state = AnimationState.Running;
         }
-        else
-        {
-            state = AnimationState.Idle;
-        }
-        if (rb.velocity.y > .1f)
+        else if (rb.velocity.y > .1f)
         {
             state = AnimationState.Jumping;
         }
@@ -96,6 +95,11 @@ public class PlayerMovement : MonoBehaviour
         {
             state = AnimationState.Falling;
         }
+        else
+        {
+            state = AnimationState.Idle;
+        }
+        
         anim.SetInteger("state", (int)state);
     }
 
@@ -116,8 +120,8 @@ public class PlayerMovement : MonoBehaviour
     {
         anim.enabled = true;
         rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
-        //rb.velocity = Vector2.zero;
         SetInCombat(false);
+        rb.AddForce(Vector2.up * 10f);
     }
 
     public void Jump()
@@ -126,6 +130,7 @@ public class PlayerMovement : MonoBehaviour
         {
             //jumpSoundEffect.Play();
             //rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeedY);
+            jumpAS.Play();
             rb.AddForce(Vector2.up * jumpForce);
         }
     }

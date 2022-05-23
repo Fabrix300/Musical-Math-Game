@@ -13,6 +13,12 @@ public class CombatSystem : MonoBehaviour
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Button[] noteButtonsAndDeleteButton;
     public Animator congratsMessageAnimator;
+
+    //Playing Notes HUD
+    public Animator playingNotesHUDAnimator;
+    public Image playingNotesHUDImage;
+    public Sprite[] musicalNotesImages;
+
     public RequestTimer timer;
     public Text formulationText;
     public Text resultText;
@@ -159,21 +165,25 @@ public class CombatSystem : MonoBehaviour
         TriggerEndAnimationOfHUDElements();
         yield return new WaitForSeconds(0.8f);
         TriggerEndAnimationOfCongratsMessage();
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(.5f);
+        TriggerStartAnimationOfPlayingNotesHUD();
+        yield return new WaitForSeconds(1f);
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
         formulationText.text = "";
 
         //make fox singggg
         playerGO.GetComponent<Animator>().SetInteger("state", 4);
+        StartCoroutine(audioManager.FadeVolumeDown("CombatLevel01"));
         for (int i = 0; i < notesInput.Count; i++)
         {
-            //audioManager.PlayNote(note, notesInput[i]);
             Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
             switch (notesInput[i]) 
             {
                 case 1f: 
                     {
+                        //Changing image of PlayingNotesHUD
+                        playingNotesHUDImage.sprite = musicalNotesImages[0];
                         AudioSource aS = noteArray[0].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -181,6 +191,8 @@ public class CombatSystem : MonoBehaviour
                     }
                 case 0.5f: 
                     {
+                        //Changing image of PlayingNotesHUD
+                        playingNotesHUDImage.sprite = musicalNotesImages[1];
                         AudioSource aS = noteArray[1].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -188,6 +200,8 @@ public class CombatSystem : MonoBehaviour
                     }
                 case 0.25f: 
                     {
+                        //Changing image of PlayingNotesHUD
+                        playingNotesHUDImage.sprite = musicalNotesImages[2];
                         AudioSource aS = noteArray[2].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -195,6 +209,8 @@ public class CombatSystem : MonoBehaviour
                     }
                 case 0.125f: 
                     {
+                        //Changing image of PlayingNotesHUD
+                        playingNotesHUDImage.sprite = musicalNotesImages[3];
                         AudioSource aS = noteArray[3].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -203,7 +219,11 @@ public class CombatSystem : MonoBehaviour
             }
         }
         playerGO.GetComponent<Animator>().SetInteger("state", 0);
+        StartCoroutine(audioManager.FadeVolumeUp("CombatLevel01"));
+
         yield return new WaitForSeconds(0.5f);
+        TriggerEndAnimationOfPlayingNotesHUD();
+        playingNotesHUDImage.sprite = musicalNotesImages[4];
 
         //////////////////
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
@@ -305,6 +325,16 @@ public class CombatSystem : MonoBehaviour
         return result;
     }
 
+    public void TriggerStartAnimationOfPlayingNotesHUD()
+    {
+        playingNotesHUDAnimator.SetInteger("state", 1);
+    }
+
+    public void TriggerEndAnimationOfPlayingNotesHUD()
+    {
+        playingNotesHUDAnimator.SetInteger("state", 2);
+    }
+
     public void TriggerEndAnimationOfCongratsMessage()
     {
         congratsMessageAnimator.SetInteger("state", 2);
@@ -314,11 +344,6 @@ public class CombatSystem : MonoBehaviour
     {
         congratsMessageAnimator.SetInteger("state", 1);
     }
-
-    /*public void EnableCongratsMessageAnimator()
-    {
-        congratsMessageAnimator.enabled = true;
-    }*/
 
     public void EnableNoteButtonsAndDeleteButton()
     {
@@ -351,14 +376,6 @@ public class CombatSystem : MonoBehaviour
             HUDElements[i].TriggerEndAnimation();
         }
     }
-
-    /*public void ActivateAnimatorsOfPlayerAnswerHUD()
-    {
-        for(int i = 0; i < HUDElements.Length; i++)
-        {
-            HUDElements[i].ActivateAnimatorAndStartAnimation();
-        }
-    }*/
 
     public void InstantiatePlayerAndEnemy() {
         playerGO = Instantiate(playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);

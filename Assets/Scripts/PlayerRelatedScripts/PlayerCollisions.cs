@@ -26,12 +26,14 @@ public class PlayerCollisions : MonoBehaviour
         // Checking if its an item
         if (gO.GetComponent<CherryItemWorld>())
         {
-            CherryItemWorld itemWorld = gO.GetComponent<CherryItemWorld>();
+            //CherryItemWorld itemWorld = gO.GetComponent<CherryItemWorld>();
             if (playerInventory)
             {
                 audioManager.Play("ItemCollected");
-                playerInventory.AddItem(itemWorld.healerObject);
-                itemWorld.DestroySelf();
+                /*playerInventory.AddItem(itemWorld.healerObject);
+                itemWorld.DestroySelf();*/
+                playerInventory.AddItem(gO.GetComponent<CherryItemWorld>().healerObject);
+                gO.GetComponent<Animator>().SetInteger("state", 1);
             }
         }
 

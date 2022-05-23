@@ -85,4 +85,31 @@ public class AudioManager : MonoBehaviour
         s.source.volume = sourceVolume;
         s2.source.Play();
     }
+
+    public IEnumerator FadeVolumeDown(string song)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == song);
+        float currentTime = 0;
+        float sourceVolume = s.source.volume;
+        while (currentTime < 0.5f)
+        {
+            s.source.volume = Mathf.Lerp(sourceVolume, 0.2f, currentTime / 0.5f);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public IEnumerator FadeVolumeUp(string song)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == song);
+        float currentTime = 0;
+        float sourceVolume = s.source.volume;
+        float targetVolume = s.volume;
+        while (currentTime < 0.5f)
+        {
+            s.source.volume = Mathf.Lerp(sourceVolume, targetVolume, currentTime / 0.5f);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
 }

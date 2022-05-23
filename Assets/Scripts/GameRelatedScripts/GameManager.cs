@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public string savedSceneName = "Level01";
     public Camera gameCamera;
     public Animator crossFadeTransition;
+    public Animator twoSidedTransition;
 
     private GameObject player;
     private GameObject activeLevelHolder;
@@ -26,9 +27,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        LoadSavedScene();
+        crossFadeTransition.speed = 0f;
         combatData = CombatData.instance;
         audioManager = AudioManager.instance;
+        LoadSavedScene();
     }
 
     public void LoadSavedScene()
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
         {
             gameCamera.GetComponent<CameraMovement>().FindPlayer();
             player = GameObject.Find("Player");
+            crossFadeTransition.speed = 1f;
         };
     }
 
@@ -56,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator PassToCombatScene(GameObject levelHolder)
     {
-        crossFadeTransition.SetInteger("state", 0);
+        twoSidedTransition.SetInteger("state", 1);
         StartCoroutine(audioManager.Crossfade(savedSceneName, "CombatLevel01"));
         yield return new WaitForSeconds(1f);
         if (levelHolder != null)
@@ -70,7 +73,7 @@ public class GameManager : MonoBehaviour
         {
             yield return null;
         }
-        crossFadeTransition.SetInteger("state", 1);
+        twoSidedTransition.SetInteger("state", 2);
     }
 
     public void ComeBackFromCombatScene()
@@ -81,11 +84,11 @@ public class GameManager : MonoBehaviour
 
     IEnumerator UnloadCombatScene()
     {
-        crossFadeTransition.SetInteger("state", 0);
+        twoSidedTransition.SetInteger("state", 1);
         StartCoroutine(audioManager.Crossfade("CombatLevel01", savedSceneName));
         yield return new WaitForSeconds(1f);
         //combatData.GetEnemyToCombat().DestroySelf();
-        combatData.GetEnemyToCombat().gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        combatData.GetEnemyToCombat().gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         gameCamera.transform.position = combatData.GetPreviousCameraPosition();
         gameCamera.GetComponent<CameraMovement>().inCombat = false;
         //player.GetComponent<PlayerMovement>().UnfreezePlayer();
@@ -95,8 +98,8 @@ public class GameManager : MonoBehaviour
         {
             yield return null;
         }
-        crossFadeTransition.SetInteger("state", 1);
-        yield return new WaitForSeconds(0.5f);
+        twoSidedTransition.SetInteger("state", 2);
+        yield return new WaitForSeconds(1f);
         Animator enemyToCombatAnimator = combatData.GetEnemyToCombat().gameObject.GetComponent<Animator>();
         enemyToCombatAnimator.enabled = true;
         enemyToCombatAnimator.SetInteger("state", 2);
