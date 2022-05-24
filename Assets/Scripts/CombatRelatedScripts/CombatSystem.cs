@@ -226,7 +226,7 @@ public class CombatSystem : MonoBehaviour
         playingNotesHUDImage.sprite = musicalNotesImages[4];
 
         //////////////////
-        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage.GetValue() * timer.GetTimerBonusMultiplicator());
+        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
         notesInput.Clear();
 
         yield return new WaitForSeconds(1.5f);
@@ -398,16 +398,18 @@ public class CombatSystem : MonoBehaviour
         }
 
         /**/
+        enemyGO.transform.Find("CanvasHolder").gameObject.SetActive(false);
         enemyGO.GetComponent<EnemyMovement>().inCombat = true;
         enemyGO.GetComponent<Animator>().SetInteger("state", 0);
         enemyEnemyComp = enemyGO.GetComponent<Enemy>();
 
+        Enemy enemyTemp = combatData.GetEnemyToCombat();
         enemyEnemyComp.SetAll(
-            combatData.GetEnemyToCombat().enemyType,
-            combatData.GetEnemyToCombat().enemyName,
-            combatData.GetEnemyToCombat().level,
-            combatData.GetEnemyToCombat().healthPoints,
-            combatData.GetEnemyToCombat().maxHealthPoints);
+            enemyTemp.enemyType,
+            enemyTemp.enemyName,
+            enemyTemp.level,
+            enemyTemp.healthPoints,
+            enemyTemp.maxHealthPoints);
     }
 
     public void SetCombatHUDs()

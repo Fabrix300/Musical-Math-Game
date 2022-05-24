@@ -16,9 +16,13 @@ public class Enemy : MonoBehaviour
     public EnemyType enemyType;
     public string enemyName;
     public int level;
-    public float damage;
-    public float healthPoints;
-    public float maxHealthPoints;
+    
+    private readonly float baseDamage = 1;
+    private readonly float baseMaxHealthPoints = 18;
+    [HideInInspector] public float damage;
+    [HideInInspector] public float healthPoints;
+    [HideInInspector] public float maxHealthPoints;
+
     public Text levelText;
 
     public event Action OnEnemyHealthPointsChange;
@@ -26,6 +30,9 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         levelText.text = level.ToString();
+        damage = baseDamage + (2 * level);
+        maxHealthPoints = baseMaxHealthPoints + (2 * level);
+        healthPoints = maxHealthPoints;
     }
 
     public void DestroySelf()

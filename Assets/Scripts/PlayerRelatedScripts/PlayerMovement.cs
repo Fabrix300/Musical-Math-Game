@@ -87,7 +87,11 @@ public class PlayerMovement : MonoBehaviour
             spriteRenderer.flipX = true;
             state = AnimationState.Running;
         }
-        else if (rb.velocity.y > .1f)
+        else
+        {
+            state = AnimationState.Idle;
+        }
+        if (rb.velocity.y > .1f)
         {
             state = AnimationState.Jumping;
         }
@@ -95,11 +99,7 @@ public class PlayerMovement : MonoBehaviour
         {
             state = AnimationState.Falling;
         }
-        else
-        {
-            state = AnimationState.Idle;
-        }
-        
+
         anim.SetInteger("state", (int)state);
     }
 

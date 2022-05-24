@@ -10,13 +10,17 @@ public class PlayerStats : MonoBehaviour
 
     // Life or mana idk
     private bool isPlayerAlive = true;
-    private float playerEnergyPoints = 20;
-    private float playerMaxEnergyPoints = 20;
+    private readonly float basePlayerMaxEnergyPoints = 18;
+    private float playerEnergyPoints;
+    private float playerMaxEnergyPoints;
 
-    // STATS
+    // OTHER STATS
     public int level;
-    public int exp;
-    public Stat damage;
+    private readonly int basePlayerMaxExpPoints = 18;
+    private int playerExpPoints;
+    private int playerMaxExpPoints;
+    private readonly float baseDamage = 3;
+    [HideInInspector] public float damage;
     //public Stat armor;
 
     // INFO
@@ -34,6 +38,12 @@ public class PlayerStats : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        damage = baseDamage + (2 * level);
+        playerMaxEnergyPoints = basePlayerMaxEnergyPoints + (2 * level);
+        playerEnergyPoints = playerMaxEnergyPoints;
+        playerMaxExpPoints = basePlayerMaxExpPoints + (2 * level);
+        playerExpPoints = 0;
     }
 
     public bool NumbPlayer(float damage)
@@ -86,5 +96,15 @@ public class PlayerStats : MonoBehaviour
     public float GetPlayerMaxEnergyPoints()
     {
         return playerMaxEnergyPoints;
+    }
+
+    public int GetPlayerExpPoints()
+    {
+        return playerExpPoints;
+    }
+
+    public int GetPlayerMaxExpPoints()
+    {
+        return playerMaxExpPoints;
     }
 }
