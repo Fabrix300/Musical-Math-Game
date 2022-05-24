@@ -245,7 +245,8 @@ public class CombatSystem : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
-        //Attack the player or heal or whatever
+        // Make Enemy Sing
+        //Damage the player
         bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
         yield return new WaitForSeconds(1f);
 

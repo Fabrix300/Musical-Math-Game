@@ -8,8 +8,9 @@ public class EnergyBar : MonoBehaviour
     public Slider slider;
     public Image energyFill;
     public Text nameText;
-    public Text levelText;
     public Image characterImage;
+    public Slider levelSlider;
+    public Text levelText;
 
     private PlayerStats playerStats;
     private CombatAssets combatAssets;
@@ -21,6 +22,8 @@ public class EnergyBar : MonoBehaviour
         combatAssets = CombatAssets.instance;
         nameText.text = playerStats.playerName;
         levelText.text = playerStats.level.ToString();
+        levelSlider.maxValue = playerStats.GetPlayerMaxExpPoints();
+        levelSlider.value = playerStats.GetPlayerExpPoints();
         characterImage.sprite = combatAssets.playerImage;
         slider.maxValue = playerStats.GetPlayerMaxEnergyPoints();
         slider.value = playerStats.GetPlayerEnergyPoints();
@@ -34,6 +37,12 @@ public class EnergyBar : MonoBehaviour
         slider.maxValue = playerStats.GetPlayerMaxEnergyPoints();
         slider.value = playerStats.GetPlayerEnergyPoints();
         SetSliderColor(slider.value, slider.maxValue); //<>
+    }
+
+    public void UpdateExp()
+    {
+        levelSlider.maxValue = playerStats.GetPlayerMaxExpPoints();
+        levelSlider.value = playerStats.GetPlayerExpPoints();
     }
 
     public void SetSliderColor(float energyPoints, float maxEnergyPoints)

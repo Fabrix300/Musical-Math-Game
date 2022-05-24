@@ -83,6 +83,16 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("player died.");
     }
 
+    public void AddExpPointsAndCheck(int points)
+    {
+        playerExpPoints += points;
+        if (playerExpPoints >= playerMaxExpPoints)
+        {
+            int reminder = playerExpPoints - playerMaxExpPoints;
+            //AdvanceOneLevel(reminder);
+        }
+    }
+
     public bool GetIsPlayerAlive()
     {
         return isPlayerAlive;
