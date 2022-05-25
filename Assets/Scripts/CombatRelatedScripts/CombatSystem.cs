@@ -174,6 +174,7 @@ public class CombatSystem : MonoBehaviour
 
         //make fox singggg
         playerGO.GetComponent<Animator>().SetInteger("state", 4);
+        //Add an image animated with the singing effect
         StartCoroutine(audioManager.FadeVolumeDown("CombatLevel01"));
         for (int i = 0; i < notesInput.Count; i++)
         {
@@ -227,6 +228,7 @@ public class CombatSystem : MonoBehaviour
 
         //////////////////
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
+        //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
         notesInput.Clear();
 
         yield return new WaitForSeconds(1.5f);
@@ -234,6 +236,16 @@ public class CombatSystem : MonoBehaviour
         if (isEnemyDead)
         {
             state = CombatState.WON;
+            int expObtained = ((int)enemyEnemyComp.maxHealthPoints) / 2;
+            bool isLevelUp = playerStats.AddExpPointsAndCheck(expObtained);
+            if (isLevelUp)
+            {
+                // animación de subida de nivel
+            }
+            else
+            {
+                // solo animacion de experiencia ganada
+            }
             EndCombat();
         }
         else

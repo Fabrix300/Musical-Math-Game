@@ -4599,8 +4599,9 @@ MonoBehaviour:
   slider: {fileID: 1318659811}
   energyFill: {fileID: 629073840}
   nameText: {fileID: 52158346}
-  levelText: {fileID: 573079798}
   characterImage: {fileID: 1707664546}
+  levelSlider: {fileID: 1620184036}
+  levelText: {fileID: 573079798}
 --- !u!1 &1346611551
 GameObject:
   m_ObjectHideFlags: 0

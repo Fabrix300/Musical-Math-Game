@@ -22,17 +22,20 @@ public class EnemyMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         enemySprite = GetComponent<SpriteRenderer>();
         rb2d = GetComponent<Rigidbody2D>();
-        if (waypoints[0].transform.position.x > transform.position.x)
+        if (waypoints[0] && waypoints[1])
         {
-            dirX = 1f;
-            enemySprite.flipX = true;
+            if (waypoints[0].transform.position.x > transform.position.x)
+            {
+                dirX = 1f;
+                enemySprite.flipX = true;
+            }
+            else
+            {
+                dirX = -1f;
+                enemySprite.flipX = false;
+            }
+            anim.SetInteger("state", (int)EnemyMovementState.running);
         }
-        else
-        {
-            dirX = -1f;
-            enemySprite.flipX = false;
-        }
-        anim.SetInteger("state", (int)EnemyMovementState.running);
     }
 
     // Update is called once per frame

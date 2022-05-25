@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
         combatData.SetOriginScene(savedSceneName);
         combatData.SetPreviousPlayerPosition(transform.position.x, transform.position.y, transform.position.z);
         combatData.SetPreviousCameraPosition(gameCamera.transform.position.x, gameCamera.transform.position.y, -10f);
-        Debug.Log(combatData.GetPreviousCameraPosition());
         activeLevelHolder = levelHolder;
         StartCoroutine(PassToCombatScene(activeLevelHolder));
     }

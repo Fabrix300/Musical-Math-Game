@@ -29,6 +29,7 @@ public class EnergyBar : MonoBehaviour
         slider.value = playerStats.GetPlayerEnergyPoints();
         SetSliderColor(slider.value, slider.maxValue);
         playerStats.OnPlayerHealthPointsChange += UpdateEnergy;
+        playerStats.OnPlayerExpPointsChange += UpdateExp;
     }
 
     public void UpdateEnergy()
@@ -41,6 +42,7 @@ public class EnergyBar : MonoBehaviour
 
     public void UpdateExp()
     {
+        levelText.text = playerStats.level.ToString();
         levelSlider.maxValue = playerStats.GetPlayerMaxExpPoints();
         levelSlider.value = playerStats.GetPlayerExpPoints();
     }

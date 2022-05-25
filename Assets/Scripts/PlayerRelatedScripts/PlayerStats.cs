@@ -28,6 +28,7 @@ public class PlayerStats : MonoBehaviour
 
     // CALLBACK para cuando el jugador recibe daño
     public event Action OnPlayerHealthPointsChange;
+    public event Action OnPlayerExpPointsChange;
 
     private void Awake()
     {
@@ -39,11 +40,7 @@ public class PlayerStats : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        damage = baseDamage + (2 * level);
-        playerMaxEnergyPoints = basePlayerMaxEnergyPoints + (2 * level);
-        playerEnergyPoints = playerMaxEnergyPoints;
-        playerMaxExpPoints = basePlayerMaxExpPoints + (2 * level);
-        playerExpPoints = 0;
+        SetStatsBasedOnLevel(0);
     }
 
     public bool NumbPlayer(float damage)
@@ -83,14 +80,33 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("player died.");
     }
 
-    public void AddExpPointsAndCheck(int points)
+    public bool AddExpPointsAndCheck(int points)
     {
         playerExpPoints += points;
         if (playerExpPoints >= playerMaxExpPoints)
         {
             int reminder = playerExpPoints - playerMaxExpPoints;
-            //AdvanceOneLevel(reminder);
+            AdvanceOneLevel(reminder);
+            OnPlayerExpPointsChange?.Invoke();
+            return true;
         }
+        OnPlayerExpPointsChange?.Invoke();
+        return false;
+    }
+
+    public void AdvanceOneLevel(int reminder)
+    {
+        level += 1;
+        SetStatsBasedOnLevel(reminder);
+    }
+
+    public void SetStatsBasedOnLevel(int reminder) 
+    {
+        damage = baseDamage + (2 * level);
+        playerMaxEnergyPoints = basePlayerMaxEnergyPoints + (2 * level);
+        playerEnergyPoints = playerMaxEnergyPoints;
+        playerMaxExpPoints = basePlayerMaxExpPoints + (2 * level);
+        playerExpPoints = reminder;
     }
 
     public bool GetIsPlayerAlive()
