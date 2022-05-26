@@ -19,6 +19,14 @@ public class CombatSystem : MonoBehaviour
     public Image playingNotesHUDImage;
     public Sprite[] musicalNotesImages;
 
+    // WinnerMessageHUD
+    public Animator winnerMessage;
+    public GameObject winnerMessageContTitle;
+    public GameObject wMCLevelBar;
+    public Slider wMCLevelBarSlider;
+    public Text wMCExpText;
+    public GameObject wMCLevelUpText;
+
     public RequestTimer timer;
     public Text formulationText;
     public Text resultText;
@@ -173,7 +181,7 @@ public class CombatSystem : MonoBehaviour
         formulationText.text = "";
 
         //make fox singggg
-        playerGO.GetComponent<Animator>().SetInteger("state", 4);
+        playerGO.GetComponent<Animator>().SetInteger("state", 5);
         //Add an image animated with the singing effect
         StartCoroutine(audioManager.FadeVolumeDown("CombatLevel01"));
         for (int i = 0; i < notesInput.Count; i++)
@@ -237,15 +245,39 @@ public class CombatSystem : MonoBehaviour
         {
             state = CombatState.WON;
             int expObtained = ((int)enemyEnemyComp.maxHealthPoints) / 2;
-            bool isLevelUp = playerStats.AddExpPointsAndCheck(expObtained);
-            if (isLevelUp)
+            wMCExpText.text = "+"+expObtained;
+            winnerMessage.SetInteger("state", 1);
+            yield return new WaitForSeconds(0.5f);
+            winnerMessageContTitle.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            wMCLevelBarSlider.maxValue = playerStats.GetPlayerMaxExpPoints();
+            wMCLevelBarSlider.value = playerStats.GetPlayerExpPoints();
+            int valueTemp = playerStats.GetPlayerExpPoints();
+            int target = playerStats.GetPlayerExpPoints() + expObtained;
+            wMCLevelBar.SetActive(true);
+            if (target >= playerStats.GetPlayerMaxExpPoints())
             {
-                // animación de subida de nivel
+                wMCLevelUpText.SetActive(true);
+                float currentTime = 0;
+                while (currentTime < 0.8f)
+                {
+                    wMCLevelBarSlider.value = Mathf.Lerp(valueTemp, playerStats.GetPlayerMaxExpPoints(), currentTime / 0.8f);
+                    currentTime += Time.deltaTime;
+                    yield return null;
+                }
             }
             else
             {
-                // solo animacion de experiencia ganada
+                float currentTime = 0;
+                while (currentTime < 0.8f)
+                {
+                    wMCLevelBarSlider.value = Mathf.Lerp(valueTemp, target, currentTime / 0.8f);
+                    currentTime += Time.deltaTime;
+                    yield return null;
+                }
             }
+            _ = playerStats.AddExpPointsAndCheck(expObtained);
+            yield return new WaitForSeconds(2.6f);
             EndCombat();
         }
         else
