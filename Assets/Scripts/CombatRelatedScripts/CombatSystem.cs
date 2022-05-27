@@ -34,9 +34,7 @@ public class CombatSystem : MonoBehaviour
     public Text enemyRequestText;
 
     private CombatState state;
-    private GameObject enemyPreFab;
     private Enemy enemyEnemyComp;
-    private GameObject playerPreFab;
     private GameObject playerGO;
 
     private List<float> notesInput = new();
@@ -52,8 +50,6 @@ public class CombatSystem : MonoBehaviour
         combatData = CombatData.instance; playerStats = PlayerStats.instance; combatAssets = CombatAssets.instance;
         gameManager = GameManager.instance; audioManager = AudioManager.instance;
         musicalNotes = new List<Sound[]>(audioManager.musicalNotes);
-        playerPreFab = combatAssets.playerPreFab;
-        enemyPreFab = combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType);
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
 
         timer.OnTimerEnd += RequestTimeEnd;
@@ -425,9 +421,10 @@ public class CombatSystem : MonoBehaviour
     }
 
     public void InstantiatePlayerAndEnemy() {
-        playerGO = Instantiate(playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
+        playerGO = Instantiate(combatAssets.playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
+        //consider if adding indicator as child or instantiate it in the world. turn indicator is in combat assets.
         SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
-        GameObject enemyGO = Instantiate(enemyPreFab, new Vector3(5.5f, 10f, 0f), Quaternion.identity);
+        GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), new Vector3(5.5f, 10f, 0f), Quaternion.identity);
         SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         playerGO.GetComponent<PlayerMovement>().SetInCombat(true);
         /**/

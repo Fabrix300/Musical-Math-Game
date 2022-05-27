@@ -18,6 +18,9 @@ public class CombatAssets : MonoBehaviour
     public Sprite playerImage;
     public GameObject[] enemyPreFabs;
     public Sprite[] enemyImages;
+    //turnIndicator
+    public GameObject turnIndicatorPlayer;
+    public GameObject turnIndicatorEnemy;
 
     public GameObject GetEnemyPreFab(EnemyType typeEnemy)
     {

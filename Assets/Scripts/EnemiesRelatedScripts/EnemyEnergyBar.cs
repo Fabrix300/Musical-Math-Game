@@ -23,7 +23,7 @@ public class EnemyEnergyBar : MonoBehaviour
             enemyImage.sprite = combatAssets.GetEnemyImage(enemyComp.enemyType);
             slider.maxValue = enemyComp.maxHealthPoints;
             slider.value = enemyComp.healthPoints;
-            SetSliderColor(slider.value, slider.maxValue);
+            //SetSliderColor(slider.value, slider.maxValue);
             enemyComp.OnEnemyHealthPointsChange += UpdateEnergy;
         } 
     }
@@ -32,10 +32,10 @@ public class EnemyEnergyBar : MonoBehaviour
     {
         slider.maxValue = enemyComp.maxHealthPoints;
         slider.value = enemyComp.healthPoints;
-        SetSliderColor(slider.value, slider.maxValue);
+        //SetSliderColor(slider.value, slider.maxValue);
     }
 
-    public void SetSliderColor(float energyPoints, float maxEnergyPoints)
+    /*public void SetSliderColor(float energyPoints, float maxEnergyPoints)
     {
         float result = energyPoints / maxEnergyPoints;
         if (result < 0.75f && result >= 0.5f)
@@ -54,7 +54,7 @@ public class EnemyEnergyBar : MonoBehaviour
         {
             energyFill.color = new Color32(8, 255, 0, 255);
         }
-    }
+    }*/
 
     public void SetEnemyComponent(Enemy enemyComponent)
     {

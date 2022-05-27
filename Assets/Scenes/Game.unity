@@ -824,6 +824,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f240dfd4814d34d55a9b033f3c9d8a60, type: 3}
   - {fileID: 21300000, guid: 86ca59b9bca0e409b9ba2784fbe69f01, type: 3}
   - {fileID: 21300000, guid: 0aea1af54600e664a94d761d6091f09d, type: 3}
+  turnIndicatorPlayer: {fileID: 3682596846816593452, guid: 8472611be34000a4ba17bbdd8546117e, type: 3}
+  turnIndicatorEnemy: {fileID: 1047079658326292811, guid: f3a212ed2af54324e80aa90f53c43c2e, type: 3}
 --- !u!1 &779026900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,10 +1064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 1
-  exp: 0
-  damage:
-    baseValue: 5
-    modifiers: []
+  damage: 0
   playerName: Ayka
 --- !u!114 &1332508232
 MonoBehaviour:
