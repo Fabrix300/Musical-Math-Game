@@ -21,6 +21,7 @@ public class CombatSystem : MonoBehaviour
 
     // WinnerMessageHUD
     public Animator winnerMessage;
+    public Animator backOverlay;
     public GameObject winnerMessageContTitle;
     public GameObject wMCLevelBar;
     public Slider wMCLevelBarSlider;
@@ -245,8 +246,9 @@ public class CombatSystem : MonoBehaviour
         {
             state = CombatState.WON;
             int expObtained = ((int)enemyEnemyComp.maxHealthPoints) / 2;
-            wMCExpText.text = "+"+expObtained;
+            wMCExpText.text = "+" + expObtained;
             winnerMessage.SetInteger("state", 1);
+            backOverlay.SetInteger("state", 1);
             yield return new WaitForSeconds(0.5f);
             winnerMessageContTitle.SetActive(true);
             yield return new WaitForSeconds(0.5f);

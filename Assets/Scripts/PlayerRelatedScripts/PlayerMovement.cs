@@ -45,8 +45,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }*/
 
-        //if(inCombat == false) UpdateAnimation();
-        UpdateAnimation();
+        if(inCombat == false) UpdateAnimation();
+        //UpdateAnimation();
     }
 
     private void FixedUpdate()
