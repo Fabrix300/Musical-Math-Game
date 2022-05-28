@@ -36,6 +36,9 @@ public class CombatSystem : MonoBehaviour
     private CombatState state;
     private Enemy enemyEnemyComp;
     private GameObject playerGO;
+    //TurnIndicators
+    private GameObject turnIndicatorPlayer;
+    private GameObject turnIndicatorEnemy;
 
     private List<float> notesInput = new();
     private List<Sound[]> musicalNotes;
@@ -70,6 +73,7 @@ public class CombatSystem : MonoBehaviour
 
     void PlayerTurn()
     {
+        turnIndicatorPlayer.SetActive(true);
         if (GenerateRandomOperationForEnemyRequest())
         {
             TriggerStartAnimationOfHUDElements();
@@ -240,6 +244,7 @@ public class CombatSystem : MonoBehaviour
 
         if (isEnemyDead)
         {
+            turnIndicatorPlayer.SetActive(false);
             state = CombatState.WON;
             int expObtained = ((int)enemyEnemyComp.maxHealthPoints) / 2;
             wMCExpText.text = "+" + expObtained;
@@ -280,6 +285,7 @@ public class CombatSystem : MonoBehaviour
         }
         else
         {
+            turnIndicatorPlayer.SetActive(false);
             state = CombatState.ENEMYTURN;
             StartCoroutine(EnemyTurn());
         }
@@ -287,7 +293,10 @@ public class CombatSystem : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
+        turnIndicatorEnemy.SetActive(true);
+        yield return new WaitForSeconds(1f);
         // Make Enemy Sing
+
         //Damage the player
         bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
         yield return new WaitForSeconds(1f);
@@ -295,11 +304,13 @@ public class CombatSystem : MonoBehaviour
         //check if player is dead, actualizar estados y pasar a endcombat o playerTurn;
         if (isPlayerDead)
         {
+            turnIndicatorEnemy.SetActive(false);
             state = CombatState.LOST;
             EndCombat();
         }
         else
         {
+            turnIndicatorEnemy.SetActive(false);
             state = CombatState.PLAYERTURN;
             PlayerTurn();
         }
@@ -422,10 +433,15 @@ public class CombatSystem : MonoBehaviour
 
     public void InstantiatePlayerAndEnemy() {
         playerGO = Instantiate(combatAssets.playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
-        //consider if adding indicator as child or instantiate it in the world. turn indicator is in combat assets.
+        turnIndicatorPlayer = Instantiate(combatAssets.turnIndicatorPlayer, new Vector3(-5.5f, 0.5f, 0f), Quaternion.identity);
+        turnIndicatorPlayer.SetActive(false);
         SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        SceneManager.MoveGameObjectToScene(turnIndicatorPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), new Vector3(5.5f, 10f, 0f), Quaternion.identity);
+        turnIndicatorEnemy = Instantiate(combatAssets.turnIndicatorEnemy, new Vector3(5.5f, 0.5f, 0f), Quaternion.identity);
+        turnIndicatorEnemy.SetActive(false);
         SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        SceneManager.MoveGameObjectToScene(turnIndicatorEnemy, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         playerGO.GetComponent<PlayerMovement>().SetInCombat(true);
         /**/
 
