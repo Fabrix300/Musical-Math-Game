@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
 
     public Sound[] sounds;
 
+    [Header("PlayerSingingNotes")]
     public Sound[] CNote;
     public Sound[] DNote;
     public Sound[] ENote;
@@ -19,6 +20,17 @@ public class AudioManager : MonoBehaviour
     public Sound[] BNote;
     public Sound[] COctaveNote;
     public List<Sound[]> musicalNotes = new();
+
+    [Header("EnemySingingNotes")]
+    public Sound[] ECNote;
+    public Sound[] EDNote;
+    public Sound[] EENote;
+    public Sound[] EFNote;
+    public Sound[] EGNote;
+    public Sound[] EANote;
+    public Sound[] EBNote;
+    public Sound[] ECOctaveNote;
+    public List<Sound[]> enemyMusicalNotes = new();
 
     private GameManager gameManager;
     
@@ -50,6 +62,15 @@ public class AudioManager : MonoBehaviour
         musicalNotes.Add(ANote);
         musicalNotes.Add(BNote);
         musicalNotes.Add(COctaveNote);
+
+        enemyMusicalNotes.Add(ECNote);
+        enemyMusicalNotes.Add(EDNote);
+        enemyMusicalNotes.Add(EENote);
+        enemyMusicalNotes.Add(EFNote);
+        enemyMusicalNotes.Add(EGNote);
+        enemyMusicalNotes.Add(EANote);
+        enemyMusicalNotes.Add(EBNote);
+        enemyMusicalNotes.Add(ECOctaveNote);
     }
 
     private void Start()

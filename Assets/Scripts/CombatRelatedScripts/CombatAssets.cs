@@ -21,6 +21,8 @@ public class CombatAssets : MonoBehaviour
     //turnIndicator
     public GameObject turnIndicatorPlayer;
     public GameObject turnIndicatorEnemy;
+    //attack Effect
+    public GameObject attackEffect;
 
     public GameObject GetEnemyPreFab(EnemyType typeEnemy)
     {

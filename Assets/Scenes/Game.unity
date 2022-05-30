@@ -170,20 +170,48 @@ MonoBehaviour:
   sounds:
   - clip: {fileID: 8300000, guid: 88d504a4816472e47ad1357cb53932c5, type: 3}
     name: Level01
-    volume: 0.3
+    volume: 0.35
     pitch: 1
     loop: 1
     playOnAwake: 0
     source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
     name: CombatLevel01
-    volume: 0.3
+    volume: 0.35
     pitch: 1
     loop: 1
     playOnAwake: 0
     source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
     name: ItemCollected
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
+    name: CorrectAnswer
+    volume: 0.35
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: f3e7db6aca4c7a74997fbf7daf707276, type: 3}
+    name: CombatWon
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 61cbb1ca5afb0e345b944e1bc49dc907, type: 3}
+    name: 1HitOnPlayer
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 61cbb1ca5afb0e345b944e1bc49dc907, type: 3}
+    name: 1HitOnEnemy
     volume: 0.6
     pitch: 1
     loop: 0
@@ -415,6 +443,238 @@ MonoBehaviour:
     playOnAwake: 0
     source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 3f19f2fece99fce4f8bfb8374361db12, type: 3}
+    name: C'-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  ECNote:
+  - clip: {fileID: 8300000, guid: b4d1a1c583d7b034fad89f3376146096, type: 3}
+    name: C-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 162965d337d84f6478c7e2befb71c2d5, type: 3}
+    name: C-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: d2c43a542f7682746bf9a7bdc24f0c92, type: 3}
+    name: C-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: b47ca5970b6699745b8b75056829d50f, type: 3}
+    name: C-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  EDNote:
+  - clip: {fileID: 8300000, guid: 373f6ff764b2a6744a3f8d643e467f06, type: 3}
+    name: D-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: acd286b389835714e96f6931f0b3f50d, type: 3}
+    name: D-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 17d49a1d1c463b745adb6f3d4d9d38c8, type: 3}
+    name: D-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 1e88e0805ef66bc4a90b17513eca1253, type: 3}
+    name: D-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  EENote:
+  - clip: {fileID: 8300000, guid: f624803c0f5652b42b1087994edb087c, type: 3}
+    name: E-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: f273a4851ce78994ebb25fdb821c9ced, type: 3}
+    name: E-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: df4f3ea1baf464b47a37f7ae53870b2a, type: 3}
+    name: E-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 773e069990429d54f818b947a6203f97, type: 3}
+    name: E-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  EFNote:
+  - clip: {fileID: 8300000, guid: 1996f9a1be720cb41ba761cb2892e5c2, type: 3}
+    name: F-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 4c35aa7ce74e01d4eb968b361d7ec455, type: 3}
+    name: F-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 9f12347d9d0b42c469f86023c05f08e9, type: 3}
+    name: F-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: f652834ab1407ab4cba8412b842a3863, type: 3}
+    name: F-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  EGNote:
+  - clip: {fileID: 8300000, guid: b513d3f9f4790b94b9637b958d2f8183, type: 3}
+    name: G-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 3339474b1691f5144b158ad32185e000, type: 3}
+    name: G-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: f78719e0e8133734e9f9f2a9df1961a0, type: 3}
+    name: G-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 1a1742b97ac548b4ea40401ebe7fae07, type: 3}
+    name: G-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  EANote:
+  - clip: {fileID: 8300000, guid: 3a1ef6244182188459562fc2390878f3, type: 3}
+    name: A-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 867f0047cfb79ef4c935b4d5141b3374, type: 3}
+    name: A-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 5e0ca0b0b95dbf047ba7a30a2b44a158, type: 3}
+    name: A-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: aa3ff99a304f8e844bd5c9415cfa2b9a, type: 3}
+    name: A-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  EBNote:
+  - clip: {fileID: 8300000, guid: 97dce78dcae41e74c99249d2425fee60, type: 3}
+    name: B-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 40ebdbab9affd4d42a951cc9b96a7d41, type: 3}
+    name: B-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: b34b64ce8c6ed6140a65c1297d588669, type: 3}
+    name: B-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: e1ed46349f646fa4bb3c7883a54f5c95, type: 3}
+    name: B-1.8
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  ECOctaveNote:
+  - clip: {fileID: 8300000, guid: 74866755d74ecad45b34daf1cce4dddd, type: 3}
+    name: C'-1
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: d57062bac1162e14792ca83e7dc7315e, type: 3}
+    name: C'-1.2
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 511baaa59c5f76c418cbc21fd8c785a1, type: 3}
+    name: C'-1.4
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 9b10e0fff7c86e745944b1583610e71b, type: 3}
     name: C'-1.8
     volume: 0.7
     pitch: 1
@@ -826,6 +1086,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0aea1af54600e664a94d761d6091f09d, type: 3}
   turnIndicatorPlayer: {fileID: 3682596846816593452, guid: 8472611be34000a4ba17bbdd8546117e, type: 3}
   turnIndicatorEnemy: {fileID: 1047079658326292811, guid: f3a212ed2af54324e80aa90f53c43c2e, type: 3}
+  attackEffect: {fileID: 6456075137878941299, guid: 0c082b0fc9d0cb3498a43f42cf04b634, type: 3}
 --- !u!1 &779026900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1423,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850311038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 283.0632, y: 340.22845, z: 0.011659145}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

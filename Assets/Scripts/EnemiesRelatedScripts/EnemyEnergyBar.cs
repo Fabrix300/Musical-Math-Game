@@ -31,8 +31,22 @@ public class EnemyEnergyBar : MonoBehaviour
     public void UpdateEnergy()
     {
         slider.maxValue = enemyComp.maxHealthPoints;
-        slider.value = enemyComp.healthPoints;
+        StartCoroutine(FillSliderEnemy());
+        //slider.value = enemyComp.healthPoints;
         //SetSliderColor(slider.value, slider.maxValue);
+    }
+
+    public IEnumerator FillSliderEnemy()
+    {
+        float target = enemyComp.healthPoints;
+        float value = slider.value;
+        float currentTime = 0;
+        while (currentTime < 1f)
+        {
+            slider.value = Mathf.Lerp(value, target, currentTime / 1f);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
     }
 
     /*public void SetSliderColor(float energyPoints, float maxEnergyPoints)

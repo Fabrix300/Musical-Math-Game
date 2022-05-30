@@ -39,9 +39,19 @@ public class CombatSystem : MonoBehaviour
     //TurnIndicators
     private GameObject turnIndicatorPlayer;
     private GameObject turnIndicatorEnemy;
+    // AttackEffects Animators
+    private GameObject attackEffectOfPlayer;
+    private GameObject attackEffectOfEnemy;
+    private Animator attackEffectOfPlayerAnim;
+    private Animator attackEffectOfEnemyAnim;
+    //Hit Audio Sources
+    private AudioSource hitOnPlayer;
+    private AudioSource hitOnEnemy;
 
     private List<float> notesInput = new();
+    private List<float> enemyNotes = new();
     private List<Sound[]> musicalNotes;
+    private List<Sound[]> enemyMusicalNotes;
     private float enemyRequestDecimal;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
@@ -53,6 +63,7 @@ public class CombatSystem : MonoBehaviour
         combatData = CombatData.instance; playerStats = PlayerStats.instance; combatAssets = CombatAssets.instance;
         gameManager = GameManager.instance; audioManager = AudioManager.instance;
         musicalNotes = new List<Sound[]>(audioManager.musicalNotes);
+        enemyMusicalNotes = new List<Sound[]>(audioManager.enemyMusicalNotes);
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
 
         timer.OnTimerEnd += RequestTimeEnd;
@@ -65,7 +76,9 @@ public class CombatSystem : MonoBehaviour
         SetCombatHUDs();
         resultText.text = "0";
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+        turnIndicatorPlayer.SetActive(true);
+        yield return new WaitForSeconds(1f);
         state = CombatState.PLAYERTURN;
         PlayerTurn();
         yield return null;
@@ -163,6 +176,7 @@ public class CombatSystem : MonoBehaviour
         formulationText.text = "";
         notesInput.Clear();
         state = CombatState.ENEMYTURN;
+        turnIndicatorPlayer.SetActive(false);
         StartCoroutine(EnemyTurn());
     }
 
@@ -170,6 +184,7 @@ public class CombatSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         TriggerStartAnimationOfCongratsMessage();
+        audioManager.Play("CorrectAnswer");
         yield return new WaitForSeconds(1f);
         TriggerEndAnimationOfHUDElements();
         yield return new WaitForSeconds(0.8f);
@@ -184,7 +199,7 @@ public class CombatSystem : MonoBehaviour
         //make fox singggg
         playerGO.GetComponent<Animator>().SetInteger("state", 5);
         //Add an image animated with the singing effect
-        StartCoroutine(audioManager.FadeVolumeDown("CombatLevel01"));
+        StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
         for (int i = 0; i < notesInput.Count; i++)
         {
             Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
@@ -229,13 +244,15 @@ public class CombatSystem : MonoBehaviour
             }
         }
         playerGO.GetComponent<Animator>().SetInteger("state", 0);
-        StartCoroutine(audioManager.FadeVolumeUp("CombatLevel01"));
+        StartCoroutine(audioManager.FadeVolumeUp("Combat" + gameManager.savedSceneName));
 
         yield return new WaitForSeconds(0.5f);
         TriggerEndAnimationOfPlayingNotesHUD();
         playingNotesHUDImage.sprite = musicalNotesImages[4];
 
         //////////////////
+        attackEffectOfEnemyAnim.SetTrigger("Start");
+        hitOnEnemy.Play();
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
         //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
         notesInput.Clear();
@@ -244,12 +261,24 @@ public class CombatSystem : MonoBehaviour
 
         if (isEnemyDead)
         {
+            /*Creating GameObject with audioSource to play death sound of enemy*/
+            GameObject gOTemp = Instantiate(new GameObject(), enemyEnemyComp.gameObject.transform.position, Quaternion.identity);
+            SceneManager.MoveGameObjectToScene(gOTemp, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+            AudioSource aS = gOTemp.AddComponent<AudioSource>();
+            aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip;
+            aS.volume = 0.9f; aS.spatialBlend = 0.4f; aS.pitch = 1f; aS.loop = false; aS.playOnAwake = false;
+            aS.Play();
+            /*******************************/
+            enemyEnemyComp.gameObject.GetComponent<Animator>().SetInteger("state", 2);
+            yield return new WaitForSeconds(1f);
             turnIndicatorPlayer.SetActive(false);
             state = CombatState.WON;
             int expObtained = ((int)enemyEnemyComp.maxHealthPoints) / 2;
             wMCExpText.text = "+" + expObtained;
             winnerMessage.SetInteger("state", 1);
             backOverlay.SetInteger("state", 1);
+            StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
+            audioManager.Play("CombatWon");
             yield return new WaitForSeconds(0.5f);
             winnerMessageContTitle.SetActive(true);
             yield return new WaitForSeconds(0.5f);
@@ -279,6 +308,7 @@ public class CombatSystem : MonoBehaviour
                     yield return null;
                 }
             }
+            StartCoroutine(audioManager.FadeVolumeUp("Combat" + gameManager.savedSceneName));
             _ = playerStats.AddExpPointsAndCheck(expObtained);
             yield return new WaitForSeconds(2.6f);
             EndCombat();
@@ -294,11 +324,66 @@ public class CombatSystem : MonoBehaviour
     IEnumerator EnemyTurn()
     {
         turnIndicatorEnemy.SetActive(true);
+        float[] temp = { 1f, 0.5f, 0.25f, 0.125f };
+        int enemySinginglength = Random.Range(1, 8);
+        for (int i = 0; i < enemySinginglength; i++)
+        {
+            enemyNotes.Add(temp[Random.Range(0,4)]);
+        }
         yield return new WaitForSeconds(1f);
+
         // Make Enemy Sing
+        StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
+        for (int i = 0; i < enemyNotes.Count; i++)
+        {
+            Sound[] noteArray = enemyMusicalNotes[Random.Range(0, 8)];
+            switch (enemyNotes[i])
+            {
+                case 1f:
+                    {
+                        //Changing image of PlayingNotesHUD
+                        //playingNotesHUDImage.sprite = musicalNotesImages[0];
+                        AudioSource aS = noteArray[0].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+                case 0.5f:
+                    {
+                        //Changing image of PlayingNotesHUD
+                        //playingNotesHUDImage.sprite = musicalNotesImages[1];
+                        AudioSource aS = noteArray[1].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+                case 0.25f:
+                    {
+                        //Changing image of PlayingNotesHUD
+                        //playingNotesHUDImage.sprite = musicalNotesImages[2];
+                        AudioSource aS = noteArray[2].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+                case 0.125f:
+                    {
+                        //Changing image of PlayingNotesHUD
+                        //playingNotesHUDImage.sprite = musicalNotesImages[3];
+                        AudioSource aS = noteArray[3].source;
+                        aS.Play();
+                        yield return new WaitWhile(() => aS.isPlaying);
+                        break;
+                    }
+            }
+        }
+        StartCoroutine(audioManager.FadeVolumeUp("Combat" + gameManager.savedSceneName));
 
         //Damage the player
+        attackEffectOfPlayerAnim.SetTrigger("Start");
+        hitOnPlayer.Play();
         bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
+        enemyNotes.Clear();
         yield return new WaitForSeconds(1f);
 
         //check if player is dead, actualizar estados y pasar a endcombat o playerTurn;
@@ -434,14 +519,20 @@ public class CombatSystem : MonoBehaviour
     public void InstantiatePlayerAndEnemy() {
         playerGO = Instantiate(combatAssets.playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
         turnIndicatorPlayer = Instantiate(combatAssets.turnIndicatorPlayer, new Vector3(-5.5f, 0.5f, 0f), Quaternion.identity);
+        attackEffectOfPlayer = Instantiate(combatAssets.attackEffect, new Vector3(-5.5f, -1.002905f, 0f), Quaternion.identity);
+        attackEffectOfPlayerAnim = attackEffectOfPlayer.GetComponent<Animator>();
         turnIndicatorPlayer.SetActive(false);
         SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(turnIndicatorPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        SceneManager.MoveGameObjectToScene(attackEffectOfPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), new Vector3(5.5f, 10f, 0f), Quaternion.identity);
         turnIndicatorEnemy = Instantiate(combatAssets.turnIndicatorEnemy, new Vector3(5.5f, 0.5f, 0f), Quaternion.identity);
+        attackEffectOfEnemy = Instantiate(combatAssets.attackEffect, new Vector3(5.5f, -1.002905f, 0f), Quaternion.identity);
+        attackEffectOfEnemyAnim = attackEffectOfEnemy.GetComponent<Animator>();
         turnIndicatorEnemy.SetActive(false);
         SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(turnIndicatorEnemy, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        SceneManager.MoveGameObjectToScene(attackEffectOfEnemy, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         playerGO.GetComponent<PlayerMovement>().SetInCombat(true);
         /**/
 
@@ -451,9 +542,55 @@ public class CombatSystem : MonoBehaviour
             {
                 s.source = playerGO.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
-                s.source.volume = s.volume;
+                //s.source.volume = s.volume;
+                s.source.volume = 1f;
                 s.source.pitch = s.pitch;
                 s.source.loop = s.loop;
+                s.source.spatialBlend = 0.5f;
+                s.source.playOnAwake = s.playOnAwake;
+            }
+        }
+        foreach (Sound s in audioManager.sounds)
+        {
+            if (s.name == "1HitOnPlayer")
+            {
+                s.source = playerGO.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                //s.source.volume = s.volume;
+                s.source.volume = 0.85f;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.spatialBlend = 0.5f;
+                hitOnPlayer = s.source;
+            }
+        }
+
+        foreach (Sound[] sArray in enemyMusicalNotes)
+        {
+            foreach (Sound s in sArray)
+            {
+                s.source = enemyGO.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                //s.source.volume = s.volume;
+                s.source.volume = 1f;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.spatialBlend = 0.4f;
+                s.source.playOnAwake = s.playOnAwake;
+            }
+        }
+        foreach (Sound s in audioManager.sounds)
+        {
+            if (s.name == "1HitOnEnemy")
+            {
+                s.source = enemyGO.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                //s.source.volume = s.volume;
+                s.source.volume = 0.85f;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.spatialBlend = 0.4f;
+                hitOnEnemy = s.source;
             }
         }
 

@@ -36,8 +36,22 @@ public class EnergyBar : MonoBehaviour
     {
         //healthPointsText.text = Mathf.CeilToInt(playerStats.GetPlayerHealthPoints()) + "/" + Mathf.CeilToInt(playerStats.GetPlayerMaxHealthPoints());
         slider.maxValue = playerStats.GetPlayerMaxEnergyPoints();
-        slider.value = playerStats.GetPlayerEnergyPoints();
+        StartCoroutine(FillEnergySliderPlayer());
+        //slider.value = playerStats.GetPlayerEnergyPoints();
         //SetSliderColor(slider.value, slider.maxValue); //<>
+    }
+
+    public IEnumerator FillEnergySliderPlayer()
+    {
+        float target = playerStats.GetPlayerEnergyPoints();
+        float value = slider.value;
+        float currentTime = 0f;
+        while (currentTime < 1f)
+        {
+            slider.value = Mathf.Lerp(value, target, currentTime / 1f);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
     }
 
     public void UpdateExp()
