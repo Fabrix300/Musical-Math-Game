@@ -23,6 +23,8 @@ public class CombatAssets : MonoBehaviour
     public GameObject turnIndicatorEnemy;
     //attack Effect
     public GameObject attackEffect;
+    //AudioHelper
+    public GameObject audioHelper;
 
     public GameObject GetEnemyPreFab(EnemyType typeEnemy)
     {

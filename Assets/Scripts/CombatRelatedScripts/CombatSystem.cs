@@ -262,12 +262,10 @@ public class CombatSystem : MonoBehaviour
         if (isEnemyDead)
         {
             /*Creating GameObject with audioSource to play death sound of enemy*/
-            GameObject gOTemp = Instantiate(new GameObject(), enemyEnemyComp.gameObject.transform.position, Quaternion.identity);
-            SceneManager.MoveGameObjectToScene(gOTemp, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
-            AudioSource aS = gOTemp.AddComponent<AudioSource>();
-            aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip;
-            aS.volume = 0.9f; aS.spatialBlend = 0.4f; aS.pitch = 1f; aS.loop = false; aS.playOnAwake = false;
-            aS.Play();
+            GameObject audioHelper = Instantiate(combatAssets.audioHelper, enemyEnemyComp.gameObject.transform.position, Quaternion.identity);
+            SceneManager.MoveGameObjectToScene(audioHelper, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+            AudioSource aS = audioHelper.GetComponent<AudioSource>();
+            aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip; aS.Play();
             /*******************************/
             enemyEnemyComp.gameObject.GetComponent<Animator>().SetInteger("state", 2);
             yield return new WaitForSeconds(1f);

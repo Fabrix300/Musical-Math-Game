@@ -28,6 +28,7 @@ public class PlayerStats : MonoBehaviour
 
     // CALLBACK para cuando el jugador recibe daño
     public event Action OnPlayerHealthPointsChange;
+    public event Action OnCherryItemUsed;
     public event Action OnPlayerExpPointsChange;
 
     private void Awake()
@@ -61,13 +62,17 @@ public class PlayerStats : MonoBehaviour
         return true;
     }
 
-    public bool HealPlayer(float pointsHealed)
+    public bool HealPlayer(float pointsHealed, ItemName itemNameUsed = ItemName.None)
     {
         if (isPlayerAlive && playerEnergyPoints < playerMaxEnergyPoints)
         {
             playerEnergyPoints += pointsHealed;
             playerEnergyPoints = Mathf.Clamp(playerEnergyPoints, 0, playerMaxEnergyPoints);
             OnPlayerHealthPointsChange?.Invoke();
+            if (itemNameUsed == ItemName.Cherry)
+            {
+                OnCherryItemUsed?.Invoke();
+            }
             return true;
         }
         return false;

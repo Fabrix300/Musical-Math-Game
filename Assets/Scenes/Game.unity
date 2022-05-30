@@ -818,7 +818,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 212, y: -0.36661}
+  m_AnchoredPosition: {x: 212, y: -0.36662}
   m_SizeDelta: {x: 400, y: 450.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &260101882
@@ -1087,6 +1087,7 @@ MonoBehaviour:
   turnIndicatorPlayer: {fileID: 3682596846816593452, guid: 8472611be34000a4ba17bbdd8546117e, type: 3}
   turnIndicatorEnemy: {fileID: 1047079658326292811, guid: f3a212ed2af54324e80aa90f53c43c2e, type: 3}
   attackEffect: {fileID: 6456075137878941299, guid: 0c082b0fc9d0cb3498a43f42cf04b634, type: 3}
+  audioHelper: {fileID: 2051384548991386110, guid: 3abcb463397e2e444a9ad47f30aeeedf, type: 3}
 --- !u!1 &779026900
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,14 +41,14 @@ public class CherryButton : MonoBehaviour
         if (playerStats.GetIsPlayerAlive() &&
             playerStats.GetPlayerEnergyPoints() < playerStats.GetPlayerMaxEnergyPoints()
             )
-        { 
+        {
             int cherriesUsed = playerInventory.ReduceAmountOfItem(ItemName.Cherry, 1);
             if (cherriesUsed > 0) 
             {
                 int playerLevel = playerStats.level;
                 HealerObject cherryObject = (HealerObject) playerInventory.GetItem(ItemName.Cherry);
                 if (playerStats.HealPlayer(
-                    cherryObject.amountOfEnergyRestored * cherriesUsed + playerLevel
+                    cherryObject.amountOfEnergyRestored * cherriesUsed + playerLevel, ItemName.Cherry
                 ))
                 {
                     yield return new WaitForSeconds(1f);

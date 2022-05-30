@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum ItemName
 {
-    Cherry
+    Cherry,
+    None
 }
 
 public enum ItemType

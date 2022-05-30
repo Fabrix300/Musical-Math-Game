@@ -8,6 +8,9 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed;
     public bool inCombat = false;
 
+    /*HealEffect*/
+    public Animator healEffectAnimator;
+
     /*Audio*/
     public AudioSource jumpAS;
 
@@ -16,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider2D playerCollider;
     private SpriteRenderer spriteRenderer;
     private Animator anim;
+    private PlayerStats playerStats;
 
     private enum AnimationState { Idle, Running, Jumping, Falling };
 
@@ -27,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
         playerCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 3f;
+        playerStats = PlayerStats.instance;
+        playerStats.OnCherryItemUsed += TriggerHealEffectAnimation;
 
         /*MOBILE*/
         dirX = 0f;
@@ -46,6 +52,10 @@ public class PlayerMovement : MonoBehaviour
         }*/
 
         if(inCombat == false) UpdateAnimation();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerStats.NumbPlayer(2f);
+        }
         //UpdateAnimation();
     }
 
@@ -100,7 +110,6 @@ public class PlayerMovement : MonoBehaviour
         {
             state = AnimationState.Falling;
         }
-
         anim.SetInteger("state", (int)state);
     }
 
@@ -156,4 +165,13 @@ public class PlayerMovement : MonoBehaviour
             dirX = 1f;
         }
     }
+
+    public void TriggerHealEffectAnimation()
+    {
+        if (healEffectAnimator)
+        {
+            healEffectAnimator.SetTrigger("Start");
+        }
+    }
+
 }
