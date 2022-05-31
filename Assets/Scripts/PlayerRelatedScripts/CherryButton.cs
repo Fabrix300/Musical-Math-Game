@@ -8,6 +8,7 @@ public class CherryButton : MonoBehaviour
 {
     public Text cherriesCounterText;
     public Button cherryButton;
+    public Animator CherryImageAnim;
 
     private PlayerInventory playerInventory;
     private PlayerStats playerStats;
@@ -51,6 +52,7 @@ public class CherryButton : MonoBehaviour
                     cherryObject.amountOfEnergyRestored * cherriesUsed + playerLevel, ItemName.Cherry
                 ))
                 {
+                    //CherryImageAnim.SetTrigger("CherryUsed");
                     yield return new WaitForSeconds(1f);
                     cherryButton.interactable = true;
                     RefreshCherriesText();

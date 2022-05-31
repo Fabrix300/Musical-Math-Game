@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollisions : MonoBehaviour
 {
-    public GameObject levelHolder;
+    private GameObject levelHolder;
     public Camera mainCamera;
 
     private PlayerInventory playerInventory;
@@ -18,6 +18,7 @@ public class PlayerCollisions : MonoBehaviour
         playerInventory = PlayerInventory.instance;
         gameManager = GameManager.instance; audioManager = AudioManager.instance;
         mainCamera = Camera.main;
+        levelHolder = GameObject.Find(gameManager.savedSceneName+"Holder");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

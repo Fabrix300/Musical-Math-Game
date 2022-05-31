@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     /*Audio*/
     public AudioSource jumpAS;
+    public AudioSource cherryEatAS;
 
     private float dirX;
     private Rigidbody2D rb;
@@ -168,9 +169,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void TriggerHealEffectAnimation()
     {
-        if (healEffectAnimator)
+        if (healEffectAnimator && cherryEatAS)
         {
             healEffectAnimator.SetTrigger("Start");
+            cherryEatAS.Play();
         }
     }
 

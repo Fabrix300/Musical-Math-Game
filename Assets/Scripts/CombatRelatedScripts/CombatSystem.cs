@@ -96,7 +96,7 @@ public class CombatSystem : MonoBehaviour
 
     public bool GenerateRandomOperationForEnemyRequest()
     {
-        float upperLimit = 40; float lowerLimit = 5;
+        float upperLimit = 41; float lowerLimit = 5;
         int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
         enemyRequestDecimal = 0.125f * multiplicatorResult;
         enemyRequestText.text = ConvertToFractionString(enemyRequestDecimal);
