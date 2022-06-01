@@ -4254,6 +4254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cherriesCounterText: {fileID: 894703672}
   cherryButton: {fileID: 0}
+  CherryImageAnim: {fileID: 0}
 --- !u!1 &877701718
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,12 +91,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (dirX > 0f)
         {
-            spriteRenderer.flipX = false;
+            //spriteRenderer.flipX = false;
+            transform.rotation = Quaternion.Euler(0,0,0);
             state = AnimationState.Running;
         }
         else if (dirX < 0f)
         {
-            spriteRenderer.flipX = true;
+            //spriteRenderer.flipX = true;
+            transform.rotation = Quaternion.Euler(0, 180, 0);
             state = AnimationState.Running;
         }
         else

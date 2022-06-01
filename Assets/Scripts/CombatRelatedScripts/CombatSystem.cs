@@ -99,7 +99,40 @@ public class CombatSystem : MonoBehaviour
         float upperLimit = 41; float lowerLimit = 5;
         int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
         enemyRequestDecimal = 0.125f * multiplicatorResult;
-        enemyRequestText.text = ConvertToFractionString(enemyRequestDecimal);
+        enemyRequestText.text = ConvertDecimalToFractionString(enemyRequestDecimal);
+        int nroVecesRedonda = 0;
+        int nroVecesBlanca = 0;
+        int nroVecesNegra = 0;
+        int nroVecesCorchea = 0;
+        if (multiplicatorResult % 8f == 0f)
+        {
+            float multiplicatorResultCheck1 = multiplicatorResult / 8f;
+            nroVecesRedonda += (int)multiplicatorResultCheck1;
+            Debug.Log(nroVecesRedonda);
+            return true;
+        }
+        float multiplicatorResultCheck2 = multiplicatorResult / 8f;
+        int integer = Mathf.FloorToInt(multiplicatorResultCheck2);
+        nroVecesRedonda += integer;
+        float decimalPart = multiplicatorResultCheck2 - integer;
+        while (decimalPart > 0) {
+            if (decimalPart - 0.5f >= 0)
+            {
+                decimalPart -= 0.5f;
+                nroVecesBlanca += 1;
+            }
+            else if (decimalPart - 0.25f >= 0)
+            {
+                decimalPart -= 0.25f;
+                nroVecesNegra += 1;
+            }
+            else if (decimalPart - 0.125f >= 0)
+            {
+                decimalPart -= 0.125f;
+                nroVecesCorchea += 1;
+            }
+        }
+        Debug.Log(nroVecesRedonda + nroVecesBlanca + nroVecesNegra + nroVecesCorchea);
         return true;
     }
 
@@ -150,7 +183,7 @@ public class CombatSystem : MonoBehaviour
                     break;
                 }
         }
-        resultText.text = ConvertToFractionString(SumNotesInputValues());
+        resultText.text = ConvertDecimalToFractionString(SumNotesInputValues());
         if(CheckResult())
         {
             timer.StopTimer();
@@ -421,7 +454,7 @@ public class CombatSystem : MonoBehaviour
         return false;
     }
 
-    private string ConvertToFractionString(float numerator)
+    private string ConvertDecimalToFractionString(float numerator)
     {
         string test = numerator.ToString();
         int indexOfDot = test.LastIndexOf(".");
