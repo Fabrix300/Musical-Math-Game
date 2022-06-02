@@ -12,6 +12,7 @@ public class CombatSystem : MonoBehaviour
     public Image enemyRequestImage;
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Button[] noteButtonsAndDeleteButton;
+    public Text[] noteButtonsLimiterTexts;
     public Animator congratsMessageAnimator;
 
     //Playing Notes HUD
@@ -49,6 +50,7 @@ public class CombatSystem : MonoBehaviour
     private AudioSource hitOnEnemy;
 
     private List<float> notesInput = new();
+    private int[] musicalFiguresLimits = { 0, 0, 0, 0 };
     private List<float> enemyNotes = new();
     private List<Sound[]> musicalNotes;
     private List<Sound[]> enemyMusicalNotes;
@@ -100,39 +102,7 @@ public class CombatSystem : MonoBehaviour
         int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
         enemyRequestDecimal = 0.125f * multiplicatorResult;
         enemyRequestText.text = ConvertDecimalToFractionString(enemyRequestDecimal);
-        int nroVecesRedonda = 0;
-        int nroVecesBlanca = 0;
-        int nroVecesNegra = 0;
-        int nroVecesCorchea = 0;
-        if (multiplicatorResult % 8f == 0f)
-        {
-            float multiplicatorResultCheck1 = multiplicatorResult / 8f;
-            nroVecesRedonda += (int)multiplicatorResultCheck1;
-            Debug.Log(nroVecesRedonda);
-            return true;
-        }
-        float multiplicatorResultCheck2 = multiplicatorResult / 8f;
-        int integer = Mathf.FloorToInt(multiplicatorResultCheck2);
-        nroVecesRedonda += integer;
-        float decimalPart = multiplicatorResultCheck2 - integer;
-        while (decimalPart > 0) {
-            if (decimalPart - 0.5f >= 0)
-            {
-                decimalPart -= 0.5f;
-                nroVecesBlanca += 1;
-            }
-            else if (decimalPart - 0.25f >= 0)
-            {
-                decimalPart -= 0.25f;
-                nroVecesNegra += 1;
-            }
-            else if (decimalPart - 0.125f >= 0)
-            {
-                decimalPart -= 0.125f;
-                nroVecesCorchea += 1;
-            }
-        }
-        Debug.Log(nroVecesRedonda + nroVecesBlanca + nroVecesNegra + nroVecesCorchea);
+        GenerateRandomLimitsForMusicalFigures(multiplicatorResult);
         return true;
     }
 
@@ -146,37 +116,147 @@ public class CombatSystem : MonoBehaviour
         {
             case "Redonda":{
                     notesInput.Add(1f);
-                    if (!formulationText || formulationText.text == "") formulationText.text += "1";
-                    else formulationText.text += " + 1";
+                    if (!formulationText || formulationText.text == "")
+                    {
+                        formulationText.text += "1";
+                        musicalFiguresLimits[0] -= 1;
+                        if (musicalFiguresLimits[0] == 0)
+                        {
+                            noteButtonsAndDeleteButton[0].interactable = false;
+                        }
+                        noteButtonsLimiterTexts[0].text = musicalFiguresLimits[0].ToString();
+                    }
+                    else
+                    {
+                        formulationText.text += " + 1";
+                        musicalFiguresLimits[0] -= 1;
+                        if (musicalFiguresLimits[0] == 0) noteButtonsAndDeleteButton[0].interactable = false;
+                        noteButtonsLimiterTexts[0].text = musicalFiguresLimits[0].ToString();
+                    }
                     break;
                 }
-            case "Blanca": {
+            case "Blanca":
+                {
                     notesInput.Add(0.5f);
-                    if (!formulationText || formulationText.text == "") formulationText.text += "1/2";
-                    else formulationText.text += " + 1/2";
+                    if (!formulationText || formulationText.text == "")
+                    {
+                        formulationText.text += "1/2";
+                        musicalFiguresLimits[1] -= 1;
+                        if (musicalFiguresLimits[1] == 0) noteButtonsAndDeleteButton[1].interactable = false;
+                        noteButtonsLimiterTexts[1].text = musicalFiguresLimits[1].ToString();
+                    }
+                    else
+                    {
+                        formulationText.text += " + 1/2";
+                        musicalFiguresLimits[1] -= 1;
+                        if (musicalFiguresLimits[1] == 0) noteButtonsAndDeleteButton[1].interactable = false;
+                        noteButtonsLimiterTexts[1].text = musicalFiguresLimits[1].ToString();
+                    }
                     break;
                 }
             case "Negra": {
                     notesInput.Add(0.25f);
-                    if (!formulationText || formulationText.text == "") formulationText.text += "1/4";
-                    else formulationText.text += " + 1/4";
+                    if (!formulationText || formulationText.text == "")
+                    {
+                        formulationText.text += "1/4";
+                        musicalFiguresLimits[2] -= 1;
+                        if (musicalFiguresLimits[2] == 0) noteButtonsAndDeleteButton[2].interactable = false;
+                        noteButtonsLimiterTexts[2].text = musicalFiguresLimits[2].ToString();
+                    }
+                    else 
+                    { 
+                        formulationText.text += " + 1/4";
+                        musicalFiguresLimits[2] -= 1;
+                        if (musicalFiguresLimits[2] == 0) noteButtonsAndDeleteButton[2].interactable = false;
+                        noteButtonsLimiterTexts[2].text = musicalFiguresLimits[2].ToString();
+                    }
                     break;
                 }
             case "Corchea": {
                     notesInput.Add(0.125f);
-                    if (!formulationText || formulationText.text == "") formulationText.text += "1/8";
-                    else formulationText.text += " + 1/8";
+                    if (!formulationText || formulationText.text == "")
+                    {
+                        formulationText.text += "1/8";
+                        musicalFiguresLimits[3] -= 1;
+                        if (musicalFiguresLimits[3] == 0) noteButtonsAndDeleteButton[3].interactable = false;
+                        noteButtonsLimiterTexts[3].text = musicalFiguresLimits[3].ToString();
+                    }
+                    else 
+                    { 
+                        formulationText.text += " + 1/8";
+                        musicalFiguresLimits[3] -= 1;
+                        if (musicalFiguresLimits[3] == 0) noteButtonsAndDeleteButton[3].interactable = false;
+                        noteButtonsLimiterTexts[3].text = musicalFiguresLimits[3].ToString();
+                    }
                     break;
                 }
             case "BackSpace": {
                     if (notesInput.Count > 1)
                     {
+                        switch (notesInput[^1]) 
+                        {
+                            case 1f: 
+                                {
+                                    if (musicalFiguresLimits[0] == 0) noteButtonsAndDeleteButton[0].interactable = true;
+                                    musicalFiguresLimits[0] += 1;
+                                    noteButtonsLimiterTexts[0].text = musicalFiguresLimits[0].ToString();
+                                    break;
+                                }
+                            case 0.5f:
+                                {
+                                    if (musicalFiguresLimits[1] == 0) noteButtonsAndDeleteButton[1].interactable = true;
+                                    musicalFiguresLimits[1] += 1;
+                                    noteButtonsLimiterTexts[1].text = musicalFiguresLimits[1].ToString();
+                                    break;
+                                }
+                            case 0.25f:
+                                {
+                                    if (musicalFiguresLimits[2] == 0) noteButtonsAndDeleteButton[2].interactable = true;
+                                    musicalFiguresLimits[2] += 1;
+                                    noteButtonsLimiterTexts[2].text = musicalFiguresLimits[2].ToString();
+                                    break;
+                                }
+                            case 0.125f:
+                                {
+                                    if (musicalFiguresLimits[3] == 0) noteButtonsAndDeleteButton[3].interactable = true;
+                                    musicalFiguresLimits[3] += 1;
+                                    noteButtonsLimiterTexts[3].text = musicalFiguresLimits[3].ToString();
+                                    break;
+                                }
+                        }
                         notesInput.RemoveAt(notesInput.Count - 1);
                         int indexStartOfSubString = formulationText.text.LastIndexOf(" ") - 2;
-                        //Debug.Log('"' + formulationText.text + '"');
                         formulationText.text = formulationText.text.Remove(indexStartOfSubString, formulationText.text.Length - indexStartOfSubString);
-                    } else if (notesInput.Count == 1)
+                    } 
+                    else if (notesInput.Count == 1)
                     {
+                        switch (notesInput[^1])
+                        {
+                            case 1f:
+                                {
+                                    musicalFiguresLimits[0] += 1;
+                                    noteButtonsLimiterTexts[0].text = musicalFiguresLimits[0].ToString();
+                                    break;
+                                }
+                            case 0.5f:
+                                {
+                                    musicalFiguresLimits[1] += 1;
+                                    noteButtonsLimiterTexts[1].text = musicalFiguresLimits[1].ToString();
+                                    break;
+                                }
+                            case 0.25f:
+                                {
+                                    musicalFiguresLimits[2] += 1;
+                                    noteButtonsLimiterTexts[2].text = musicalFiguresLimits[2].ToString();
+                                    break;
+                                }
+                            case 0.125f:
+                                {
+                                    musicalFiguresLimits[3] += 1;
+                                    noteButtonsLimiterTexts[3].text = musicalFiguresLimits[3].ToString();
+                                    break;
+                                }
+                        }
                         notesInput.RemoveAt(notesInput.Count - 1);
                         formulationText.text = "";
                     }
@@ -208,6 +288,7 @@ public class CombatSystem : MonoBehaviour
         resultText.text = "0";
         formulationText.text = "";
         notesInput.Clear();
+        musicalFiguresLimits = new int[] {0,0,0,0};
         state = CombatState.ENEMYTURN;
         turnIndicatorPlayer.SetActive(false);
         StartCoroutine(EnemyTurn());
@@ -289,6 +370,7 @@ public class CombatSystem : MonoBehaviour
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
         //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
         notesInput.Clear();
+        musicalFiguresLimits = new int[] { 0, 0, 0, 0 };
 
         yield return new WaitForSeconds(1.5f);
 
@@ -356,7 +438,7 @@ public class CombatSystem : MonoBehaviour
     {
         turnIndicatorEnemy.SetActive(true);
         float[] temp = { 1f, 0.5f, 0.25f, 0.125f };
-        int enemySinginglength = Random.Range(1, 8);
+        int enemySinginglength = Random.Range(1, 7);
         for (int i = 0; i < enemySinginglength; i++)
         {
             enemyNotes.Add(temp[Random.Range(0,4)]);
@@ -486,6 +568,54 @@ public class CombatSystem : MonoBehaviour
             b = Remainder;
         }
         return a;
+    }
+
+    private void GenerateRandomLimitsForMusicalFigures(int multiplicatorResult)
+    {
+        if (multiplicatorResult % 8f == 0f)
+        {
+            float multiplicatorResultCheck1 = multiplicatorResult / 8f;
+            musicalFiguresLimits[0] += (int)multiplicatorResultCheck1;
+            // Adding random int to the limits to give more liberty to the player, adding also that number to respective text
+            for (int i = 0; i < musicalFiguresLimits.Length; i++)
+            {
+                musicalFiguresLimits[i] += Random.Range(2, 7);
+                noteButtonsLimiterTexts[i].text = musicalFiguresLimits[i].ToString();
+            }
+            return;
+        }
+        else
+        {
+            float multiplicatorResultCheck2 = multiplicatorResult / 8f;
+            int integer = Mathf.FloorToInt(multiplicatorResultCheck2);
+            musicalFiguresLimits[0] += integer;
+            float decimalPart = multiplicatorResultCheck2 - integer;
+            while (decimalPart > 0)
+            {
+                if (decimalPart - 0.5f >= 0)
+                {
+                    decimalPart -= 0.5f;
+                    musicalFiguresLimits[1] += 1;
+                }
+                else if (decimalPart - 0.25f >= 0)
+                {
+                    decimalPart -= 0.25f;
+                    musicalFiguresLimits[2] += 1;
+                }
+                else if (decimalPart - 0.125f >= 0)
+                {
+                    decimalPart -= 0.125f;
+                    musicalFiguresLimits[3] += 1;
+                }
+            }
+        }
+        // Adding random int to the limits to give more liberty to the player, adding also that number to respective text
+        for (int i = 0; i < musicalFiguresLimits.Length; i++)
+        {
+            musicalFiguresLimits[i] += Random.Range(2,5);
+            noteButtonsLimiterTexts[i].text = musicalFiguresLimits[i].ToString();
+        }
+
     }
 
     private float SumNotesInputValues()
