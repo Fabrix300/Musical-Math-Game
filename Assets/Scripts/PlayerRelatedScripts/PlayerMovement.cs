@@ -171,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void TriggerHealEffectAnimation()
     {
-        if (healEffectAnimator && cherryEatAS)
+        if (healEffectAnimator && cherryEatAS && cherryEatAS.enabled)
         {
             healEffectAnimator.SetTrigger("Start");
             cherryEatAS.Play();

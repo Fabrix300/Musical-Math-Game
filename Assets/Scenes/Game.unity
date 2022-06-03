@@ -217,6 +217,20 @@ MonoBehaviour:
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 0e624f5cca428df43b8244d9f886dcb7, type: 3}
+    name: MusicalFigureButtonClick
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: bbb3e7c23e10b30429df58e23355f7f5, type: 3}
+    name: BackSpaceButtonClick
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
   CNote:
   - clip: {fileID: 8300000, guid: c8afe59215b790344aed495fec90c1c7, type: 3}
     name: C-1
@@ -1013,7 +1027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015e49177728489438fe6e12539c919d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  savedSceneName: Level01
+  savedSceneName: Level02
   gameCamera: {fileID: 779026902}
   crossFadeTransition: {fileID: 404399382}
   twoSidedTransition: {fileID: 1611023122}
@@ -1186,7 +1200,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inCombat: 0
-  offset: {x: 0, y: 0, z: 0}
   smoothFactor: 6
   player: {fileID: 0}
   MinPositionX: 0

@@ -12,6 +12,7 @@ public class CombatSystem : MonoBehaviour
     public Image enemyRequestImage;
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Button[] noteButtonsAndDeleteButton;
+    private AudioSource[] noteButtonsAndDeleteButtonAudioSources = new AudioSource[5];
     public Text[] noteButtonsLimiterTexts;
     public Animator congratsMessageAnimator;
 
@@ -115,6 +116,7 @@ public class CombatSystem : MonoBehaviour
         switch (clickedButton.name)
         {
             case "Redonda":{
+                    //noteButtonsAndDeleteButtonAudioSources[0].Play();
                     notesInput.Add(1f);
                     if (!formulationText || formulationText.text == "")
                     {
@@ -137,6 +139,7 @@ public class CombatSystem : MonoBehaviour
                 }
             case "Blanca":
                 {
+                    //noteButtonsAndDeleteButtonAudioSources[1].Play();
                     notesInput.Add(0.5f);
                     if (!formulationText || formulationText.text == "")
                     {
@@ -154,7 +157,9 @@ public class CombatSystem : MonoBehaviour
                     }
                     break;
                 }
-            case "Negra": {
+            case "Negra": 
+                {
+                    //noteButtonsAndDeleteButtonAudioSources[2].Play();
                     notesInput.Add(0.25f);
                     if (!formulationText || formulationText.text == "")
                     {
@@ -172,7 +177,9 @@ public class CombatSystem : MonoBehaviour
                     }
                     break;
                 }
-            case "Corchea": {
+            case "Corchea": 
+                {
+                    //noteButtonsAndDeleteButtonAudioSources[3].Play();
                     notesInput.Add(0.125f);
                     if (!formulationText || formulationText.text == "")
                     {
@@ -190,7 +197,9 @@ public class CombatSystem : MonoBehaviour
                     }
                     break;
                 }
-            case "BackSpace": {
+            case "BackSpace": 
+                {
+                    //noteButtonsAndDeleteButtonAudioSources[4].Play();
                     if (notesInput.Count > 1)
                     {
                         switch (notesInput[^1]) 
@@ -756,6 +765,28 @@ public class CombatSystem : MonoBehaviour
         }
 
         /**/
+
+        /* Create AudioSources For Buttons */
+
+        AudioClip mFAC = audioManager.GetAudioClip("MusicalFigureButtonClick");
+        AudioClip bSAC = audioManager.GetAudioClip("BackSpaceButtonClick");
+        for (int i = 0; i < noteButtonsAndDeleteButton.Length; i++)
+        {
+            noteButtonsAndDeleteButtonAudioSources[i] = noteButtonsAndDeleteButton[i].gameObject.AddComponent<AudioSource>();
+            if (i == 4)
+            {
+                noteButtonsAndDeleteButtonAudioSources[i].clip = bSAC;
+            }
+            else
+            {
+                noteButtonsAndDeleteButtonAudioSources[i].clip = mFAC;
+            }
+            noteButtonsAndDeleteButtonAudioSources[i].volume = 0.6f;
+            noteButtonsAndDeleteButtonAudioSources[i].playOnAwake = false;
+        }
+
+        /**/
+
         enemyGO.transform.Find("CanvasHolder").gameObject.SetActive(false);
         enemyGO.GetComponent<EnemyMovement>().inCombat = true;
         enemyGO.GetComponent<Animator>().SetInteger("state", 0);
@@ -775,5 +806,17 @@ public class CombatSystem : MonoBehaviour
         enemyEnergyBar.SetEnemyComponent(enemyEnemyComp);
         enemyEnergyBar.SetCombatAssetsInstance(combatAssets);
         enemyEnergyBar.SetValues();
+    }
+
+    public void ReproduceButtonSound(Button b)
+    {
+        switch (b.name)
+        {
+            case "Redonda": { noteButtonsAndDeleteButtonAudioSources[0].Play(); break; }
+            case "Blanca": { noteButtonsAndDeleteButtonAudioSources[1].Play(); break; }
+            case "Negra": { noteButtonsAndDeleteButtonAudioSources[2].Play(); break; }
+            case "Corchea": { noteButtonsAndDeleteButtonAudioSources[3].Play(); break; }
+            case "BackSpace": { noteButtonsAndDeleteButtonAudioSources[4].Play(); break; }
+        }
     }
 }

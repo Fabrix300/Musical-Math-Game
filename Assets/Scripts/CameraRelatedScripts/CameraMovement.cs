@@ -11,10 +11,10 @@ public class CameraMovement : MonoBehaviour
     public float smoothFactor;
 
     [SerializeField] private Transform player;
-    [SerializeField] private float MinPositionX; // left border
-    [SerializeField] private float MaxPositionX; //  right border
-    [SerializeField] private float MinPositionY;
-    [SerializeField] private float MaxPositionY;
+    public float MinPositionX; // left border
+    public float MaxPositionX; //  right border
+    public float MinPositionY;
+    public float MaxPositionY;
 
     // Update is called once per frame
     void FixedUpdate()

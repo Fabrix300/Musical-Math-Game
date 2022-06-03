@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     // SINGLETON
     public static GameManager instance;
 
-    public string savedSceneName = "Level01";
+    public string savedSceneName = "Level02";
     public Camera gameCamera;
     public Animator crossFadeTransition;
     public Animator twoSidedTransition;

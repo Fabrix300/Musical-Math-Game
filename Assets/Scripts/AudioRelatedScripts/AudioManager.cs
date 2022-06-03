@@ -90,6 +90,12 @@ public class AudioManager : MonoBehaviour
         s.source.Play();
     }
 
+    public AudioClip GetAudioClip(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        return s.clip;
+    }
+
     public IEnumerator Crossfade(string song1, string song2)
     {
         Sound s = Array.Find(sounds, sound => sound.name == song1);
