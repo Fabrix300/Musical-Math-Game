@@ -5,10 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[2]
+    {
+        new LevelCameraLimits("Level1", 0f, 15f, 0f, 0f),
+        new LevelCameraLimits("Level2", 0f, 30f, 20f, -30f)
+    };
+
     // SINGLETON
     public static GameManager instance;
 
-    public string savedSceneName = "Level02";
+    public string savedSceneName;
     public Camera gameCamera;
     public Animator crossFadeTransition;
     public Animator twoSidedTransition;
@@ -44,6 +50,33 @@ public class GameManager : MonoBehaviour
         };
     }
 
+    public IEnumerator AdvanceToNextLevel()
+    {
+        crossFadeTransition.SetInteger("state", 0);
+        string nextLevel = "Level" + (int.Parse(savedSceneName[5..]) + 1).ToString();
+        Debug.Log(nextLevel);
+        string previousLevel = savedSceneName;
+        savedSceneName = nextLevel;
+        StartCoroutine(audioManager.Crossfade(previousLevel, nextLevel));
+        Debug.Log("hola");
+        AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
+        while (!progress.isDone) yield return null;
+        Debug.Log("termino de lodear el level siguiente");
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(previousLevel, UnloadSceneOptions.None);
+        //while (!asyncUnload.isDone) yield return null;
+        //asyncUnload.completed += (op) => { Debug.Log("termino de unlodear el level anterior"); };
+        gameCamera.transform.position = new Vector3(0f, 0f, -10);
+        gameCamera.GetComponent<CameraMovement>().FindPlayer();
+        player = GameObject.Find("Player");
+        if (player) Debug.Log("gM encontro al jugador");
+        crossFadeTransition.SetInteger("state", 1);
+    }
+
+    public void GoBackToPreviousLevel()
+    {
+
+    }
+
     public void StartAFight(GameObject enemyGO, GameObject levelHolder)
     {
         player.GetComponent<PlayerMovement>().FreezePlayer();
@@ -59,7 +92,7 @@ public class GameManager : MonoBehaviour
     IEnumerator PassToCombatScene(GameObject levelHolder)
     {
         twoSidedTransition.SetInteger("state", 1);
-        StartCoroutine(audioManager.Crossfade(savedSceneName, "CombatLevel01"));
+        StartCoroutine(audioManager.Crossfade(savedSceneName, "Combat" + savedSceneName));
         yield return new WaitForSeconds(1f);
         if (levelHolder != null)
         {
@@ -84,7 +117,7 @@ public class GameManager : MonoBehaviour
     IEnumerator UnloadCombatScene()
     {
         twoSidedTransition.SetInteger("state", 1);
-        StartCoroutine(audioManager.Crossfade("CombatLevel01", savedSceneName));
+        StartCoroutine(audioManager.Crossfade("Combat" + savedSceneName, savedSceneName));
         yield return new WaitForSeconds(1f);
         //combatData.GetEnemyToCombat().DestroySelf();
         combatData.GetEnemyToCombat().gameObject.GetComponent<BoxCollider2D>().isTrigger = true;

@@ -38,6 +38,11 @@ public class PlayerCollisions : MonoBehaviour
             }
         }
 
+        if (gO.CompareTag("NextLevelPortal"))
+        {
+            StartCoroutine(gameManager.AdvanceToNextLevel());
+        }
+
         // Checking if its an enemy
         // I was using kinematic and isTrigger in enemy but i left it with dynamic body and isTrigger deactivated, works the same
         /*else if (gO.GetComponent<Enemy>())

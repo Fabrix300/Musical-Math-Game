@@ -169,14 +169,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - clip: {fileID: 8300000, guid: 88d504a4816472e47ad1357cb53932c5, type: 3}
-    name: Level01
+    name: Level1
+    volume: 0.35
+    pitch: 1
+    loop: 1
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 88d504a4816472e47ad1357cb53932c5, type: 3}
+    name: Level2
     volume: 0.35
     pitch: 1
     loop: 1
     playOnAwake: 0
     source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
-    name: CombatLevel01
+    name: CombatLevel1
     volume: 0.35
     pitch: 1
     loop: 1
@@ -1027,7 +1034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015e49177728489438fe6e12539c919d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  savedSceneName: Level02
+  savedSceneName: Level1
   gameCamera: {fileID: 779026902}
   crossFadeTransition: {fileID: 404399382}
   twoSidedTransition: {fileID: 1611023122}
@@ -1202,10 +1209,10 @@ MonoBehaviour:
   inCombat: 0
   smoothFactor: 6
   player: {fileID: 0}
-  MinPositionX: 0
-  MaxPositionX: 15
-  MinPositionY: 0
-  MaxPositionY: 0
+  minPositionX: 0
+  maxPositionX: 15
+  minPositionY: 0
+  maxPositionY: 0
 --- !u!1 &1274227268
 GameObject:
   m_ObjectHideFlags: 0
