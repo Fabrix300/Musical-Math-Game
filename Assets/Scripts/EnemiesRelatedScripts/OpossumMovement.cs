@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class OpossumMovement : MonoBehaviour
 {
     public bool inCombat = false;
 
@@ -65,6 +65,7 @@ public class EnemyMovement : MonoBehaviour
             }
             //transform.position = Vector2.MoveTowards(transform.position, waypoints[currentWaypointIndex].transform.position, Time.deltaTime * speedX);
             //rb2d.velocity = new Vector2(dirX * speedX, 0f);
+            anim.SetInteger("state", (int)EnemyMovementState.running);
         }
     }
 

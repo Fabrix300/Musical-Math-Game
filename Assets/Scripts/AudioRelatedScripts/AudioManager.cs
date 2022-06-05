@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -31,8 +30,6 @@ public class AudioManager : MonoBehaviour
     public Sound[] EBNote;
     public Sound[] ECOctaveNote;
     public List<Sound[]> enemyMusicalNotes = new();
-
-    private GameManager gameManager;
     
     private void Awake()
     {
@@ -75,8 +72,8 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        gameManager = GameManager.instance;
-        Play(gameManager.savedSceneName);
+        //gameManager = GameManager.instance;
+        //Play(gameManager.savedSceneName);
     }
 
     public void Play(string name)

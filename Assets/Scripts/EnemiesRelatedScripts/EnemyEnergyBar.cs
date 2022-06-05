@@ -70,6 +70,11 @@ public class EnemyEnergyBar : MonoBehaviour
         }
     }*/
 
+    private void OnDestroy()
+    {
+        enemyComp.OnEnemyHealthPointsChange -= UpdateEnergy;
+    }
+
     public void SetEnemyComponent(Enemy enemyComponent)
     {
         enemyComp = enemyComponent;

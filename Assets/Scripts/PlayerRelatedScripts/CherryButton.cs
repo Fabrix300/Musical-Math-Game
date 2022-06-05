@@ -22,6 +22,11 @@ public class CherryButton : MonoBehaviour
         RefreshCherriesText();
     }
 
+    private void OnDestroy()
+    {
+        playerInventory.OnCherryCollected -= RefreshCherriesText;
+    }
+
     public void RefreshCherriesText()
     {
         HealerObject cherryObject = (HealerObject) playerInventory.GetItem(ItemName.Cherry);

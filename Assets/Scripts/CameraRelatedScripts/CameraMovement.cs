@@ -5,10 +5,10 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public bool inCombat = false;
-    //public Vector3 offset;
 
     [Range(1, 10)]
     public float smoothFactor;
+    public Vector3 offset;
 
     [SerializeField] private Transform player;
     public float minPositionX; // left border
@@ -27,9 +27,9 @@ public class CameraMovement : MonoBehaviour
                 transform.position.z
             );*/
 
-            //Vector3 targetPosition = player.position + offset;
-            //Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothFactor * Time.fixedDeltaTime);
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, player.position, smoothFactor * Time.fixedDeltaTime);
+            Vector3 targetPosition = player.position + offset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothFactor * Time.fixedDeltaTime);
+            //Vector3 smoothedPosition = Vector3.Lerp(transform.position, player.position, smoothFactor * Time.fixedDeltaTime);
             //transform.position = smoothedPosition;
             transform.position = new Vector3(
                 Mathf.Clamp(smoothedPosition.x, minPositionX, maxPositionX),
@@ -45,5 +45,14 @@ public class CameraMovement : MonoBehaviour
         {
             Debug.Log("Camara encontro al jugador");
         }
+    }
+
+    public void SetCameraLimits(LevelCameraLimits lvlCamLimits)
+    {
+        minPositionX = lvlCamLimits.minPositionX;
+        maxPositionX = lvlCamLimits.maxPositionX;
+        minPositionY = lvlCamLimits.minPositionY;
+        maxPositionY = lvlCamLimits.maxPositionY;
+        offset = lvlCamLimits.offset;
     }
 }

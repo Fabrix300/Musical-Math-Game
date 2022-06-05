@@ -18,7 +18,6 @@ public class PlayerMovement : MonoBehaviour
     private float dirX;
     private Rigidbody2D rb;
     private CapsuleCollider2D playerCollider;
-    private SpriteRenderer spriteRenderer;
     private Animator anim;
     private PlayerStats playerStats;
 
@@ -28,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         playerCollider = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 3f;
@@ -68,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private bool IsGrounded()
     {
         /*
-         * Debug.DrawRay(playerCollider.bounds.center, Vector2.down * (playerCollider.bounds.extents.y + extraHeightExtent), Color.green);
+        Debug.DrawRay(playerCollider.bounds.center, Vector2.down * (playerCollider.bounds.extents.y + extraHeightExtent), Color.green);
         Debug.DrawRay(playerCollider.bounds.center + (Vector3.left * playerCollider.bounds.extents.x), Vector2.down * (playerCollider.bounds.extents.y + extraHeightExtent), Color.green);
         Debug.DrawRay(playerCollider.bounds.center + (Vector3.right * playerCollider.bounds.extents.x), Vector2.down * (playerCollider.bounds.extents.y + extraHeightExtent), Color.green);
         */
@@ -169,6 +167,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        playerStats.OnCherryItemUsed -= TriggerHealEffectAnimation;
+    }
+
     public void TriggerHealEffectAnimation()
     {
         if (healEffectAnimator && cherryEatAS && cherryEatAS.enabled)
@@ -176,6 +179,12 @@ public class PlayerMovement : MonoBehaviour
             healEffectAnimator.SetTrigger("Start");
             cherryEatAS.Play();
         }
+    }
+
+    public void ActivateAndMovePlayerOnLevelPass(Vector3 position, Quaternion rotation)
+    {
+        gameObject.SetActive(true);
+        transform.SetPositionAndRotation(position, rotation);
     }
 
 }

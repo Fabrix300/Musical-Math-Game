@@ -73,6 +73,11 @@ public class CombatSystem : MonoBehaviour
         StartCoroutine(SetupBattle());
     }
 
+    private void OnDestroy()
+    {
+        timer.OnTimerEnd -= RequestTimeEnd;
+    }
+
     IEnumerator SetupBattle()
     {
         InstantiatePlayerAndEnemy();
@@ -788,7 +793,7 @@ public class CombatSystem : MonoBehaviour
         /**/
 
         enemyGO.transform.Find("CanvasHolder").gameObject.SetActive(false);
-        enemyGO.GetComponent<EnemyMovement>().inCombat = true;
+        enemyGO.GetComponent<OpossumMovement>().inCombat = true;
         enemyGO.GetComponent<Animator>().SetInteger("state", 0);
         enemyEnemyComp = enemyGO.GetComponent<Enemy>();
 

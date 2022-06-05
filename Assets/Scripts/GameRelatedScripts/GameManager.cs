@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,8 +6,14 @@ public class GameManager : MonoBehaviour
 {
     private LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[2]
     {
-        new LevelCameraLimits("Level1", 0f, 15f, 0f, 0f),
-        new LevelCameraLimits("Level2", 0f, 30f, 20f, -30f)
+        new LevelCameraLimits("Level1", 0f, 15f, 0f, 0f, new Vector3(0f, 0f, 0f)),
+        new LevelCameraLimits("Level2", 0f, 58f, -30f, 20f, new Vector3(0f, 1f, 0f))
+    };
+
+    private LevelPlayerSpawnPoints[] levelPlayerSpawnPointsArray = new LevelPlayerSpawnPoints[2]
+    {
+        new LevelPlayerSpawnPoints("level1", new Vector3(-2.3f, -1f, 0f), new Vector3(21.7f, -1f, 0f)),
+        new LevelPlayerSpawnPoints("level2", new Vector3(-6.5f, -1f, 0f), new Vector3(64.5f, -7f, 0f))
     };
 
     // SINGLETON
@@ -44,7 +49,10 @@ public class GameManager : MonoBehaviour
         AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
         progress.completed += (op) =>
         {
+            audioManager.Play(savedSceneName);
+            int actualLevelNumber = int.Parse(savedSceneName[5..]);
             gameCamera.GetComponent<CameraMovement>().FindPlayer();
+            gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
             crossFadeTransition.speed = 1f;
         };
@@ -53,50 +61,73 @@ public class GameManager : MonoBehaviour
     public IEnumerator AdvanceToNextLevel()
     {
         crossFadeTransition.SetInteger("state", 0);
-        string nextLevel = "Level" + (int.Parse(savedSceneName[5..]) + 1).ToString();
-        Debug.Log(nextLevel);
-        string previousLevel = savedSceneName;
+        yield return new WaitForSeconds(0.8f);
+        int actualLevelNumber = int.Parse(savedSceneName[5..]);
+        string nextLevel = "Level" + (actualLevelNumber + 1);
+        string actualLevel = savedSceneName;
         savedSceneName = nextLevel;
-        StartCoroutine(audioManager.Crossfade(previousLevel, nextLevel));
-        Debug.Log("hola");
+        StartCoroutine(audioManager.Crossfade(actualLevel, nextLevel));
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(actualLevel, UnloadSceneOptions.None);
         AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
-        while (!progress.isDone) yield return null;
-        Debug.Log("termino de lodear el level siguiente");
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(previousLevel, UnloadSceneOptions.None);
-        //while (!asyncUnload.isDone) yield return null;
-        //asyncUnload.completed += (op) => { Debug.Log("termino de unlodear el level anterior"); };
-        gameCamera.transform.position = new Vector3(0f, 0f, -10);
-        gameCamera.GetComponent<CameraMovement>().FindPlayer();
-        player = GameObject.Find("Player");
-        if (player) Debug.Log("gM encontro al jugador");
-        crossFadeTransition.SetInteger("state", 1);
+        progress.completed += (op) => 
+        {
+            gameCamera.GetComponent<CameraMovement>().FindPlayer();
+            gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber]);
+            player = GameObject.Find("Player");
+            player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
+            (
+                levelPlayerSpawnPointsArray[actualLevelNumber].leftSpawnPoint,
+                Quaternion.Euler(0,0,0)
+            );
+            crossFadeTransition.SetInteger("state", 1);
+        };
     }
 
-    public void GoBackToPreviousLevel()
+    public IEnumerator GoBackToPreviousLevel()
     {
-
+        crossFadeTransition.SetInteger("state", 0);
+        yield return new WaitForSeconds(0.8f);
+        int actualLevelNumber = int.Parse(savedSceneName[5..]);
+        string previousLevel = "Level" + (actualLevelNumber + -1);
+        string actualLevel = savedSceneName;
+        savedSceneName = previousLevel;
+        StartCoroutine(audioManager.Crossfade(actualLevel, previousLevel));
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(actualLevel, UnloadSceneOptions.None);
+        AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
+        progress.completed += (op) =>
+        {
+            gameCamera.GetComponent<CameraMovement>().FindPlayer();
+            gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber - 2]);
+            player = GameObject.Find("Player");
+            player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
+            (
+                levelPlayerSpawnPointsArray[actualLevelNumber-2].rightSpawnPoint,
+                Quaternion.Euler(0, 180, 0)
+            );
+            crossFadeTransition.SetInteger("state", 1);
+        };
     }
 
     public void StartAFight(GameObject enemyGO, GameObject levelHolder)
     {
         player.GetComponent<PlayerMovement>().FreezePlayer();
-        enemyGO.GetComponent<EnemyMovement>().FreezeEnemy();
+        enemyGO.GetComponent<OpossumMovement>().FreezeEnemy();
         combatData.SetEnemyToCombat(enemyGO.GetComponent<Enemy>());
         combatData.SetOriginScene(savedSceneName);
         combatData.SetPreviousPlayerPosition(transform.position.x, transform.position.y, transform.position.z);
         combatData.SetPreviousCameraPosition(gameCamera.transform.position.x, gameCamera.transform.position.y, -10f);
         activeLevelHolder = levelHolder;
-        StartCoroutine(PassToCombatScene(activeLevelHolder));
+        StartCoroutine(PassToCombatScene());
     }
 
-    IEnumerator PassToCombatScene(GameObject levelHolder)
+    IEnumerator PassToCombatScene()
     {
         twoSidedTransition.SetInteger("state", 1);
         StartCoroutine(audioManager.Crossfade(savedSceneName, "Combat" + savedSceneName));
         yield return new WaitForSeconds(1f);
-        if (levelHolder != null)
+        if (activeLevelHolder != null)
         {
-            levelHolder.SetActive(false);
+            activeLevelHolder.SetActive(false);
             gameCamera.GetComponent<CameraMovement>().inCombat = true;
             gameCamera.transform.position = new Vector3(0f, 0f, -10);
         }

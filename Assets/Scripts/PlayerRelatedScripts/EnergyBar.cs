@@ -81,4 +81,11 @@ public class EnergyBar : MonoBehaviour
             energyFill.color = new Color32(8, 255, 0, 255);
         }
     }*/
+
+    private void OnDestroy()
+    {
+        playerStats.OnPlayerHealthPointsChange -= UpdateEnergy;
+        playerStats.OnPlayerExpPointsChange -= UpdateExp;
+    }
+
 }
