@@ -111,8 +111,26 @@ public class GameManager : MonoBehaviour
     public void StartAFight(GameObject enemyGO, GameObject levelHolder)
     {
         player.GetComponent<PlayerMovement>().FreezePlayer();
-        enemyGO.GetComponent<OpossumMovement>().FreezeEnemy();
-        combatData.SetEnemyToCombat(enemyGO.GetComponent<Enemy>());
+        Enemy enemyCompTemp = enemyGO.GetComponent<Enemy>();
+        switch (enemyCompTemp.enemyType)
+        {
+            case EnemyType.opossum: 
+                {
+                    enemyGO.GetComponent<OpossumMovement>().FreezeEnemy();
+                    break;
+                }
+            case EnemyType.frog:
+                {
+                    enemyGO.GetComponent<FrogMovement>().FreezeEnemy();
+                    break;
+                }
+            case EnemyType.eagle:
+                {
+                    enemyGO.GetComponent<EagleMovement>().FreezeEnemy();
+                    break;
+                }
+        }
+        combatData.SetEnemyToCombat(enemyCompTemp);
         combatData.SetOriginScene(savedSceneName);
         combatData.SetPreviousPlayerPosition(transform.position.x, transform.position.y, transform.position.z);
         combatData.SetPreviousCameraPosition(gameCamera.transform.position.x, gameCamera.transform.position.y, -10f);
@@ -150,11 +168,9 @@ public class GameManager : MonoBehaviour
         twoSidedTransition.SetInteger("state", 1);
         StartCoroutine(audioManager.Crossfade("Combat" + savedSceneName, savedSceneName));
         yield return new WaitForSeconds(1f);
-        //combatData.GetEnemyToCombat().DestroySelf();
-        combatData.GetEnemyToCombat().gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        combatData.GetEnemyToCombat().MakeColliderTrigger();
         gameCamera.transform.position = combatData.GetPreviousCameraPosition();
         gameCamera.GetComponent<CameraMovement>().inCombat = false;
-        //player.GetComponent<PlayerMovement>().UnfreezePlayer();
         activeLevelHolder.SetActive(true);
         AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("Combat" + combatData.GetOriginScene(), UnloadSceneOptions.None);
         while (!asyncUnload.isDone)
@@ -165,7 +181,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Animator enemyToCombatAnimator = combatData.GetEnemyToCombat().gameObject.GetComponent<Animator>();
         enemyToCombatAnimator.enabled = true;
-        enemyToCombatAnimator.SetInteger("state", 2);
+        enemyToCombatAnimator.SetTrigger("death");
         player.GetComponent<PlayerMovement>().UnfreezePlayer(); 
     }
 }

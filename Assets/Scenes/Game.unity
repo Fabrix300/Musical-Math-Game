@@ -1041,7 +1041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015e49177728489438fe6e12539c919d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  savedSceneName: Level1
+  savedSceneName: Level2
   gameCamera: {fileID: 779026902}
   crossFadeTransition: {fileID: 404399382}
   twoSidedTransition: {fileID: 1611023122}
@@ -1105,8 +1105,8 @@ MonoBehaviour:
   playerPreFab: {fileID: 1673194285572409108, guid: 120f76c6742beee46881a3d0a86428c0, type: 3}
   playerImage: {fileID: 21300000, guid: 72de0c64f2c6a498096698322c976a67, type: 3}
   enemyPreFabs:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1724620865450438482, guid: 43a2ba00a69e8024b81caaad68c7468b, type: 3}
+  - {fileID: 2120689079186672428, guid: b46264551e9c88646955a2f00c8a73e6, type: 3}
   - {fileID: 1757133372648816787, guid: f2378329540c86e4fa1028982098b151, type: 3}
   enemyImages:
   - {fileID: 21300000, guid: f240dfd4814d34d55a9b033f3c9d8a60, type: 3}

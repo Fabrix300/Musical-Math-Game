@@ -396,7 +396,7 @@ public class CombatSystem : MonoBehaviour
             AudioSource aS = audioHelper.GetComponent<AudioSource>();
             aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip; aS.Play();
             /*******************************/
-            enemyEnemyComp.gameObject.GetComponent<Animator>().SetInteger("state", 2);
+            enemyEnemyComp.gameObject.GetComponent<Animator>().SetTrigger("death");
             yield return new WaitForSeconds(1f);
             turnIndicatorPlayer.SetActive(false);
             state = CombatState.WON;
@@ -700,7 +700,9 @@ public class CombatSystem : MonoBehaviour
         SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(turnIndicatorPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(attackEffectOfPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
-        GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), new Vector3(5.5f, 10f, 0f), Quaternion.identity);
+        Vector3 instantiatePosOfEnemy = new Vector3(5.5f, 10f, 0f);
+        if (combatData.GetEnemyToCombat().enemyType == EnemyType.eagle) instantiatePosOfEnemy = new Vector3(-5.5f, -0.75f, 0f);
+        GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), instantiatePosOfEnemy, Quaternion.identity);
         turnIndicatorEnemy = Instantiate(combatAssets.turnIndicatorEnemy, new Vector3(5.5f, 0.5f, 0f), Quaternion.identity);
         attackEffectOfEnemy = Instantiate(combatAssets.attackEffect, new Vector3(5.5f, -1.002905f, 0f), Quaternion.identity);
         attackEffectOfEnemyAnim = attackEffectOfEnemy.GetComponent<Animator>();
@@ -793,7 +795,24 @@ public class CombatSystem : MonoBehaviour
         /**/
 
         enemyGO.transform.Find("CanvasHolder").gameObject.SetActive(false);
-        enemyGO.GetComponent<OpossumMovement>().inCombat = true;
+        switch (enemyGO.GetComponent<Enemy>().enemyType)
+        {
+            case EnemyType.opossum:
+                {
+                    enemyGO.GetComponent<OpossumMovement>().inCombat = true;
+                    break;
+                }
+            case EnemyType.frog:
+                {
+                    enemyGO.GetComponent<FrogMovement>().inCombat = true;
+                    break;
+                }
+            case EnemyType.eagle:
+                {
+                    enemyGO.GetComponent<EagleMovement>().inCombat = true;
+                    break;
+                }
+        }
         enemyGO.GetComponent<Animator>().SetInteger("state", 0);
         enemyEnemyComp = enemyGO.GetComponent<Enemy>();
 

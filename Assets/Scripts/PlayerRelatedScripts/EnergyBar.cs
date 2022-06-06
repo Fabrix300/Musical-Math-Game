@@ -46,9 +46,9 @@ public class EnergyBar : MonoBehaviour
         float target = playerStats.GetPlayerEnergyPoints();
         float value = slider.value;
         float currentTime = 0f;
-        while (currentTime < 1f)
+        while (currentTime < 0.5f)
         {
-            slider.value = Mathf.Lerp(value, target, currentTime / 1f);
+            slider.value = Mathf.Lerp(value, target, currentTime / 0.5f);
             currentTime += Time.deltaTime;
             yield return null;
         }

@@ -14,7 +14,7 @@ public class OpossumMovement : MonoBehaviour
     private float dirX;
     [SerializeField] private float speedX;
 
-    private enum EnemyMovementState { idle, running }
+    private enum OpossumMovementState { idle, running }
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +34,7 @@ public class OpossumMovement : MonoBehaviour
                 dirX = -1f;
                 enemySprite.flipX = false;
             }
-            anim.SetInteger("state", (int)EnemyMovementState.running);
+            anim.SetInteger("state", (int)OpossumMovementState.running);
         }
     }
 
@@ -65,7 +65,7 @@ public class OpossumMovement : MonoBehaviour
             }
             //transform.position = Vector2.MoveTowards(transform.position, waypoints[currentWaypointIndex].transform.position, Time.deltaTime * speedX);
             //rb2d.velocity = new Vector2(dirX * speedX, 0f);
-            anim.SetInteger("state", (int)EnemyMovementState.running);
+            anim.SetInteger("state", (int)OpossumMovementState.running);
         }
     }
 

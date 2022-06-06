@@ -92,7 +92,6 @@ public class PlayerStats : MonoBehaviour
         {
             int reminder = playerExpPoints - playerMaxExpPoints;
             AdvanceOneLevel(reminder);
-            OnPlayerExpPointsChange?.Invoke();
             return true;
         }
         OnPlayerExpPointsChange?.Invoke();
@@ -112,6 +111,8 @@ public class PlayerStats : MonoBehaviour
         playerEnergyPoints = playerMaxEnergyPoints;
         playerMaxExpPoints = basePlayerMaxExpPoints + (2 * level);
         playerExpPoints = reminder;
+        OnPlayerExpPointsChange?.Invoke();
+        OnPlayerHealthPointsChange?.Invoke();
     }
 
     public bool GetIsPlayerAlive()

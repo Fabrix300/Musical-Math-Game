@@ -187,4 +187,15 @@ public class PlayerMovement : MonoBehaviour
         transform.SetPositionAndRotation(position, rotation);
     }
 
+    /*private void OnEnable()
+    {
+        Debug.Log("activando");
+        playerStats.OnCherryItemUsed += TriggerHealEffectAnimation;
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("desactivando");
+        playerStats.OnCherryItemUsed -= TriggerHealEffectAnimation;
+    }*/
 }

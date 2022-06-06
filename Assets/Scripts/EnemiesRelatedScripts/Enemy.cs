@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
 
     public float GetTotalDamage()
     {
-        return damage * level;
+        return damage;
     }
 
     public void SetAll(
@@ -66,6 +66,28 @@ public class Enemy : MonoBehaviour
         this.level = level;
         this.healthPoints = healthPoints;
         this.maxHealthPoints = maxHealthPoints;
+    }
+
+    public void MakeColliderTrigger()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.opossum:
+                {
+                    gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+                    break;
+                }
+            case EnemyType.frog:
+                {
+                    gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+                    break;
+                }
+            case EnemyType.eagle:
+                {
+                    gameObject.GetComponent<CapsuleCollider2D>().isTrigger = true;
+                    break;
+                }
+        }
     }
 
     /*public GameObject GetPreFab(EnemyType typeEnemy)

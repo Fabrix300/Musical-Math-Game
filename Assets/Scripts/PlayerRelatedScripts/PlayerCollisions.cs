@@ -61,6 +61,7 @@ public class PlayerCollisions : MonoBehaviour
         if (gO.GetComponent<Enemy>())
         {
             //StartFight(gO);
+            Debug.Log("starting fight");
             gameManager.StartAFight(gO, levelHolder);
         }
     }
