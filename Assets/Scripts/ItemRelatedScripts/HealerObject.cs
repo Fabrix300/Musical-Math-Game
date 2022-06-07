@@ -11,6 +11,6 @@ public class HealerObject : ItemObject
         itemName = _itemName;
         itemType = ItemType.Healer;
         amount = _amount;
-        amountOfEnergyRestored = 4f;
+        amountOfEnergyRestored = 3f;
     }
 }

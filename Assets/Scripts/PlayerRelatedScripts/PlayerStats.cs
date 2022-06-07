@@ -19,7 +19,8 @@ public class PlayerStats : MonoBehaviour
     private readonly int basePlayerMaxExpPoints = 18;
     private int playerExpPoints;
     private int playerMaxExpPoints;
-    private readonly float baseDamage = 3;
+    //private readonly float baseDamage = 3;
+    private readonly float baseDamage = 2;
     [HideInInspector] public float damage;
     //public Stat armor;
 
@@ -106,7 +107,8 @@ public class PlayerStats : MonoBehaviour
 
     public void SetStatsBasedOnLevel(int reminder) 
     {
-        damage = baseDamage + (2 * level);
+        //damage = baseDamage + (2 * level);
+        damage = baseDamage + level;
         playerMaxEnergyPoints = basePlayerMaxEnergyPoints + (2 * level);
         playerEnergyPoints = playerMaxEnergyPoints;
         playerMaxExpPoints = basePlayerMaxExpPoints + (2 * level);
