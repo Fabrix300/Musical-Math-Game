@@ -701,7 +701,7 @@ public class CombatSystem : MonoBehaviour
         SceneManager.MoveGameObjectToScene(turnIndicatorPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(attackEffectOfPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         Vector3 instantiatePosOfEnemy = new Vector3(5.5f, 10f, 0f);
-        if (combatData.GetEnemyToCombat().enemyType == EnemyType.eagle) instantiatePosOfEnemy = new Vector3(-5.5f, -0.75f, 0f);
+        if (combatData.GetEnemyToCombat().enemyType == EnemyType.eagle) instantiatePosOfEnemy = new Vector3(5.5f, -0.75f, 0f);
         GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), instantiatePosOfEnemy, Quaternion.identity);
         turnIndicatorEnemy = Instantiate(combatAssets.turnIndicatorEnemy, new Vector3(5.5f, 0.5f, 0f), Quaternion.identity);
         attackEffectOfEnemy = Instantiate(combatAssets.attackEffect, new Vector3(5.5f, -1.002905f, 0f), Quaternion.identity);

@@ -10,6 +10,7 @@ public class PlayerInventory : MonoBehaviour
     // Inventory of items
     //private List<ItemObject> itemList;
     private HealerObject cherryHolder = new HealerObject(ItemName.Cherry, 0);
+    private List<string> levelKeys = new();
 
     public event Action OnCherryCollected;
     //public event Action OnCherryUsed;
@@ -65,6 +66,30 @@ public class PlayerInventory : MonoBehaviour
                     cherryHolder.amount += amountToAdd;
                     return true;
                 }
+        }
+        return false;
+    }
+
+    public void AddKey(string levelName)
+    {
+        for (int i = 0; i < levelKeys.Count; i++)
+        {
+            if (levelKeys[i] == levelName)
+            {
+                return;
+            }
+        }
+        levelKeys.Add(levelName);
+    }
+
+    public bool HasPlayerSpecificKey(string levelName)
+    {
+        for (int i = 0; i < levelKeys.Count; i++)
+        {
+            if (levelKeys[i] == levelName)
+            {
+                return true;
+            }
         }
         return false;
     }

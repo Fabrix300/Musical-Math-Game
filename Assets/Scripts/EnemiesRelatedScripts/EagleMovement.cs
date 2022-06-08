@@ -12,7 +12,6 @@ public class EagleMovement : MonoBehaviour
     private Rigidbody2D rb2d;
     private Animator anim;
     private SpriteRenderer enemySprite;
-    private CapsuleCollider2D eagleCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +19,6 @@ public class EagleMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         enemySprite = GetComponent<SpriteRenderer>();
         rb2d = GetComponent<Rigidbody2D>();
-        eagleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
@@ -75,6 +73,7 @@ public class EagleMovement : MonoBehaviour
     public void FreezeEnemy()
     {
         anim.enabled = false;
+        inCombat = true;
         //Freeze Rotation in Z
         rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
     }

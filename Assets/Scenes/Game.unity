@@ -182,6 +182,13 @@ MonoBehaviour:
     loop: 1
     playOnAwake: 0
     source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 88d504a4816472e47ad1357cb53932c5, type: 3}
+    name: Level3
+    volume: 0.35
+    pitch: 1
+    loop: 1
+    playOnAwake: 0
+    source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
     name: CombatLevel1
     volume: 0.35
@@ -191,6 +198,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
     name: CombatLevel2
+    volume: 0.35
+    pitch: 1
+    loop: 1
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
+    name: CombatLevel3
     volume: 0.35
     pitch: 1
     loop: 1
@@ -241,6 +255,13 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: bbb3e7c23e10b30429df58e23355f7f5, type: 3}
     name: BackSpaceButtonClick
     volume: 0.7
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: b87106522b4358840a681d169e9af796, type: 3}
+    name: DoorOpen
+    volume: 0.4
     pitch: 1
     loop: 0
     playOnAwake: 0
@@ -1115,6 +1136,7 @@ MonoBehaviour:
   turnIndicatorPlayer: {fileID: 3682596846816593452, guid: 8472611be34000a4ba17bbdd8546117e, type: 3}
   turnIndicatorEnemy: {fileID: 1047079658326292811, guid: f3a212ed2af54324e80aa90f53c43c2e, type: 3}
   attackEffect: {fileID: 6456075137878941299, guid: 0c082b0fc9d0cb3498a43f42cf04b634, type: 3}
+  keyPreFab: {fileID: 2021867320533091677, guid: 9751a9cdc7dccc847aeedb3550359956, type: 3}
   audioHelper: {fileID: 2051384548991386110, guid: 3abcb463397e2e444a9ad47f30aeeedf, type: 3}
 --- !u!1 &779026900
 GameObject:
@@ -1355,7 +1377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f35e39d416f524284c9e6fa40e49a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 1
+  level: 4
   damage: 0
   playerName: Ayka
 --- !u!114 &1332508232

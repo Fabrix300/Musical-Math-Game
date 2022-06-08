@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NextLevelPortal
   - PreviousLevelPortal
+  - Key
   layers:
   - Default
   - TransparentFX

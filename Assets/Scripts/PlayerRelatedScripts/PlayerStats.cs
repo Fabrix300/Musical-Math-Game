@@ -20,7 +20,7 @@ public class PlayerStats : MonoBehaviour
     private int playerExpPoints;
     private int playerMaxExpPoints;
     //private readonly float baseDamage = 3;
-    private readonly float baseDamage = 2;
+    private readonly float baseDamage = 3;
     [HideInInspector] public float damage;
     //public Stat armor;
 

@@ -23,6 +23,8 @@ public class CombatAssets : MonoBehaviour
     public GameObject turnIndicatorEnemy;
     //attack Effect
     public GameObject attackEffect;
+    //Miscelaneous
+    public GameObject keyPreFab;
     //AudioHelper
     public GameObject audioHelper;
 

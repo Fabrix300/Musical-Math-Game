@@ -31,19 +31,28 @@ public class PlayerCollisions : MonoBehaviour
             if (playerInventory)
             {
                 audioManager.Play("ItemCollected");
-                /*playerInventory.AddItem(itemWorld.healerObject);
-                itemWorld.DestroySelf();*/
+                /*playerInventory.AddItem(itemWorld.healerObject); itemWorld.DestroySelf();*/
                 playerInventory.AddItem(gO.GetComponent<CherryItemWorld>().healerObject);
                 gO.GetComponent<Animator>().SetInteger("state", 1);
             }
         }
         else if (gO.CompareTag("NextLevelPortal"))
         {
-            StartCoroutine(gameManager.AdvanceToNextLevel());
+            if (playerInventory.HasPlayerSpecificKey(gameManager.savedSceneName))
+            {
+                if (gO.transform.Find("DoorBlock").gameObject.activeInHierarchy)
+                {
+                    audioManager.Play("DoorOpen");
+                }
+                StartCoroutine(gameManager.AdvanceToNextLevel());
+            }
         }
         else if (gO.CompareTag("PreviousLevelPortal"))
         {
-            StartCoroutine(gameManager.GoBackToPreviousLevel());
+            if (playerInventory.HasPlayerSpecificKey(gameManager.savedSceneName))
+            {
+                StartCoroutine(gameManager.GoBackToPreviousLevel());
+            }
         }
 
         // Checking if its an enemy
@@ -63,6 +72,12 @@ public class PlayerCollisions : MonoBehaviour
             //StartFight(gO);
             Debug.Log("starting fight");
             gameManager.StartAFight(gO, levelHolder);
+        }
+        else if (gO.CompareTag("Key"))
+        {
+            playerInventory.AddKey(gameManager.savedSceneName);
+            audioManager.Play("ItemCollected");
+            Destroy(gO);
         }
     }
 }
