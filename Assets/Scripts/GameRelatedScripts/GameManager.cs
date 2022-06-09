@@ -4,20 +4,22 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[4]
+    private LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[5]
     {
         new LevelCameraLimits("Level1", 0f, 18f, 0f, 0f, new Vector3(0f, 0f, 0f)),
         new LevelCameraLimits("Level2", -2.5f, 60.5f, -30f, 20f, new Vector3(0f, 1f, 0f)),
         new LevelCameraLimits("Level3", -2.5f, 51.5f, -30f, 20f, new Vector3(0f, 1f, 0f)),
-        new LevelCameraLimits("Level4", -2.5f, 67.6f, -100f, 100f, new Vector3(0f, 1f, 0f))
+        new LevelCameraLimits("Level4", -2.5f, 67.6f, -100f, 100f, new Vector3(0f, 1f, 0f)),
+        new LevelCameraLimits("Level5", -2.5f, 67.6f, -100f, 100f, new Vector3(0f, 1f, 0f))
     };
 
-    private LevelPlayerSpawnPoints[] levelPlayerSpawnPointsArray = new LevelPlayerSpawnPoints[4]
+    private LevelPlayerSpawnPoints[] levelPlayerSpawnPointsArray = new LevelPlayerSpawnPoints[5]
     {
         new LevelPlayerSpawnPoints("level1", new Vector3(-2.3f, -1f, 0f), new Vector3(21.7f, -1f, 0f)),
         new LevelPlayerSpawnPoints("level2", new Vector3(-6.5f, -1f, 0f), new Vector3(64.5f, -7f, 0f)),
         new LevelPlayerSpawnPoints("level3", new Vector3(-6.5f, -1f, 0f), new Vector3(55.3f, -1f, 0f)),
-        new LevelPlayerSpawnPoints("level4", new Vector3(-6.5f, -1f, 0f), new Vector3(71.8f, -1f, 0f))
+        new LevelPlayerSpawnPoints("level4", new Vector3(-6.5f, -1f, 0f), new Vector3(71.8f, -1f, 0f)),
+        new LevelPlayerSpawnPoints("level5", new Vector3(-6.5f, -1f, 0f), new Vector3(71.8f, -1f, 0f))
     };
 
     // SINGLETON

@@ -196,6 +196,13 @@ MonoBehaviour:
     loop: 1
     playOnAwake: 0
     source: {fileID: 0}
+  - clip: {fileID: 8300000, guid: 88d504a4816472e47ad1357cb53932c5, type: 3}
+    name: Level5
+    volume: 0.35
+    pitch: 1
+    loop: 1
+    playOnAwake: 0
+    source: {fileID: 0}
   - clip: {fileID: 8300000, guid: 34fcbbbaec1c8df4ea7d7382f3a28113, type: 3}
     name: CombatLevel1
     volume: 0.35
