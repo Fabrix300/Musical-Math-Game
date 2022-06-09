@@ -1,2 +1,2 @@
 # Musical-Math-Game
-Un videojuego para móviles donde se utiliza la música para "combatir" y progresar en el mundo
+Un videojuego para móviles donde se utilizan conceptos musicales para "combatir" y progresar en el mundo
