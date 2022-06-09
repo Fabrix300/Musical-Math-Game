@@ -26,4 +26,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CombatLevel3.unity
     guid: 40ed4087d36678044925de09bf84347c
+  - enabled: 1
+    path: Assets/Scenes/Level4.unity
+    guid: e140b14b29cc243429c388bfadb8dba7
+  - enabled: 1
+    path: Assets/Scenes/CombatLevel4.unity
+    guid: 70b5bdc0464783c43bee523f737931ab
   m_configObjects: {}
