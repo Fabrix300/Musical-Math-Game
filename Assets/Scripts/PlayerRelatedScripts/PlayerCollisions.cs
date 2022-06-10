@@ -47,12 +47,16 @@ public class PlayerCollisions : MonoBehaviour
                 StartCoroutine(gameManager.AdvanceToNextLevel());
             }
         }
-        else if (gO.CompareTag("PreviousLevelPortal"))
+        /*else if (gO.CompareTag("PreviousLevelPortal"))
         {
             if (playerInventory.HasPlayerSpecificKey(gameManager.savedSceneName))
             {
                 StartCoroutine(gameManager.GoBackToPreviousLevel());
             }
+        }*/
+        else if (gO.CompareTag("FinishGameTrigger"))
+        {
+            gameManager.FinishGame();
         }
 
         // Checking if its an enemy

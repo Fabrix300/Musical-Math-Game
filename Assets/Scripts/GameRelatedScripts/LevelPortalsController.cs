@@ -18,8 +18,8 @@ public class LevelPortalsController : MonoBehaviour
     {
         playerInventory = PlayerInventory.instance;
         gameManager = GameManager.instance;
-        HideDoorIfPlayerHasPreviousLevelKey();
-        HideDoorIfPlayerHasNextLevelKey();
+        //HideDoorIfPlayerHasPreviousLevelKey();
+        //HideDoorIfPlayerHasNextLevelKey();
     }
 
     public void HideDoorIfPlayerHasPreviousLevelKey()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,12 +15,15 @@ public class PlayerMovement : MonoBehaviour
     /*Audio*/
     public AudioSource jumpAS;
     public AudioSource cherryEatAS;
+    public AudioSource characterExplosion;
 
     private float dirX;
     private Rigidbody2D rb;
     private CapsuleCollider2D playerCollider;
     private Animator anim;
     private PlayerStats playerStats;
+    private CombatAssets combatAssets;
+    private CombatData combatData;
 
     private enum AnimationState { Idle, Running, Jumping, Falling };
 
@@ -31,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 3f;
         playerStats = PlayerStats.instance;
+        combatAssets = CombatAssets.instance;
+        combatData = CombatData.instance;
         playerStats.OnCherryItemUsed += TriggerHealEffectAnimation;
 
         /*MOBILE*/
@@ -181,10 +187,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void LittleJump()
+    {
+        rb.AddForce(Vector2.up * 210);
+    }
+
+    public void SetIdleAnimation()
+    {
+        anim.SetInteger("state", 0);
+    }
+
+    public void InstantiateAudioHelper()
+    {
+        GameObject audioHelper = Instantiate(combatAssets.audioHelper, transform.position, Quaternion.identity);
+        SceneManager.MoveGameObjectToScene(audioHelper, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        AudioSource aS = audioHelper.GetComponent<AudioSource>();
+        aS.clip = characterExplosion.clip; aS.Play();
+    }
+
     public void ActivateAndMovePlayerOnLevelPass(Vector3 position, Quaternion rotation)
     {
         gameObject.SetActive(true);
         transform.SetPositionAndRotation(position, rotation);
+    }
+
+    public void DestroySelf() 
+    {
+        Destroy(gameObject);
     }
 
     /*private void OnEnable()

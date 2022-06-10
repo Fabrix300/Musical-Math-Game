@@ -52,6 +52,7 @@ public class EnergyBar : MonoBehaviour
             currentTime += Time.deltaTime;
             yield return null;
         }
+        slider.value = target;
     }
 
     public void UpdateExp()

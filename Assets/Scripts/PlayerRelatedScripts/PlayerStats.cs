@@ -55,7 +55,7 @@ public class PlayerStats : MonoBehaviour
             OnPlayerHealthPointsChange?.Invoke();
             if (playerEnergyPoints <= 0f)
             {
-                Die();
+                //Die();
                 return true;
             }
             return false;
@@ -79,12 +79,12 @@ public class PlayerStats : MonoBehaviour
         return false;
     }
 
-    public virtual void Die()
+    /*public virtual void Die()
     {
         isPlayerAlive = false;
         //DIE IN SOME WAY
         Debug.Log("player died.");
-    }
+    }*/
 
     public bool AddExpPointsAndCheck(int points)
     {
@@ -127,9 +127,19 @@ public class PlayerStats : MonoBehaviour
         return playerEnergyPoints;
     }
 
+    public void SetPlayerEnergyPoints(float energyPoints)
+    {
+        playerEnergyPoints = energyPoints;
+    }
+
     public float GetPlayerMaxEnergyPoints()
     {
         return playerMaxEnergyPoints;
+    }
+
+    public void SetPlayerMaxEnergyPoints(float maxEnergyPoints)
+    {
+        playerMaxEnergyPoints = maxEnergyPoints;
     }
 
     public int GetPlayerExpPoints()
@@ -137,8 +147,18 @@ public class PlayerStats : MonoBehaviour
         return playerExpPoints;
     }
 
+    public void SetPlayerExpPoints(int expPoints)
+    {
+        playerExpPoints = expPoints;
+    }
+
     public int GetPlayerMaxExpPoints()
     {
         return playerMaxExpPoints;
+    }
+
+    public void SetPlayerMaxExpPoints(int maxExpPoints)
+    {
+        playerMaxExpPoints = maxExpPoints;
     }
 }

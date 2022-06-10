@@ -509,6 +509,7 @@ public class CombatSystem : MonoBehaviour
         //Damage the player
         attackEffectOfPlayerAnim.SetTrigger("Start");
         hitOnPlayer.Play();
+        playerGO.GetComponent<Animator>().SetInteger("state", 6);
         bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
         enemyNotes.Clear();
         yield return new WaitForSeconds(1f);
@@ -516,7 +517,11 @@ public class CombatSystem : MonoBehaviour
         //check if player is dead, actualizar estados y pasar a endcombat o playerTurn;
         if (isPlayerDead)
         {
+            yield return new WaitForSeconds(0.2f);
+            playerGO.GetComponent<Animator>().SetTrigger("death");
+            yield return new WaitForSeconds(1f);
             turnIndicatorEnemy.SetActive(false);
+            yield return new WaitForSeconds(1f);
             state = CombatState.LOST;
             EndCombat();
         }
@@ -538,6 +543,7 @@ public class CombatSystem : MonoBehaviour
         else if (state == CombatState.LOST)
         {
             Debug.Log("You lost.");
+            gameManager.ShowLostMessage();
         }
     }
 

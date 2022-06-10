@@ -70,7 +70,19 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public void AddKey(string levelName)
+    public void SetAmountOfItem(ItemName itemName, int _amount)
+    {
+        switch (itemName)
+        {
+            case ItemName.Cherry:
+                {
+                    cherryHolder.amount = _amount;
+                    break;
+                }
+        }
+    }
+
+        public void AddKey(string levelName)
     {
         for (int i = 0; i < levelKeys.Count; i++)
         {
@@ -80,6 +92,16 @@ public class PlayerInventory : MonoBehaviour
             }
         }
         levelKeys.Add(levelName);
+    }
+
+    public List<string> GetLevelKeysArray()
+    {
+        return levelKeys;
+    }
+
+    public void SetLevelKeysArray(List<string> _levelkeys)
+    {
+        levelKeys = _levelkeys;
     }
 
     public bool HasPlayerSpecificKey(string levelName)

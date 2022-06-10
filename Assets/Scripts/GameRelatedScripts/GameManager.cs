@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
         new LevelPlayerSpawnPoints("level5", new Vector3(-6.5f, -1f, 0f), new Vector3(71.8f, -1f, 0f))
     };
 
+    private PlayerStateHolder playerState;
+
     // SINGLETON
     public static GameManager instance;
 
@@ -29,11 +31,17 @@ public class GameManager : MonoBehaviour
     public Camera gameCamera;
     public Animator crossFadeTransition;
     public Animator twoSidedTransition;
+    public Animator gameOverTransition;
+    /*Finish Game Transitions*/
+    public Animator finishScreen1Transition;
+    public Animator finishScreen2Transition;
 
     private GameObject player;
     private GameObject activeLevelHolder;
     private CombatData combatData;
     private AudioManager audioManager;
+    private PlayerStats playerStats;
+    private PlayerInventory playerInventory;
 
     private void Awake()
     {
@@ -47,6 +55,8 @@ public class GameManager : MonoBehaviour
         crossFadeTransition.speed = 0f;
         combatData = CombatData.instance;
         audioManager = AudioManager.instance;
+        playerStats = PlayerStats.instance;
+        playerInventory = PlayerInventory.instance;
         LoadSavedScene();
     }
 
@@ -60,6 +70,18 @@ public class GameManager : MonoBehaviour
             gameCamera.GetComponent<CameraMovement>().FindPlayer();
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
+            playerState = new PlayerStateHolder
+            (
+                playerStats.level, 
+                playerStats.GetPlayerExpPoints(),
+                playerStats.GetPlayerMaxExpPoints(),
+                playerStats.GetPlayerEnergyPoints(),
+                playerStats.GetPlayerMaxEnergyPoints(),
+                playerInventory.GetItem(ItemName.Cherry).amount,
+                playerInventory.GetLevelKeysArray(),
+                levelPlayerSpawnPointsArray[actualLevelNumber-1].leftSpawnPoint,
+                Quaternion.Euler(0, 0, 0)
+            );
             crossFadeTransition.speed = 1f;
         };
     }
@@ -85,6 +107,18 @@ public class GameManager : MonoBehaviour
                 levelPlayerSpawnPointsArray[actualLevelNumber].leftSpawnPoint,
                 Quaternion.Euler(0,0,0)
             );
+            playerState = new PlayerStateHolder
+            (
+                playerStats.level,
+                playerStats.GetPlayerExpPoints(),
+                playerStats.GetPlayerMaxExpPoints(),
+                playerStats.GetPlayerEnergyPoints(),
+                playerStats.GetPlayerMaxEnergyPoints(),
+                playerInventory.GetItem(ItemName.Cherry).amount,
+                playerInventory.GetLevelKeysArray(),
+                levelPlayerSpawnPointsArray[actualLevelNumber].leftSpawnPoint,
+                Quaternion.Euler(0, 0, 0)
+            );
             crossFadeTransition.SetInteger("state", 1);
         };
     }
@@ -108,6 +142,18 @@ public class GameManager : MonoBehaviour
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (
                 levelPlayerSpawnPointsArray[actualLevelNumber-2].rightSpawnPoint,
+                Quaternion.Euler(0, 180, 0)
+            );
+            playerState = new PlayerStateHolder
+            (
+                playerStats.level,
+                playerStats.GetPlayerExpPoints(),
+                playerStats.GetPlayerMaxExpPoints(),
+                playerStats.GetPlayerEnergyPoints(),
+                playerStats.GetPlayerMaxEnergyPoints(),
+                playerInventory.GetItem(ItemName.Cherry).amount,
+                playerInventory.GetLevelKeysArray(),
+                levelPlayerSpawnPointsArray[actualLevelNumber - 2].rightSpawnPoint,
                 Quaternion.Euler(0, 180, 0)
             );
             crossFadeTransition.SetInteger("state", 1);
@@ -189,5 +235,73 @@ public class GameManager : MonoBehaviour
         enemyToCombatAnimator.enabled = true;
         enemyToCombatAnimator.SetTrigger("death");
         player.GetComponent<PlayerMovement>().UnfreezePlayer(); 
+    }
+
+    public void ResetLevelWhenDie()
+    {
+        Debug.Log("reseting ...");
+        //crossFadeTransition.SetInteger("state", 0);
+        gameOverTransition.SetInteger("state", 2);
+        StartCoroutine(audioManager.Crossfade("Lost", savedSceneName));
+        playerStats.level = playerState.playerLevel;
+        playerStats.SetPlayerExpPoints(playerState.playerExpPoints);
+        playerStats.SetPlayerMaxExpPoints(playerState.playerMaxExpPoints);
+        playerStats.SetPlayerEnergyPoints(playerState.playerEnergyPoints);
+        playerStats.SetPlayerMaxEnergyPoints(playerState.playerMaxEnergyPoints);
+        playerInventory.SetAmountOfItem(ItemName.Cherry, playerState.amountOfCherries);
+        playerInventory.SetLevelKeysArray(playerState.levelkeys);
+        /*unload combat*/
+        AsyncOperation asyncUnload1 = SceneManager.UnloadSceneAsync("Combat" + savedSceneName, UnloadSceneOptions.None);
+        /*unload savedlevel*/ AsyncOperation asyncUnload2 = SceneManager.UnloadSceneAsync(savedSceneName, UnloadSceneOptions.None);
+        /*load savedlevel*/ AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
+        progress.completed += (op) =>
+        {
+            int actualLevelNumber = int.Parse(savedSceneName[5..]);
+            gameCamera.GetComponent<CameraMovement>().FindPlayer();
+            gameCamera.GetComponent<CameraMovement>().inCombat = false;
+            gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
+            player = GameObject.Find("Player");
+            player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
+            (
+                playerState.spawnPosition,
+                playerState.spawnRotation
+            );
+            crossFadeTransition.SetInteger("state", 1);
+        };
+
+    }
+
+    public void ShowLostMessage()
+    {
+        StartCoroutine(audioManager.Crossfade("Combat" + savedSceneName, "Lost"));
+        gameOverTransition.SetInteger("state", 1);
+        crossFadeTransition.SetInteger("state", 0);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("quiting ...");
+        Application.Quit();
+    }
+
+    public void FinishGame()
+    {
+        StartCoroutine(FinalAnimationsOfFinishScreen());
+    }
+
+    public IEnumerator FinalAnimationsOfFinishScreen()
+    {
+        crossFadeTransition.speed = 0.15f;
+        crossFadeTransition.SetInteger("state", 0);
+        yield return new WaitForSeconds(8f);
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(savedSceneName, UnloadSceneOptions.None);
+        crossFadeTransition.speed = 1f;
+        finishScreen1Transition.SetInteger("state", 1);
+        yield return new WaitForSeconds(14f);
+        finishScreen1Transition.SetInteger("state", 2);
+        yield return new WaitForSeconds(8f);
+        finishScreen2Transition.SetInteger("state", 1);
+        finishScreen2Transition.gameObject.GetComponent<CanvasGroup>().interactable = true;
+        finishScreen2Transition.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 }
