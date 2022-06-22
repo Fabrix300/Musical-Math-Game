@@ -9,6 +9,7 @@ public class BunnyMovement : MonoBehaviour
     public float distFromPlayer;
 
     private Rigidbody2D rb;
+    private Animator anim;
     private int dirX;
 
     // Start is called before the first frame update
@@ -16,6 +17,7 @@ public class BunnyMovement : MonoBehaviour
     {
         dirX = 0;
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -33,10 +35,42 @@ public class BunnyMovement : MonoBehaviour
         {
             dirX = 0;
         }
+        UpdateAnimation();
     }
 
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(dirX * movementSpeed * Time.deltaTime, rb.velocity.y);
+    }
+
+    public void UpdateAnimation()
+    {
+        int state;
+
+        if (dirX > 0f)
+        {
+            //spriteRenderer.flipX = false;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            state = 1;
+        }
+        else if (dirX < 0f)
+        {
+            //spriteRenderer.flipX = true;
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            state = 1;
+        }
+        else
+        {
+            state = 0;
+        }
+        if (rb.velocity.y > .1f)
+        {
+            state = 2;
+        }
+        else if (rb.velocity.y < -.1f)
+        {
+            state = 3;
+        }
+        anim.SetInteger("state", state);
     }
 }
