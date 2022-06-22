@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -7742742429113185320}
   - component: {fileID: 3011640592142817413}
   - component: {fileID: 5658912603253084188}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 8611487263971447305}
   - component: {fileID: 2035881898429512038}
   - component: {fileID: 793540409057107419}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HealEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}

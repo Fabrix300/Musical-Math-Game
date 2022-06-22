@@ -6685,13 +6685,14 @@ GameObject:
   - component: {fileID: 2004747784}
   - component: {fileID: 2004747785}
   - component: {fileID: 2004747786}
-  m_Layer: 0
+  - component: {fileID: 2004747787}
+  m_Layer: 6
   m_Name: Bunny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2004747782
 Transform:
   m_ObjectHideFlags: 0
@@ -6745,9 +6746,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1843974921
+  m_SortingLayer: -1
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 522d916af9f7944fc9739fa8abcde570, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -6816,6 +6817,21 @@ CapsuleCollider2D:
   m_Offset: {x: -0.016823322, y: -0.31731415}
   m_Size: {x: 0.76474756, y: 1.3657293}
   m_Direction: 0
+--- !u!114 &2004747787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004747781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a8203ad932670499dc59ba08e82fb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 436508643}
+  movementSpeed: 290
+  distFromPlayer: 1.8
 --- !u!1 &2074850598
 GameObject:
   m_ObjectHideFlags: 0

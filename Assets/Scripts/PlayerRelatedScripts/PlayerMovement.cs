@@ -157,7 +157,6 @@ public class PlayerMovement : MonoBehaviour
         dirX = 0f;
     }
 
-
     public void MoveLeft()
     {
         if (inCombat == false)
