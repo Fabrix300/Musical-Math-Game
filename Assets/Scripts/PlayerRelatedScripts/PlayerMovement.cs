@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource jumpAS;
     public AudioSource cherryEatAS;
     public AudioSource characterExplosion;
+
+    /*testing bunny Jumping*/
+    public event Action<Vector3> OnPlayerJump;
 
     private float dirX;
     private Rigidbody2D rb;
@@ -149,6 +151,7 @@ public class PlayerMovement : MonoBehaviour
             //rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeedY);
             jumpAS.Play();
             rb.AddForce(Vector2.up * jumpForce);
+            OnPlayerJump?.Invoke(transform.position);
         }
     }
 

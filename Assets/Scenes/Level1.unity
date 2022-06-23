@@ -6683,9 +6683,9 @@ GameObject:
   - component: {fileID: 2004747782}
   - component: {fileID: 2004747783}
   - component: {fileID: 2004747784}
+  - component: {fileID: 2004747787}
   - component: {fileID: 2004747785}
   - component: {fileID: 2004747786}
-  - component: {fileID: 2004747787}
   m_Layer: 6
   m_Name: Bunny
   m_TagString: Untagged
@@ -6831,7 +6831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 436508643}
   movementSpeed: 290
-  distFromPlayer: 1.8
+  distFromPlayer: 1.3
 --- !u!1 &2074850598
 GameObject:
   m_ObjectHideFlags: 0
