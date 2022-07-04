@@ -16,6 +16,12 @@ public class CombatSystem : MonoBehaviour
     public Text[] noteButtonsLimiterTexts;
     public Animator congratsMessageAnimator;
 
+    // Note Selector
+    public NoteSelectorSwipe noteSelectorSwipe;
+
+    // Pentagram
+    public Animator pentagramAnimator;
+
     //Playing Notes HUD
     public Animator playingNotesHUDAnimator;
     public Image playingNotesHUDImage;
@@ -50,7 +56,8 @@ public class CombatSystem : MonoBehaviour
     private AudioSource hitOnPlayer;
     private AudioSource hitOnEnemy;
 
-    private List<float> notesInput = new();
+    private List<float> musicalFiguresInput = new();
+    private List<int> notesInput = new();
     private int[] musicalFiguresLimits = { 0, 0, 0, 0 };
     private List<float> enemyNotes = new();
     private List<Sound[]> musicalNotes;
@@ -122,7 +129,7 @@ public class CombatSystem : MonoBehaviour
         {
             case "Redonda":{
                     //noteButtonsAndDeleteButtonAudioSources[0].Play();
-                    notesInput.Add(1f);
+                    musicalFiguresInput.Add(1f); notesInput.Add(noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1";
@@ -145,7 +152,7 @@ public class CombatSystem : MonoBehaviour
             case "Blanca":
                 {
                     //noteButtonsAndDeleteButtonAudioSources[1].Play();
-                    notesInput.Add(0.5f);
+                    musicalFiguresInput.Add(0.5f); notesInput.Add(noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/2";
@@ -165,7 +172,7 @@ public class CombatSystem : MonoBehaviour
             case "Negra": 
                 {
                     //noteButtonsAndDeleteButtonAudioSources[2].Play();
-                    notesInput.Add(0.25f);
+                    musicalFiguresInput.Add(0.25f); notesInput.Add(noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/4";
@@ -185,7 +192,7 @@ public class CombatSystem : MonoBehaviour
             case "Corchea": 
                 {
                     //noteButtonsAndDeleteButtonAudioSources[3].Play();
-                    notesInput.Add(0.125f);
+                    musicalFiguresInput.Add(0.125f); notesInput.Add(noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/8";
@@ -205,9 +212,9 @@ public class CombatSystem : MonoBehaviour
             case "BackSpace": 
                 {
                     //noteButtonsAndDeleteButtonAudioSources[4].Play();
-                    if (notesInput.Count > 1)
+                    if (musicalFiguresInput.Count > 1)
                     {
-                        switch (notesInput[^1]) 
+                        switch (musicalFiguresInput[^1]) 
                         {
                             case 1f: 
                                 {
@@ -238,13 +245,14 @@ public class CombatSystem : MonoBehaviour
                                     break;
                                 }
                         }
+                        musicalFiguresInput.RemoveAt(musicalFiguresInput.Count - 1);
                         notesInput.RemoveAt(notesInput.Count - 1);
                         int indexStartOfSubString = formulationText.text.LastIndexOf(" ") - 2;
                         formulationText.text = formulationText.text.Remove(indexStartOfSubString, formulationText.text.Length - indexStartOfSubString);
                     } 
-                    else if (notesInput.Count == 1)
+                    else if (musicalFiguresInput.Count == 1)
                     {
-                        switch (notesInput[^1])
+                        switch (musicalFiguresInput[^1])
                         {
                             case 1f:
                                 {
@@ -271,6 +279,7 @@ public class CombatSystem : MonoBehaviour
                                     break;
                                 }
                         }
+                        musicalFiguresInput.RemoveAt(musicalFiguresInput.Count - 1);
                         notesInput.RemoveAt(notesInput.Count - 1);
                         formulationText.text = "";
                     }
@@ -301,6 +310,7 @@ public class CombatSystem : MonoBehaviour
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
         formulationText.text = "";
+        musicalFiguresInput.Clear();
         notesInput.Clear();
         musicalFiguresLimits = new int[] {0,0,0,0};
         state = CombatState.ENEMYTURN;
@@ -328,10 +338,11 @@ public class CombatSystem : MonoBehaviour
         playerGO.GetComponent<Animator>().SetInteger("state", 5);
         //Add an image animated with the singing effect
         StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
-        for (int i = 0; i < notesInput.Count; i++)
+        for (int i = 0; i < musicalFiguresInput.Count; i++)
         {
-            Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
-            switch (notesInput[i]) 
+            //Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
+            Sound[] noteArray = musicalNotes[notesInput[i]];
+            switch (musicalFiguresInput[i]) 
             {
                 case 1f: 
                     {
@@ -383,6 +394,7 @@ public class CombatSystem : MonoBehaviour
         hitOnEnemy.Play();
         bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
         //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
+        musicalFiguresInput.Clear();
         notesInput.Clear();
         musicalFiguresLimits = new int[] { 0, 0, 0, 0 };
 
@@ -641,7 +653,7 @@ public class CombatSystem : MonoBehaviour
     private float SumNotesInputValues()
     {
         float result = 0f;
-        for (int i = 0; i < notesInput.Count; i++) result += notesInput[i];
+        for (int i = 0; i < musicalFiguresInput.Count; i++) result += musicalFiguresInput[i];
         return result;
     }
 

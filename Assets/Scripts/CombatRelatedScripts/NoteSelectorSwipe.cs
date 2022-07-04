@@ -76,4 +76,9 @@ public class NoteSelectorSwipe : MonoBehaviour
             }
         }*/
     }
+
+    public int GetSelected()
+    {
+        return selected;
+    }
 }
