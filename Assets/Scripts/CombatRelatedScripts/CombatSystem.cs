@@ -16,8 +16,17 @@ public class CombatSystem : MonoBehaviour
     public Text[] noteButtonsLimiterTexts;
     public Animator congratsMessageAnimator;
 
+    // Transforms of Notes Frames
+    public List<RectTransform> notesRectTransforms;
+    public RectTransform firstFrame;
+    public RectTransform pentagramNotesParent;
+    public List<GameObject> pentagramNotesPrefabs;
+
     // Note Selector
     public NoteSelectorSwipe noteSelectorSwipe;
+
+    // Random Note Toggle
+    //public Toggle randomNoteToggle;
 
     // Pentagram
     public Animator pentagramAnimator;
@@ -58,6 +67,7 @@ public class CombatSystem : MonoBehaviour
 
     private List<float> musicalFiguresInput = new();
     private List<int> notesInput = new();
+    private List<GameObject> instantiatedPentagramNotes = new();
     private int[] musicalFiguresLimits = { 0, 0, 0, 0 };
     private List<float> enemyNotes = new();
     private List<Sound[]> musicalNotes;
@@ -105,6 +115,7 @@ public class CombatSystem : MonoBehaviour
         if (GenerateRandomOperationForEnemyRequest())
         {
             TriggerStartAnimationOfHUDElements();
+            pentagramAnimator.SetInteger("state", 1);
         }
         timer.RunTimer();
     }
@@ -129,7 +140,11 @@ public class CombatSystem : MonoBehaviour
         {
             case "Redonda":{
                     //noteButtonsAndDeleteButtonAudioSources[0].Play();
-                    musicalFiguresInput.Add(1f); notesInput.Add(noteSelectorSwipe.GetSelected());
+                    musicalFiguresInput.Add(1f);
+                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8)); 
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
+                    notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(0, noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1";
@@ -152,7 +167,11 @@ public class CombatSystem : MonoBehaviour
             case "Blanca":
                 {
                     //noteButtonsAndDeleteButtonAudioSources[1].Play();
-                    musicalFiguresInput.Add(0.5f); notesInput.Add(noteSelectorSwipe.GetSelected());
+                    musicalFiguresInput.Add(0.5f);
+                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
+                    notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(1, noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/2";
@@ -172,7 +191,11 @@ public class CombatSystem : MonoBehaviour
             case "Negra": 
                 {
                     //noteButtonsAndDeleteButtonAudioSources[2].Play();
-                    musicalFiguresInput.Add(0.25f); notesInput.Add(noteSelectorSwipe.GetSelected());
+                    musicalFiguresInput.Add(0.25f);
+                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
+                    notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(2, noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/4";
@@ -192,7 +215,11 @@ public class CombatSystem : MonoBehaviour
             case "Corchea": 
                 {
                     //noteButtonsAndDeleteButtonAudioSources[3].Play();
-                    musicalFiguresInput.Add(0.125f); notesInput.Add(noteSelectorSwipe.GetSelected());
+                    musicalFiguresInput.Add(0.125f);
+                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
+                    notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(3, noteSelectorSwipe.GetSelected());
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/8";
@@ -247,6 +274,8 @@ public class CombatSystem : MonoBehaviour
                         }
                         musicalFiguresInput.RemoveAt(musicalFiguresInput.Count - 1);
                         notesInput.RemoveAt(notesInput.Count - 1);
+                        Destroy(instantiatedPentagramNotes[^1]);
+                        instantiatedPentagramNotes.RemoveAt(instantiatedPentagramNotes.Count - 1);
                         int indexStartOfSubString = formulationText.text.LastIndexOf(" ") - 2;
                         formulationText.text = formulationText.text.Remove(indexStartOfSubString, formulationText.text.Length - indexStartOfSubString);
                     } 
@@ -281,6 +310,8 @@ public class CombatSystem : MonoBehaviour
                         }
                         musicalFiguresInput.RemoveAt(musicalFiguresInput.Count - 1);
                         notesInput.RemoveAt(notesInput.Count - 1);
+                        Destroy(instantiatedPentagramNotes[^1]);
+                        instantiatedPentagramNotes.RemoveAt(instantiatedPentagramNotes.Count - 1);
                         formulationText.text = "";
                     }
                     break;
@@ -306,12 +337,14 @@ public class CombatSystem : MonoBehaviour
         DisableNoteButtonsAndDeleteButton();
         yield return new WaitForSeconds(0.8f);
         TriggerEndAnimationOfHUDElements();
+        pentagramAnimator.SetInteger("state", 4);
         yield return new WaitForSeconds(2f);
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
         formulationText.text = "";
         musicalFiguresInput.Clear();
         notesInput.Clear();
+        DestroyInstantiatedNotesInPentagram();
         musicalFiguresLimits = new int[] {0,0,0,0};
         state = CombatState.ENEMYTURN;
         turnIndicatorPlayer.SetActive(false);
@@ -328,7 +361,8 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         TriggerEndAnimationOfCongratsMessage();
         yield return new WaitForSeconds(.5f);
-        TriggerStartAnimationOfPlayingNotesHUD();
+        //TriggerStartAnimationOfPlayingNotesHUD();
+        pentagramAnimator.SetInteger("state", 2);
         yield return new WaitForSeconds(1f);
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
@@ -386,7 +420,8 @@ public class CombatSystem : MonoBehaviour
         StartCoroutine(audioManager.FadeVolumeUp("Combat" + gameManager.savedSceneName));
 
         yield return new WaitForSeconds(0.5f);
-        TriggerEndAnimationOfPlayingNotesHUD();
+        //TriggerEndAnimationOfPlayingNotesHUD();
+        pentagramAnimator.SetInteger("state", 3);
         playingNotesHUDImage.sprite = musicalNotesImages[4];
 
         //////////////////
@@ -396,6 +431,7 @@ public class CombatSystem : MonoBehaviour
         //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
         musicalFiguresInput.Clear();
         notesInput.Clear();
+        DestroyInstantiatedNotesInPentagram();
         musicalFiguresLimits = new int[] { 0, 0, 0, 0 };
 
         yield return new WaitForSeconds(1.5f);
@@ -566,6 +602,46 @@ public class CombatSystem : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void InstantiateLastNoteInputInPentagram(int musicalFigureUsed, int noteSelected)
+    {
+        //firstFrame.anchoredPosition.y - (noteYFactor * (7 - noteSelected))
+        //float noteYFactor = firstFrame.sizeDelta.y;
+        if (instantiatedPentagramNotes.Count == 0)
+        {
+            instantiatedPentagramNotes.Add(
+                Instantiate(pentagramNotesPrefabs[musicalFigureUsed], pentagramNotesParent)
+            );
+            RectTransform temp = instantiatedPentagramNotes[^1].GetComponent<RectTransform>();
+            temp.localScale = new Vector3(1f, 1f, 1f);
+            temp.anchoredPosition = new Vector2(
+                temp.sizeDelta.x/2,
+                notesRectTransforms[noteSelected].anchoredPosition.y
+                );
+        }
+        else
+        {
+            RectTransform instPentaNotesLast = instantiatedPentagramNotes[^1].GetComponent<RectTransform>();
+            instantiatedPentagramNotes.Add(
+                Instantiate(pentagramNotesPrefabs[musicalFigureUsed], pentagramNotesParent)
+                );
+            RectTransform temp = instantiatedPentagramNotes[^1].GetComponent<RectTransform>();
+            temp.localScale = new Vector3(1f, 1f, 1f);
+            temp.anchoredPosition = new Vector2(
+                instPentaNotesLast.anchoredPosition.x + (instPentaNotesLast.sizeDelta.x / 2) + (temp.sizeDelta.x / 2),
+                notesRectTransforms[noteSelected].anchoredPosition.y
+                );
+        }
+    }
+
+    private void DestroyInstantiatedNotesInPentagram()
+    {
+        foreach(GameObject gO in instantiatedPentagramNotes) 
+        {
+            Destroy(gO);
+        }
+        instantiatedPentagramNotes.Clear();
     }
 
     private string ConvertDecimalToFractionString(float numerator)

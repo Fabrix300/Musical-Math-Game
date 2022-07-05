@@ -81,4 +81,9 @@ public class NoteSelectorSwipe : MonoBehaviour
     {
         return selected;
     }
+
+    public void DisableScroll(bool value)
+    {
+        scrollBar.interactable = !value;
+    }
 }
