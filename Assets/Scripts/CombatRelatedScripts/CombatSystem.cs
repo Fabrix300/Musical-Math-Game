@@ -26,7 +26,10 @@ public class CombatSystem : MonoBehaviour
     public NoteSelectorSwipe noteSelectorSwipe;
 
     // Random Note Toggle
-    //public Toggle randomNoteToggle;
+    public Toggle randomNoteToggle;
+
+    // MoodIndicator
+    public Text moodIndicatorText;
 
     // Pentagram
     public Animator pentagramAnimator;
@@ -73,6 +76,10 @@ public class CombatSystem : MonoBehaviour
     private List<Sound[]> musicalNotes;
     private List<Sound[]> enemyMusicalNotes;
     private float enemyRequestDecimal;
+    private readonly string[] moods = { "Calmado", "Serio", "Molesto", "Furioso" };
+    private int enemyMood;
+    private int enemyMoodSpecificNote;
+    private int enemyMoodSpecificNoteTimes;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
     private GameManager gameManager; private AudioManager audioManager;
@@ -114,6 +121,7 @@ public class CombatSystem : MonoBehaviour
         turnIndicatorPlayer.SetActive(true);
         if (GenerateRandomOperationForEnemyRequest())
         {
+            GenerateRandomEnemyMood();
             TriggerStartAnimationOfHUDElements();
             pentagramAnimator.SetInteger("state", 1);
         }
@@ -122,37 +130,44 @@ public class CombatSystem : MonoBehaviour
 
     public bool GenerateRandomOperationForEnemyRequest()
     {
-        float upperLimit = 41; float lowerLimit = 5;
-        int multiplicatorResult = (int) Random.Range(lowerLimit, upperLimit);
+        int upperLimit = 33; int lowerLimit = 5;
+        int multiplicatorResult = Random.Range(lowerLimit, upperLimit);
         enemyRequestDecimal = 0.125f * multiplicatorResult;
         enemyRequestText.text = ConvertDecimalToFractionString(enemyRequestDecimal);
         GenerateRandomLimitsForMusicalFigures(multiplicatorResult);
         return true;
     }
 
+    public void GenerateRandomEnemyMood()
+    {
+        enemyMood = Random.Range(0, 4);
+        switch (enemyMood)
+        {
+            case 0: { enemyMoodSpecificNote = Random.Range(0, 2); break; }
+            case 1: { enemyMoodSpecificNote = Random.Range(2, 4); break; }
+            case 2: { enemyMoodSpecificNote = Random.Range(4, 6); break; }
+            case 3: { enemyMoodSpecificNote = Random.Range(6, 8); break; }
+        }
+        enemyMoodSpecificNoteTimes = Random.Range(0,2);
+        moodIndicatorText.text = moods[enemyMood];
+    }
+
     public void OnPressNoteButton(Button clickedButton)
     {
-        if (state != CombatState.PLAYERTURN)
-        {
-            return;
-        }
+        if (state != CombatState.PLAYERTURN) return;
         switch (clickedButton.name)
         {
             case "Redonda":{
-                    //noteButtonsAndDeleteButtonAudioSources[0].Play();
+                    if (SumNotesInputValues() + 1.000f > 4) return;
                     musicalFiguresInput.Add(1f);
-                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8)); 
-                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
-                    notesInput.Add(noteSelectorSwipe.GetSelected());
-                    InstantiateLastNoteInputInPentagram(0, noteSelectorSwipe.GetSelected());
+                    if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8)); 
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(0, notesInput[^1]);
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1";
                         musicalFiguresLimits[0] -= 1;
-                        if (musicalFiguresLimits[0] == 0)
-                        {
-                            noteButtonsAndDeleteButton[0].interactable = false;
-                        }
+                        if (musicalFiguresLimits[0] == 0) noteButtonsAndDeleteButton[0].interactable = false;
                         noteButtonsLimiterTexts[0].text = musicalFiguresLimits[0].ToString();
                     }
                     else
@@ -166,12 +181,11 @@ public class CombatSystem : MonoBehaviour
                 }
             case "Blanca":
                 {
-                    //noteButtonsAndDeleteButtonAudioSources[1].Play();
+                    if (SumNotesInputValues() + 0.500f > 4) return;
                     musicalFiguresInput.Add(0.5f);
-                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
-                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
-                    notesInput.Add(noteSelectorSwipe.GetSelected());
-                    InstantiateLastNoteInputInPentagram(1, noteSelectorSwipe.GetSelected());
+                    if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(1, notesInput[^1]);
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/2";
@@ -190,12 +204,11 @@ public class CombatSystem : MonoBehaviour
                 }
             case "Negra": 
                 {
-                    //noteButtonsAndDeleteButtonAudioSources[2].Play();
+                    if (SumNotesInputValues() + 0.250f > 4) return;
                     musicalFiguresInput.Add(0.25f);
-                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
-                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
-                    notesInput.Add(noteSelectorSwipe.GetSelected());
-                    InstantiateLastNoteInputInPentagram(2, noteSelectorSwipe.GetSelected());
+                    if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(2, notesInput[^1]);
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/4";
@@ -214,12 +227,11 @@ public class CombatSystem : MonoBehaviour
                 }
             case "Corchea": 
                 {
-                    //noteButtonsAndDeleteButtonAudioSources[3].Play();
+                    if (SumNotesInputValues() + 0.125f > 4) return;
                     musicalFiguresInput.Add(0.125f);
-                    /*if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
-                    else notesInput.Add(noteSelectorSwipe.GetSelected());*/
-                    notesInput.Add(noteSelectorSwipe.GetSelected());
-                    InstantiateLastNoteInputInPentagram(3, noteSelectorSwipe.GetSelected());
+                    if (randomNoteToggle.isOn) notesInput.Add(Random.Range(0, 8));
+                    else notesInput.Add(noteSelectorSwipe.GetSelected());
+                    InstantiateLastNoteInputInPentagram(3, notesInput[^1]);
                     if (!formulationText || formulationText.text == "")
                     {
                         formulationText.text += "1/8";
@@ -238,7 +250,6 @@ public class CombatSystem : MonoBehaviour
                 }
             case "BackSpace": 
                 {
-                    //noteButtonsAndDeleteButtonAudioSources[4].Play();
                     if (musicalFiguresInput.Count > 1)
                     {
                         switch (musicalFiguresInput[^1]) 
@@ -308,11 +319,11 @@ public class CombatSystem : MonoBehaviour
                                     break;
                                 }
                         }
+                        formulationText.text = "";
                         musicalFiguresInput.RemoveAt(musicalFiguresInput.Count - 1);
                         notesInput.RemoveAt(notesInput.Count - 1);
                         Destroy(instantiatedPentagramNotes[^1]);
                         instantiatedPentagramNotes.RemoveAt(instantiatedPentagramNotes.Count - 1);
-                        formulationText.text = "";
                     }
                     break;
                 }

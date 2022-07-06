@@ -201,7 +201,7 @@ public class GameManager : MonoBehaviour
         {
             activeLevelHolder.SetActive(false);
             gameCamera.GetComponent<CameraMovement>().inCombat = true;
-            gameCamera.transform.position = new Vector3(0f, 0f, -10);
+            gameCamera.transform.position = new Vector3(0f, -1f, -10);
         }
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
         while (!asyncLoad.isDone)

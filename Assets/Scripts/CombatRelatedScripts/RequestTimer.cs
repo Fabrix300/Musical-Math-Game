@@ -8,6 +8,7 @@ public class RequestTimer : MonoBehaviour
 {
     public Slider slider;
     public Image fill;
+    public Image uiFill;
     public float totalTime;
     public float graceTime;
     public float maxValueOfMultiplicator;
@@ -46,6 +47,7 @@ public class RequestTimer : MonoBehaviour
                 if (stopTimer == false)
                 {
                     slider.value = time;
+                    if(uiFill) uiFill.fillAmount = time/20; FillAmountChanged(time);
                 }
             }
         }
@@ -56,6 +58,7 @@ public class RequestTimer : MonoBehaviour
         slider.maxValue = totalTime;
         slider.value = totalTime;
         graceTimeCopy = graceTime;
+        /* NUEVO */ uiFill.fillAmount = totalTime / totalTime;
         actualTime = Time.time;
         stopTimer = false;
         stopped = false;
@@ -78,5 +81,10 @@ public class RequestTimer : MonoBehaviour
     public void ValueChangeCheck()
     {
         fill.color = Color.Lerp(Color.red, Color.green, slider.value / 20);
+    }
+
+    public void FillAmountChanged(float time)
+    {
+        uiFill.color = Color.Lerp(Color.red, Color.green, time / totalTime);
     }
 }

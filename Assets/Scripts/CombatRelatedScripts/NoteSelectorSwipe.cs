@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class NoteSelectorSwipe : MonoBehaviour
 {
     public Scrollbar scrollBar;
+    public ScrollRect scrollRect;
 
     private float scrollPos = 0;
     private float[] pos;
@@ -84,6 +85,8 @@ public class NoteSelectorSwipe : MonoBehaviour
 
     public void DisableScroll(bool value)
     {
+        Debug.Log(value);
+        scrollRect.enabled = !value;
         scrollBar.interactable = !value;
     }
 }
