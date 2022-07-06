@@ -143,12 +143,32 @@ public class CombatSystem : MonoBehaviour
         enemyMood = Random.Range(0, 4);
         switch (enemyMood)
         {
-            case 0: { enemyMoodSpecificNote = Random.Range(0, 2); break; }
-            case 1: { enemyMoodSpecificNote = Random.Range(2, 4); break; }
-            case 2: { enemyMoodSpecificNote = Random.Range(4, 6); break; }
-            case 3: { enemyMoodSpecificNote = Random.Range(6, 8); break; }
+            case 0: 
+                {
+                    enemyMoodSpecificNote = Random.Range(0, 2);
+                    moodIndicatorText.color = new Color(0f, 140f/255f, 0f);
+                    break; 
+                }
+            case 1: 
+                { 
+                    enemyMoodSpecificNote = Random.Range(2, 4);
+                    moodIndicatorText.color = new Color(140f/255f, 140f/255f, 0f);
+                    break; 
+                }
+            case 2: 
+                { 
+                    enemyMoodSpecificNote = Random.Range(4, 6);
+                    moodIndicatorText.color = new Color(140f/255f, 70f/255f, 0f);
+                    break; 
+                }
+            case 3: 
+                { 
+                    enemyMoodSpecificNote = Random.Range(6, 8);
+                    moodIndicatorText.color = new Color(140f/255f, 0f, 0f);
+                    break; 
+                }
         }
-        enemyMoodSpecificNoteTimes = Random.Range(0,2);
+        enemyMoodSpecificNoteTimes = Random.Range(1,3);
         moodIndicatorText.text = moods[enemyMood];
     }
 

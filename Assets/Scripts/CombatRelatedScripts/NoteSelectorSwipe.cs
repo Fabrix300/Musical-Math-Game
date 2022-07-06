@@ -85,7 +85,6 @@ public class NoteSelectorSwipe : MonoBehaviour
 
     public void DisableScroll(bool value)
     {
-        Debug.Log(value);
         scrollRect.enabled = !value;
         scrollBar.interactable = !value;
     }

@@ -8,7 +8,7 @@ public class RequestTimer : MonoBehaviour
 {
     public Slider slider;
     public Image fill;
-    public Image uiFill;
+    public Image circularUiFill;
     public float totalTime;
     public float graceTime;
     public float maxValueOfMultiplicator;
@@ -24,9 +24,12 @@ public class RequestTimer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        slider.maxValue = totalTime;
-        slider.value = totalTime;
-        slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        if (slider)
+        {
+            slider.maxValue = totalTime;
+            slider.value = totalTime;
+            slider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
+        }
     }
 
     // Update is called once per frame
@@ -41,13 +44,13 @@ public class RequestTimer : MonoBehaviour
                 if (time <= 0f)
                 {
                     stopTimer = true;
-                    Debug.Log("Time ended");
+                    if (circularUiFill) circularUiFill.color = Color.green;
                     OnTimerEnd?.Invoke();
                 }
                 if (stopTimer == false)
                 {
-                    slider.value = time;
-                    if(uiFill) uiFill.fillAmount = time/20; FillAmountChanged(time);
+                    if(slider) slider.value = time;
+                    if(circularUiFill) circularUiFill.fillAmount = time/20; FillAmountChanged(time);
                 }
             }
         }
@@ -55,10 +58,13 @@ public class RequestTimer : MonoBehaviour
 
     public void RunTimer()
     {
-        slider.maxValue = totalTime;
-        slider.value = totalTime;
+        if (slider)
+        {
+            slider.maxValue = totalTime;
+            slider.value = totalTime;
+        }
+        /* NUEVO */ if (circularUiFill) circularUiFill.fillAmount = totalTime / totalTime;
         graceTimeCopy = graceTime;
-        /* NUEVO */ uiFill.fillAmount = totalTime / totalTime;
         actualTime = Time.time;
         stopTimer = false;
         stopped = false;
@@ -71,20 +77,24 @@ public class RequestTimer : MonoBehaviour
 
     public float GetTimerBonusMultiplicator()
     {
-        if (stopped)
+        if (slider)
         {
-            return maxValueOfMultiplicator - (minValueOfMultiplicator - ((slider.value / totalTime) * minValueOfMultiplicator));
+            if (stopped)
+            {
+                return maxValueOfMultiplicator - (minValueOfMultiplicator - ((slider.value / totalTime) * minValueOfMultiplicator));
+            }
+            return 1f;
         }
-        return 1f;
+        return maxValueOfMultiplicator;
     }
 
     public void ValueChangeCheck()
     {
-        fill.color = Color.Lerp(Color.red, Color.green, slider.value / 20);
+        if(fill) fill.color = Color.Lerp(Color.red, Color.green, slider.value / 20);
     }
 
     public void FillAmountChanged(float time)
     {
-        uiFill.color = Color.Lerp(Color.red, Color.green, time / totalTime);
+        if(circularUiFill) circularUiFill.color = Color.Lerp(Color.red, Color.green, time / totalTime);
     }
 }
