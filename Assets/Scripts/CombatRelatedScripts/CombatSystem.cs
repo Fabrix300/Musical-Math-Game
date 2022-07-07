@@ -14,7 +14,14 @@ public class CombatSystem : MonoBehaviour
     public Button[] noteButtonsAndDeleteButton;
     private AudioSource[] noteButtonsAndDeleteButtonAudioSources = new AudioSource[5];
     public Text[] noteButtonsLimiterTexts;
+
+    // congratsMessage
     public Animator congratsMessageAnimator;
+    public Text congratsMessage;
+    public Image fractionMark;
+    public Image noteMark;
+    public Text multiplicatorText;
+    public Image starImage;
 
     // Transforms of Notes Frames
     public List<RectTransform> notesRectTransforms;
@@ -384,12 +391,12 @@ public class CombatSystem : MonoBehaviour
 
     IEnumerator PlayerAction()
     {
-        yield return new WaitForSeconds(0.3f);
-        TriggerStartAnimationOfCongratsMessage();
+        yield return new WaitForSeconds(0.2f);
         audioManager.Play("CorrectAnswer");
-        yield return new WaitForSeconds(1f);
+        TriggerStartAnimationAndSetupCongratsMessage();
+        yield return new WaitForSeconds(1.2f);
         TriggerEndAnimationOfHUDElements();
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.2f);
         TriggerEndAnimationOfCongratsMessage();
         yield return new WaitForSeconds(.5f);
         //TriggerStartAnimationOfPlayingNotesHUD();
@@ -626,7 +633,7 @@ public class CombatSystem : MonoBehaviour
     {
         bool checkfirstRequestedNoteFlag = true;
         bool checkSecondRequestedNoteFlag = true;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < notesInput.Count; i++)
         {
             if (checkfirstRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[0])
             {
@@ -640,11 +647,35 @@ public class CombatSystem : MonoBehaviour
             }
             if (checkfirstRequestedNoteFlag == false && checkSecondRequestedNoteFlag == false)
             {
-                multiplier += 1.00f; 
+                multiplier += 1.00f;
                 return;
             }
         }
     }
+
+    /*private void CheckResultIfSecondMultiplierbool()
+    {
+        bool checkfirstRequestedNoteFlag = true;
+        bool checkSecondRequestedNoteFlag = true;
+        for (int i = 0; i < notesInput.Count; i++)
+        {
+            if (checkfirstRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[0])
+            {
+                Debug.Log("primera encontrada");
+                checkfirstRequestedNoteFlag = false;
+            }
+            else if (checkSecondRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[1])
+            {
+                Debug.Log("segunda encontrada");
+                checkSecondRequestedNoteFlag = false;
+            }
+            if (checkfirstRequestedNoteFlag == false && checkSecondRequestedNoteFlag == false)
+            {
+                multiplier += 1.00f;
+                return;
+            }
+        }
+    }*/
 
     private bool CheckResult()
     {
@@ -815,8 +846,25 @@ public class CombatSystem : MonoBehaviour
         congratsMessageAnimator.SetInteger("state", 2);
     }
 
-    public void TriggerStartAnimationOfCongratsMessage()
+    public void TriggerStartAnimationAndSetupCongratsMessage()
     {
+        if (multiplier < 2f)
+        {
+            congratsMessage.text = "¡Bien!";
+            fractionMark.sprite = combatAssets.marksOnCongratsMessage[0];
+            noteMark.sprite = combatAssets.marksOnCongratsMessage[1];
+            starImage.gameObject.SetActive(false);
+            multiplicatorText.text = multiplier.ToString("N1");
+            multiplicatorText.color = new Color(140f / 255f, 70f / 255f, 0f);
+        } else
+        {
+            congratsMessage.text = "¡Bien Hecho!";
+            fractionMark.sprite = combatAssets.marksOnCongratsMessage[0];
+            noteMark.sprite = combatAssets.marksOnCongratsMessage[0];
+            starImage.gameObject.SetActive(true);
+            multiplicatorText.text = multiplier.ToString("N1");
+            multiplicatorText.color = new Color(140f / 255f, 0f, 0f);
+        }
         congratsMessageAnimator.SetInteger("state", 1);
     }
 

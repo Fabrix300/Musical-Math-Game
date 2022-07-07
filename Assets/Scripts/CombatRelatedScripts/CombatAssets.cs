@@ -18,11 +18,14 @@ public class CombatAssets : MonoBehaviour
     public Sprite playerImage;
     public GameObject[] enemyPreFabs;
     public Sprite[] enemyImages;
+    public Sprite[] marksOnCongratsMessage;
     //turnIndicator
     public GameObject turnIndicatorPlayer;
     public GameObject turnIndicatorEnemy;
     //attack Effect
     public GameObject attackEffect;
+    // DamageIndicator
+    public GameObject damageIndicator;
     //Miscelaneous
     public GameObject keyPreFab;
     //AudioHelper
