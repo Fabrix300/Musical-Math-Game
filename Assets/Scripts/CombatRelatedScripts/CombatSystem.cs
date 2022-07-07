@@ -30,6 +30,7 @@ public class CombatSystem : MonoBehaviour
 
     // MoodIndicator
     public Text moodIndicatorText;
+    //public GameObject moodIndicatorButton;
 
     // Pentagram
     public Animator pentagramAnimator;
@@ -78,8 +79,8 @@ public class CombatSystem : MonoBehaviour
     private float enemyRequestDecimal;
     private readonly string[] moods = { "Calmado", "Serio", "Molesto", "Furioso" };
     private int enemyMood;
-    private int enemyMoodSpecificNote;
-    private int enemyMoodSpecificNoteTimes;
+    private List<int> enemyMoodSpecificNotes = new();
+    private float multiplier = 1.50f;
 
     private CombatData combatData; private PlayerStats playerStats; private CombatAssets combatAssets;
     private GameManager gameManager; private AudioManager audioManager;
@@ -141,35 +142,32 @@ public class CombatSystem : MonoBehaviour
     public void GenerateRandomEnemyMood()
     {
         enemyMood = Random.Range(0, 4);
+        moodIndicatorText.text = moods[enemyMood];
         switch (enemyMood)
         {
             case 0: 
                 {
-                    enemyMoodSpecificNote = Random.Range(0, 2);
-                    moodIndicatorText.color = new Color(0f, 140f/255f, 0f);
-                    break; 
+                    //for (int i = 0; i < Random.Range(1, 3); i++) { enemyMoodSpecificNotes.Add(Random.Range(0, 2)); }
+                    for (int i = 0; i < 2; i++) { enemyMoodSpecificNotes.Add(Random.Range(0, 2)); }
+                    moodIndicatorText.color = new Color(0f, 140f/255f, 0f); break; 
                 }
             case 1: 
-                { 
-                    enemyMoodSpecificNote = Random.Range(2, 4);
-                    moodIndicatorText.color = new Color(140f/255f, 140f/255f, 0f);
-                    break; 
+                {
+                    //for (int i = 0; i < Random.Range(1, 3); i++) { enemyMoodSpecificNotes.Add(Random.Range(2,4)); }
+                    for (int i = 0; i < 2; i++) { enemyMoodSpecificNotes.Add(Random.Range(2, 4)); }
+                    moodIndicatorText.color = new Color(140f/255f, 140f/255f, 0f); break; 
                 }
             case 2: 
-                { 
-                    enemyMoodSpecificNote = Random.Range(4, 6);
-                    moodIndicatorText.color = new Color(140f/255f, 70f/255f, 0f);
-                    break; 
+                {
+                    for (int i = 0; i < 2; i++) { enemyMoodSpecificNotes.Add(Random.Range(4, 6)); }
+                    moodIndicatorText.color = new Color(140f/255f, 70f/255f, 0f); break; 
                 }
             case 3: 
-                { 
-                    enemyMoodSpecificNote = Random.Range(6, 8);
-                    moodIndicatorText.color = new Color(140f/255f, 0f, 0f);
-                    break; 
+                {
+                    for (int i = 0; i < 2; i++) { enemyMoodSpecificNotes.Add(Random.Range(6, 8)); }
+                    moodIndicatorText.color = new Color(140f/255f, 0f, 0f); break; 
                 }
         }
-        enemyMoodSpecificNoteTimes = Random.Range(1,3);
-        moodIndicatorText.text = moods[enemyMood];
     }
 
     public void OnPressNoteButton(Button clickedButton)
@@ -352,6 +350,7 @@ public class CombatSystem : MonoBehaviour
         if(CheckResult())
         {
             timer.StopTimer();
+            CheckResultIfSecondMultiplier();
             DisableNoteButtonsAndDeleteButton();
             StartCoroutine(PlayerAction());
         }
@@ -376,6 +375,7 @@ public class CombatSystem : MonoBehaviour
         musicalFiguresInput.Clear();
         notesInput.Clear();
         DestroyInstantiatedNotesInPentagram();
+        enemyMoodSpecificNotes.Clear();
         musicalFiguresLimits = new int[] {0,0,0,0};
         state = CombatState.ENEMYTURN;
         turnIndicatorPlayer.SetActive(false);
@@ -458,12 +458,17 @@ public class CombatSystem : MonoBehaviour
         //////////////////
         attackEffectOfEnemyAnim.SetTrigger("Start");
         hitOnEnemy.Play();
-        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
+        // Como ya se encuentra aquí, es obvio que ya hizo la fracción por eso ya supongo el 1.5 de multi
+        //bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
+        Debug.Log(multiplier);
+        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * multiplier);
         //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
         musicalFiguresInput.Clear();
         notesInput.Clear();
         DestroyInstantiatedNotesInPentagram();
+        enemyMoodSpecificNotes.Clear();
         musicalFiguresLimits = new int[] { 0, 0, 0, 0 };
+        multiplier = 1.50f;
 
         yield return new WaitForSeconds(1.5f);
 
@@ -531,13 +536,8 @@ public class CombatSystem : MonoBehaviour
     {
         turnIndicatorEnemy.SetActive(true);
         float[] temp = { 1f, 0.5f, 0.25f, 0.125f };
-        int enemySinginglength = Random.Range(1, 7);
-        for (int i = 0; i < enemySinginglength; i++)
-        {
-            enemyNotes.Add(temp[Random.Range(0,4)]);
-        }
+        for (int i = 0; i < Random.Range(1, 7); i++) enemyNotes.Add(temp[Random.Range(0,4)]);
         yield return new WaitForSeconds(1f);
-
         // Make Enemy Sing
         StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
         for (int i = 0; i < enemyNotes.Count; i++)
@@ -565,8 +565,6 @@ public class CombatSystem : MonoBehaviour
                     }
                 case 0.25f:
                     {
-                        //Changing image of PlayingNotesHUD
-                        //playingNotesHUDImage.sprite = musicalNotesImages[2];
                         AudioSource aS = noteArray[2].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -574,8 +572,6 @@ public class CombatSystem : MonoBehaviour
                     }
                 case 0.125f:
                     {
-                        //Changing image of PlayingNotesHUD
-                        //playingNotesHUDImage.sprite = musicalNotesImages[3];
                         AudioSource aS = noteArray[3].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -623,6 +619,30 @@ public class CombatSystem : MonoBehaviour
         {
             Debug.Log("You lost.");
             gameManager.ShowLostMessage();
+        }
+    }
+
+    private void CheckResultIfSecondMultiplier()
+    {
+        bool checkfirstRequestedNoteFlag = true;
+        bool checkSecondRequestedNoteFlag = true;
+        for (int i = 0; i < 2; i++)
+        {
+            if (checkfirstRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[0])
+            {
+                Debug.Log("primera encontrada");
+                checkfirstRequestedNoteFlag = false;
+            }
+            else if (checkSecondRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[1])
+            {
+                Debug.Log("segunda encontrada");
+                checkSecondRequestedNoteFlag = false;
+            }
+            if (checkfirstRequestedNoteFlag == false && checkSecondRequestedNoteFlag == false)
+            {
+                multiplier += 1.00f; 
+                return;
+            }
         }
     }
 
@@ -754,7 +774,6 @@ public class CombatSystem : MonoBehaviour
             musicalFiguresLimits[i] += Random.Range(2,5);
             noteButtonsLimiterTexts[i].text = musicalFiguresLimits[i].ToString();
         }
-
     }
 
     private float SumNotesInputValues()
@@ -762,6 +781,23 @@ public class CombatSystem : MonoBehaviour
         float result = 0f;
         for (int i = 0; i < musicalFiguresInput.Count; i++) result += musicalFiguresInput[i];
         return result;
+    }
+
+    public void PlaySpecificNotesAccordingToEnemyMood(Button _enemyMoodNotesButton) { StartCoroutine(PlaySpecificNotesAccordingToEnemyMoodCo(_enemyMoodNotesButton)); }
+
+    private IEnumerator PlaySpecificNotesAccordingToEnemyMoodCo(Button _enemyMoodNotesButton)
+    {
+        _enemyMoodNotesButton.GetComponent<Button>().interactable = false;
+        //Sound[] noteArray = enemyMusicalNotes[Random.Range(0, 8)];
+        for (int i = 0; i < enemyMoodSpecificNotes.Count; i++)
+        {
+            Sound[] noteArray = enemyMusicalNotes[enemyMoodSpecificNotes[i]];
+            AudioSource aS = noteArray[1].source;
+            aS.Play();
+            yield return new WaitWhile(() => aS.isPlaying);
+        }
+        _enemyMoodNotesButton.GetComponent<Button>().interactable = true;
+        yield return null;
     }
 
     public void TriggerStartAnimationOfPlayingNotesHUD()
