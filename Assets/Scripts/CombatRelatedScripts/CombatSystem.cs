@@ -14,7 +14,6 @@ public class CombatSystem : MonoBehaviour
     public Button[] noteButtonsAndDeleteButton;
     private AudioSource[] noteButtonsAndDeleteButtonAudioSources = new AudioSource[5];
     public Text[] noteButtonsLimiterTexts;
-
     // congratsMessage
     public Animator congratsMessageAnimator;
     public Text congratsMessage;
@@ -22,31 +21,24 @@ public class CombatSystem : MonoBehaviour
     public Image noteMark;
     public Text multiplicatorText;
     public Image starImage;
-
     // Transforms of Notes Frames
     public List<RectTransform> notesRectTransforms;
     public RectTransform firstFrame;
     public RectTransform pentagramNotesParent;
     public List<GameObject> pentagramNotesPrefabs;
-
     // Note Selector
     public NoteSelectorSwipe noteSelectorSwipe;
-
     // Random Note Toggle
     public Toggle randomNoteToggle;
-
     // MoodIndicator
-    public Text moodIndicatorText;
-    //public GameObject moodIndicatorButton;
-
+    public Text moodIndicatorText; public GameObject moodIndicatorCorrectMark;
     // Pentagram
     public Animator pentagramAnimator;
-
+    public PentagramPlayingGuide pentagramGuide;
     //Playing Notes HUD
-    public Animator playingNotesHUDAnimator;
-    public Image playingNotesHUDImage;
-    public Sprite[] musicalNotesImages;
-
+    //public Animator playingNotesHUDAnimator;
+    //public Image playingNotesHUDImage;
+    //public Sprite[] musicalNotesImages;
     // WinnerMessageHUD
     public Animator winnerMessage;
     public Animator backOverlay;
@@ -64,14 +56,14 @@ public class CombatSystem : MonoBehaviour
     private CombatState state;
     private Enemy enemyEnemyComp;
     private GameObject playerGO;
+    //Damage Indicators
+    private GameObject damageIndicatorOfPlayer; private GameObject damageIndicatorOfEnemy;
+    private Animator damageIndicatorOfPlayerAnim; private Animator damageIndicatorOfEnemyAnim;
     //TurnIndicators
-    private GameObject turnIndicatorPlayer;
-    private GameObject turnIndicatorEnemy;
+    private GameObject turnIndicatorPlayer; private GameObject turnIndicatorEnemy;
     // AttackEffects Animators
-    private GameObject attackEffectOfPlayer;
-    private GameObject attackEffectOfEnemy;
-    private Animator attackEffectOfPlayerAnim;
-    private Animator attackEffectOfEnemyAnim;
+    private GameObject attackEffectOfPlayer; private Animator attackEffectOfPlayerAnim;
+    private GameObject attackEffectOfEnemy; private Animator attackEffectOfEnemyAnim;
     //Hit Audio Sources
     private AudioSource hitOnPlayer;
     private AudioSource hitOnEnemy;
@@ -354,10 +346,10 @@ public class CombatSystem : MonoBehaviour
                 }
         }
         resultText.text = ConvertDecimalToFractionString(SumNotesInputValues());
-        if(CheckResult())
+        moodIndicatorCorrectMark.SetActive(CheckResultIfSecondMultiplier());
+        if (CheckResult())
         {
             timer.StopTimer();
-            CheckResultIfSecondMultiplier();
             DisableNoteButtonsAndDeleteButton();
             StartCoroutine(PlayerAction());
         }
@@ -377,6 +369,7 @@ public class CombatSystem : MonoBehaviour
         pentagramAnimator.SetInteger("state", 4);
         yield return new WaitForSeconds(2f);
         EnableNoteButtonsAndDeleteButton();
+        moodIndicatorCorrectMark.SetActive(false);
         resultText.text = "0";
         formulationText.text = "";
         musicalFiguresInput.Clear();
@@ -384,6 +377,7 @@ public class CombatSystem : MonoBehaviour
         DestroyInstantiatedNotesInPentagram();
         enemyMoodSpecificNotes.Clear();
         musicalFiguresLimits = new int[] {0,0,0,0};
+        noteSelectorSwipe.EnableScroll();
         state = CombatState.ENEMYTURN;
         turnIndicatorPlayer.SetActive(false);
         StartCoroutine(EnemyTurn());
@@ -401,6 +395,7 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         //TriggerStartAnimationOfPlayingNotesHUD();
         pentagramAnimator.SetInteger("state", 2);
+        pentagramGuide.SetActiveGameObject(true);
         yield return new WaitForSeconds(1f);
         EnableNoteButtonsAndDeleteButton();
         resultText.text = "0";
@@ -410,6 +405,7 @@ public class CombatSystem : MonoBehaviour
         playerGO.GetComponent<Animator>().SetInteger("state", 5);
         //Add an image animated with the singing effect
         StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
+        pentagramGuide.MoveToPos(new Vector2(0,0), 6f);
         for (int i = 0; i < musicalFiguresInput.Count; i++)
         {
             //Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
@@ -419,7 +415,7 @@ public class CombatSystem : MonoBehaviour
                 case 1f: 
                     {
                         //Changing image of PlayingNotesHUD
-                        playingNotesHUDImage.sprite = musicalNotesImages[0];
+                        //playingNotesHUDImage.sprite = musicalNotesImages[0];
                         AudioSource aS = noteArray[0].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -428,7 +424,7 @@ public class CombatSystem : MonoBehaviour
                 case 0.5f: 
                     {
                         //Changing image of PlayingNotesHUD
-                        playingNotesHUDImage.sprite = musicalNotesImages[1];
+                        //playingNotesHUDImage.sprite = musicalNotesImages[1];
                         AudioSource aS = noteArray[1].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -437,7 +433,7 @@ public class CombatSystem : MonoBehaviour
                 case 0.25f: 
                     {
                         //Changing image of PlayingNotesHUD
-                        playingNotesHUDImage.sprite = musicalNotesImages[2];
+                        //playingNotesHUDImage.sprite = musicalNotesImages[2];
                         AudioSource aS = noteArray[2].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -446,7 +442,7 @@ public class CombatSystem : MonoBehaviour
                 case 0.125f: 
                     {
                         //Changing image of PlayingNotesHUD
-                        playingNotesHUDImage.sprite = musicalNotesImages[3];
+                        //playingNotesHUDImage.sprite = musicalNotesImages[3];
                         AudioSource aS = noteArray[3].source;
                         aS.Play();
                         yield return new WaitWhile(() => aS.isPlaying);
@@ -460,21 +456,24 @@ public class CombatSystem : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         //TriggerEndAnimationOfPlayingNotesHUD();
         pentagramAnimator.SetInteger("state", 3);
-        playingNotesHUDImage.sprite = musicalNotesImages[4];
+        //playingNotesHUDImage.sprite = musicalNotesImages[4];
 
         //////////////////
+        float playerTotalDamage = playerStats.damage * multiplier;
         attackEffectOfEnemyAnim.SetTrigger("Start");
+        damageIndicatorOfEnemy.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().text = playerTotalDamage.ToString("N0");
+        damageIndicatorOfEnemyAnim.SetTrigger("start");
         hitOnEnemy.Play();
-        // Como ya se encuentra aquí, es obvio que ya hizo la fracción por eso ya supongo el 1.5 de multi
         //bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * timer.GetTimerBonusMultiplicator());
-        Debug.Log(multiplier);
-        bool isEnemyDead = enemyEnemyComp.Numb(playerStats.damage * multiplier);
+        bool isEnemyDead = enemyEnemyComp.Numb(playerTotalDamage);
         //playerGO.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 560);
         musicalFiguresInput.Clear();
         notesInput.Clear();
         DestroyInstantiatedNotesInPentagram();
+        moodIndicatorCorrectMark.SetActive(false);
         enemyMoodSpecificNotes.Clear();
         musicalFiguresLimits = new int[] { 0, 0, 0, 0 };
+        noteSelectorSwipe.EnableScroll();
         multiplier = 1.50f;
 
         yield return new WaitForSeconds(1.5f);
@@ -589,8 +588,10 @@ public class CombatSystem : MonoBehaviour
         StartCoroutine(audioManager.FadeVolumeUp("Combat" + gameManager.savedSceneName));
 
         //Damage the player
-        attackEffectOfPlayerAnim.SetTrigger("Start");
         hitOnPlayer.Play();
+        attackEffectOfPlayerAnim.SetTrigger("Start");
+        damageIndicatorOfPlayer.transform.GetChild(0).GetChild(0).gameObject.GetComponent<Text>().text = enemyEnemyComp.GetTotalDamage().ToString("N0");
+        damageIndicatorOfPlayerAnim.SetTrigger("start");
         playerGO.GetComponent<Animator>().SetInteger("state", 6);
         bool isPlayerDead = playerStats.NumbPlayer(enemyEnemyComp.GetTotalDamage());
         enemyNotes.Clear();
@@ -629,7 +630,7 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-    private void CheckResultIfSecondMultiplier()
+    private bool CheckResultIfSecondMultiplier()
     {
         bool checkfirstRequestedNoteFlag = true;
         bool checkSecondRequestedNoteFlag = true;
@@ -647,35 +648,13 @@ public class CombatSystem : MonoBehaviour
             }
             if (checkfirstRequestedNoteFlag == false && checkSecondRequestedNoteFlag == false)
             {
-                multiplier += 1.00f;
-                return;
+                multiplier = 2.50f;
+                return true;
             }
         }
+        multiplier = 1.50f;
+        return false;
     }
-
-    /*private void CheckResultIfSecondMultiplierbool()
-    {
-        bool checkfirstRequestedNoteFlag = true;
-        bool checkSecondRequestedNoteFlag = true;
-        for (int i = 0; i < notesInput.Count; i++)
-        {
-            if (checkfirstRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[0])
-            {
-                Debug.Log("primera encontrada");
-                checkfirstRequestedNoteFlag = false;
-            }
-            else if (checkSecondRequestedNoteFlag == true && notesInput[i] == enemyMoodSpecificNotes[1])
-            {
-                Debug.Log("segunda encontrada");
-                checkSecondRequestedNoteFlag = false;
-            }
-            if (checkfirstRequestedNoteFlag == false && checkSecondRequestedNoteFlag == false)
-            {
-                multiplier += 1.00f;
-                return;
-            }
-        }
-    }*/
 
     private bool CheckResult()
     {
@@ -831,7 +810,7 @@ public class CombatSystem : MonoBehaviour
         yield return null;
     }
 
-    public void TriggerStartAnimationOfPlayingNotesHUD()
+    /*public void TriggerStartAnimationOfPlayingNotesHUD()
     {
         playingNotesHUDAnimator.SetInteger("state", 1);
     }
@@ -839,7 +818,7 @@ public class CombatSystem : MonoBehaviour
     public void TriggerEndAnimationOfPlayingNotesHUD()
     {
         playingNotesHUDAnimator.SetInteger("state", 2);
-    }
+    }*/
 
     public void TriggerEndAnimationOfCongratsMessage()
     {
@@ -904,6 +883,8 @@ public class CombatSystem : MonoBehaviour
         playerGO = Instantiate(combatAssets.playerPreFab, new Vector3(-5.5f, 10f, 0f), Quaternion.identity);
         turnIndicatorPlayer = Instantiate(combatAssets.turnIndicatorPlayer, new Vector3(-5.5f, 0.5f, 0f), Quaternion.identity);
         attackEffectOfPlayer = Instantiate(combatAssets.attackEffect, new Vector3(-5.5f, -1.002905f, 0f), Quaternion.identity);
+        damageIndicatorOfPlayer = Instantiate(combatAssets.damageIndicator, playerGO.transform);
+        damageIndicatorOfPlayerAnim = damageIndicatorOfPlayer.GetComponent<Animator>();
         attackEffectOfPlayerAnim = attackEffectOfPlayer.GetComponent<Animator>();
         turnIndicatorPlayer.SetActive(false);
         SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
@@ -914,6 +895,8 @@ public class CombatSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), instantiatePosOfEnemy, Quaternion.identity);
         turnIndicatorEnemy = Instantiate(combatAssets.turnIndicatorEnemy, new Vector3(5.5f, 0.5f, 0f), Quaternion.identity);
         attackEffectOfEnemy = Instantiate(combatAssets.attackEffect, new Vector3(5.5f, -1.002905f, 0f), Quaternion.identity);
+        damageIndicatorOfEnemy = Instantiate(combatAssets.damageIndicator, enemyGO.transform);
+        damageIndicatorOfEnemyAnim = damageIndicatorOfEnemy.GetComponent<Animator>();
         attackEffectOfEnemyAnim = attackEffectOfEnemy.GetComponent<Animator>();
         turnIndicatorEnemy.SetActive(false);
         SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));

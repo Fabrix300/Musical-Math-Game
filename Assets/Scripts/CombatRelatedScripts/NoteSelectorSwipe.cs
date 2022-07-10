@@ -7,6 +7,7 @@ public class NoteSelectorSwipe : MonoBehaviour
 {
     public Scrollbar scrollBar;
     public ScrollRect scrollRect;
+    public Toggle toggle;
 
     private float scrollPos = 0;
     private float[] pos;
@@ -87,5 +88,12 @@ public class NoteSelectorSwipe : MonoBehaviour
     {
         scrollRect.enabled = !value;
         scrollBar.interactable = !value;
+    }
+
+    public void EnableScroll()
+    {
+        scrollRect.enabled = true;
+        scrollBar.interactable = true;
+        toggle.isOn = false;
     }
 }

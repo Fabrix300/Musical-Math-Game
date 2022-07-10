@@ -906,8 +906,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 562844983}
   - {fileID: 571183868}
+  - {fileID: 562844983}
   - {fileID: 753440114}
   - {fileID: 95226966}
   - {fileID: 1753864391}
@@ -1574,7 +1574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1673194285572409110, guid: 120f76c6742beee46881a3d0a86428c0, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1673194285572409110, guid: 120f76c6742beee46881a3d0a86428c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1620,6 +1620,10 @@ PrefabInstance:
       propertyPath: levelHolder
       value: 
       objectReference: {fileID: 213606865}
+    - target: {fileID: 2035881898429512038, guid: 120f76c6742beee46881a3d0a86428c0, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 120f76c6742beee46881a3d0a86428c0, type: 3}
 --- !u!114 &562844982 stripped
@@ -1672,7 +1676,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 213606866}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &571183869
 CapsuleCollider2D:

@@ -1344,7 +1344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015e49177728489438fe6e12539c919d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  savedSceneName: Level6
+  savedSceneName: Level1
   gameCamera: {fileID: 779026902}
   crossFadeTransition: {fileID: 404399382}
   twoSidedTransition: {fileID: 1611023122}
@@ -1832,7 +1832,7 @@ MonoBehaviour:
   turnIndicatorPlayer: {fileID: 3682596846816593452, guid: 8472611be34000a4ba17bbdd8546117e, type: 3}
   turnIndicatorEnemy: {fileID: 1047079658326292811, guid: f3a212ed2af54324e80aa90f53c43c2e, type: 3}
   attackEffect: {fileID: 6456075137878941299, guid: 0c082b0fc9d0cb3498a43f42cf04b634, type: 3}
-  damageIndicator: {fileID: 0}
+  damageIndicator: {fileID: 8624346379018660933, guid: 61465d7c2cc476e4598913738894c0df, type: 3}
   keyPreFab: {fileID: 2021867320533091677, guid: 9751a9cdc7dccc847aeedb3550359956, type: 3}
   audioHelper: {fileID: 2051384548991386110, guid: 3abcb463397e2e444a9ad47f30aeeedf, type: 3}
 --- !u!1 &726928857
