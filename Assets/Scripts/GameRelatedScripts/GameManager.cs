@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
-    private LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[6]
+    private readonly LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[6]
     {
         new LevelCameraLimits("Level1", 0f, 18f, 0f, 0f, new Vector3(0f, 0f, 0f)),
         new LevelCameraLimits("Level2", -2.5f, 60.5f, -30f, 20f, new Vector3(0f, 1f, 0f)),
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
         new LevelCameraLimits("Level6", 0f, 18f, 0f, 0f, new Vector3(0f, 0f, 0f))
     };
 
-    private LevelPlayerSpawnPoints[] levelPlayerSpawnPointsArray = new LevelPlayerSpawnPoints[6]
+    private readonly LevelPlayerSpawnPoints[] levelPlayerSpawnPointsArray = new LevelPlayerSpawnPoints[6]
     {
         new LevelPlayerSpawnPoints("level1", new Vector3(-2.3f, -1f, 0f), new Vector3(21.7f, -1f, 0f)),
         new LevelPlayerSpawnPoints("level2", new Vector3(-6.5f, -1f, 0f), new Vector3(64.5f, -7f, 0f)),
@@ -44,6 +45,8 @@ public class GameManager : MonoBehaviour
     private AudioManager audioManager;
     private PlayerStats playerStats;
     private PlayerInventory playerInventory;
+
+    public event Action OnCombatLevelLoaded;
 
     private void Awake()
     {
@@ -203,11 +206,14 @@ public class GameManager : MonoBehaviour
             gameCamera.GetComponent<CameraMovement>().inCombat = true;
             gameCamera.transform.position = new Vector3(0f, -1f, -10);
         }
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
+        //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("CombatLevel", LoadSceneMode.Additive);
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
+        // discernir entre los cl1 cl2 cl3
+        OnCombatLevelLoaded?.Invoke();
         twoSidedTransition.SetInteger("state", 2);
     }
 
@@ -226,7 +232,8 @@ public class GameManager : MonoBehaviour
         gameCamera.transform.position = combatData.GetPreviousCameraPosition();
         gameCamera.GetComponent<CameraMovement>().inCombat = false;
         activeLevelHolder.SetActive(true);
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("Combat" + combatData.GetOriginScene(), UnloadSceneOptions.None);
+        //AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("Combat" + combatData.GetOriginScene(), UnloadSceneOptions.None);
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("CombatLevel", UnloadSceneOptions.None);
         while (!asyncUnload.isDone)
         {
             yield return null;
@@ -236,7 +243,7 @@ public class GameManager : MonoBehaviour
         Animator enemyToCombatAnimator = combatData.GetEnemyToCombat().gameObject.GetComponent<Animator>();
         enemyToCombatAnimator.enabled = true;
         enemyToCombatAnimator.SetTrigger("death");
-        player.GetComponent<PlayerMovement>().UnfreezePlayer(); 
+        player.GetComponent<PlayerMovement>().UnfreezePlayer();
     }
 
     public void ResetLevelWhenDie()

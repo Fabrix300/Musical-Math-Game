@@ -94,6 +94,7 @@ public class CombatSystem : MonoBehaviour
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
 
         timer.OnTimerEnd += RequestTimeEnd;
+        //gameManager.OnCombatLevelLoaded += ActivateCombatLevelHolder;
         StartCoroutine(SetupBattle());
     }
 
@@ -482,7 +483,7 @@ public class CombatSystem : MonoBehaviour
         {
             /*Creating GameObject with audioSource to play death sound of enemy*/
             GameObject audioHelper = Instantiate(combatAssets.audioHelper, enemyEnemyComp.gameObject.transform.position, Quaternion.identity);
-            SceneManager.MoveGameObjectToScene(audioHelper, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+            SceneManager.MoveGameObjectToScene(audioHelper, SceneManager.GetSceneByName("CombatLevel"));
             AudioSource aS = audioHelper.GetComponent<AudioSource>();
             aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip; aS.Play();
             /*******************************/
@@ -887,10 +888,13 @@ public class CombatSystem : MonoBehaviour
         damageIndicatorOfPlayerAnim = damageIndicatorOfPlayer.GetComponent<Animator>();
         attackEffectOfPlayerAnim = attackEffectOfPlayer.GetComponent<Animator>();
         turnIndicatorPlayer.SetActive(false);
-        SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        /*SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(turnIndicatorPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
-        SceneManager.MoveGameObjectToScene(attackEffectOfPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
-        Vector3 instantiatePosOfEnemy = new Vector3(5.5f, 10f, 0f);
+        SceneManager.MoveGameObjectToScene(attackEffectOfPlayer, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));*/
+        SceneManager.MoveGameObjectToScene(playerGO, SceneManager.GetSceneByName("CombatLevel"));
+        SceneManager.MoveGameObjectToScene(turnIndicatorPlayer, SceneManager.GetSceneByName("CombatLevel"));
+        SceneManager.MoveGameObjectToScene(attackEffectOfPlayer, SceneManager.GetSceneByName("CombatLevel"));
+        Vector3 instantiatePosOfEnemy = new(5.5f, 10f, 0f);
         if (combatData.GetEnemyToCombat().enemyType == EnemyType.eagle) instantiatePosOfEnemy = new Vector3(5.5f, -0.75f, 0f);
         GameObject enemyGO = Instantiate(combatAssets.GetEnemyPreFab(combatData.GetEnemyToCombat().enemyType), instantiatePosOfEnemy, Quaternion.identity);
         turnIndicatorEnemy = Instantiate(combatAssets.turnIndicatorEnemy, new Vector3(5.5f, 0.5f, 0f), Quaternion.identity);
@@ -899,9 +903,12 @@ public class CombatSystem : MonoBehaviour
         damageIndicatorOfEnemyAnim = damageIndicatorOfEnemy.GetComponent<Animator>();
         attackEffectOfEnemyAnim = attackEffectOfEnemy.GetComponent<Animator>();
         turnIndicatorEnemy.SetActive(false);
-        SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        /*SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
         SceneManager.MoveGameObjectToScene(turnIndicatorEnemy, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
-        SceneManager.MoveGameObjectToScene(attackEffectOfEnemy, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));
+        SceneManager.MoveGameObjectToScene(attackEffectOfEnemy, SceneManager.GetSceneByName("Combat" + combatData.GetOriginScene()));*/
+        SceneManager.MoveGameObjectToScene(enemyGO, SceneManager.GetSceneByName("CombatLevel"));
+        SceneManager.MoveGameObjectToScene(turnIndicatorEnemy, SceneManager.GetSceneByName("CombatLevel"));
+        SceneManager.MoveGameObjectToScene(attackEffectOfEnemy, SceneManager.GetSceneByName("CombatLevel"));
         playerGO.GetComponent<PlayerMovement>().SetInCombat(true);
         /**/
 
