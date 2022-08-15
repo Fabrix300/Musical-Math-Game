@@ -21,7 +21,7 @@ public class BunnyMovement : MonoBehaviour
         dirX = 0;
         playerJumped = false;
         playerTransform = GameObject.Find("Player").transform;
-        playerTransform.gameObject.GetComponent<PlayerMovement>().OnPlayerJump += ChangePlayerJumped;
+        //playerTransform.gameObject.GetComponent<PlayerMovement>().OnPlayerJump += ChangePlayerJumped;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }

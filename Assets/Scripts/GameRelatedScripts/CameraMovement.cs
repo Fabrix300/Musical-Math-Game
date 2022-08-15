@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
     public float smoothFactor;
     public Vector3 offset;
 
-    [SerializeField] private Transform player;
+    public Transform player;
     public float minPositionX; // left border
     public float maxPositionX; //  right border
     public float minPositionY;

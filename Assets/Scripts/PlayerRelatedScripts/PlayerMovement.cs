@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource characterExplosion;
 
     /*testing bunny Jumping*/
-    public event Action<Vector3> OnPlayerJump;
+    //public event Action<Vector3> OnPlayerJump;
 
     private float dirX;
     private Rigidbody2D rb;
@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
             //rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeedY);
             jumpAS.Play();
             rb.AddForce(Vector2.up * jumpForce);
-            OnPlayerJump?.Invoke(transform.position);
+            //OnPlayerJump?.Invoke(transform.position);
         }
     }
 

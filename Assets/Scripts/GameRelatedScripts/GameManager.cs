@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public string savedSceneName;
     public Camera gameCamera;
+    public PlayerControls playerControls;
     public Animator crossFadeTransition;
     public Animator twoSidedTransition;
     public Animator gameOverTransition;
@@ -47,6 +48,8 @@ public class GameManager : MonoBehaviour
     private PlayerInventory playerInventory;
 
     public event Action OnCombatLevelLoaded;
+    /* Para todos los elementos que necesiten hacer algo cuando se carga el nivel como por ej. encontrar al jugador */
+    //public event Action OnNormalLevelLoaded;
 
     private void Awake()
     {
@@ -72,9 +75,10 @@ public class GameManager : MonoBehaviour
         {
             audioManager.Play(savedSceneName);
             int actualLevelNumber = int.Parse(savedSceneName[5..]);
-            gameCamera.GetComponent<CameraMovement>().FindPlayer();
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
+            playerControls.player = player.GetComponent<PlayerMovement>();
+            gameCamera.GetComponent<CameraMovement>().player = player.transform;
             playerState = new PlayerStateHolder
             (
                 playerStats.level, 
@@ -104,9 +108,10 @@ public class GameManager : MonoBehaviour
         AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
         progress.completed += (op) => 
         {
-            gameCamera.GetComponent<CameraMovement>().FindPlayer();
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber]);
             player = GameObject.Find("Player");
+            playerControls.player = player.GetComponent<PlayerMovement>();
+            gameCamera.GetComponent<CameraMovement>().player = player.transform;
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (
                 levelPlayerSpawnPointsArray[actualLevelNumber].leftSpawnPoint,
@@ -141,9 +146,10 @@ public class GameManager : MonoBehaviour
         AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
         progress.completed += (op) =>
         {
-            gameCamera.GetComponent<CameraMovement>().FindPlayer();
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber - 2]);
             player = GameObject.Find("Player");
+            playerControls.player = player.GetComponent<PlayerMovement>();
+            gameCamera.GetComponent<CameraMovement>().player = player.transform;
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (
                 levelPlayerSpawnPointsArray[actualLevelNumber-2].rightSpawnPoint,
@@ -204,6 +210,7 @@ public class GameManager : MonoBehaviour
         {
             activeLevelHolder.SetActive(false);
             gameCamera.GetComponent<CameraMovement>().inCombat = true;
+            playerControls.gameObject.SetActive(false);
             gameCamera.transform.position = new Vector3(0f, -1f, -10);
         }
         //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Combat" + combatData.GetOriginScene(), LoadSceneMode.Additive);
@@ -231,6 +238,7 @@ public class GameManager : MonoBehaviour
         combatData.GetEnemyToCombat().MakeColliderTrigger();
         gameCamera.transform.position = combatData.GetPreviousCameraPosition();
         gameCamera.GetComponent<CameraMovement>().inCombat = false;
+        playerControls.gameObject.SetActive(true);
         activeLevelHolder.SetActive(true);
         //AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("Combat" + combatData.GetOriginScene(), UnloadSceneOptions.None);
         AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync("CombatLevel", UnloadSceneOptions.None);
@@ -266,10 +274,11 @@ public class GameManager : MonoBehaviour
         progress.completed += (op) =>
         {
             int actualLevelNumber = int.Parse(savedSceneName[5..]);
-            gameCamera.GetComponent<CameraMovement>().FindPlayer();
             gameCamera.GetComponent<CameraMovement>().inCombat = false;
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
+            playerControls.player = player.GetComponent<PlayerMovement>();
+            gameCamera.GetComponent<CameraMovement>().player = player.transform;
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (
                 playerState.spawnPosition,
