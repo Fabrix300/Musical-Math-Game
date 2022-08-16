@@ -7,6 +7,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
+    public float musicVolume = 0.8f;
+    public float sfxVolume = 0.8f;
     public Sound[] sounds;
 
     [Header("PlayerSingingNotes")]
@@ -134,6 +136,25 @@ public class AudioManager : MonoBehaviour
             s.source.volume = Mathf.Lerp(sourceVolume, targetVolume, currentTime / 0.5f);
             currentTime += Time.deltaTime;
             yield return null;
+        }
+    }
+
+    // To be used in pause menu
+    public void AdjustMusicVolume(float _musicVolume)
+    {
+        musicVolume = _musicVolume;
+        foreach (Sound s in sounds)
+        {
+            if (s.source) s.source.volume = musicVolume;
+        }
+    }
+
+    public void AdjustSfxVolume(float _sfxVolume)
+    {
+        sfxVolume = _sfxVolume;
+        foreach (Sound s in sounds)
+        {
+            if (s.source) s.source.volume = sfxVolume;
         }
     }
 }

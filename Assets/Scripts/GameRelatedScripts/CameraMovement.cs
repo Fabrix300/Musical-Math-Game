@@ -10,27 +10,20 @@ public class CameraMovement : MonoBehaviour
     public float smoothFactor;
     public Vector3 offset;
 
-    public Transform player;
     public float minPositionX; // left border
     public float maxPositionX; //  right border
     public float minPositionY;
     public float maxPositionY;
+
+    private Transform player;
 
     // Update is called once per frame
     void FixedUpdate()
     {
         if (inCombat == false && player)
         {
-            /*transform.position = new Vector3(
-                Mathf.Clamp(player.position.x, MinPositionX, MaxPositionX),
-                Mathf.Clamp(player.position.y, MinPositionY, MaxPositionY),
-                transform.position.z
-            );*/
-
             Vector3 targetPosition = player.position + offset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothFactor * Time.fixedDeltaTime);
-            //Vector3 smoothedPosition = Vector3.Lerp(transform.position, player.position, smoothFactor * Time.fixedDeltaTime);
-            //transform.position = smoothedPosition;
             transform.position = new Vector3(
                 Mathf.Clamp(smoothedPosition.x, minPositionX, maxPositionX),
                 Mathf.Clamp(smoothedPosition.y, minPositionY, maxPositionY),
@@ -45,6 +38,11 @@ public class CameraMovement : MonoBehaviour
         {
             Debug.Log("Camara encontro al jugador");
         }
+    }
+
+    public void SetPlayer(Transform _player)
+    {
+        player = _player;
     }
 
     public void SetCameraLimits(LevelCameraLimits lvlCamLimits)
