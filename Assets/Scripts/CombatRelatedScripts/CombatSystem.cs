@@ -12,7 +12,8 @@ public class CombatSystem : MonoBehaviour
     public Image enemyRequestImage;
     public PlayerAnswerHUDTransitions[] HUDElements;
     public Button[] noteButtonsAndDeleteButton;
-    private AudioSource[] noteButtonsAndDeleteButtonAudioSources = new AudioSource[5];
+    private AudioSource noteButtonsAS;
+    private AudioSource deleteButtonAS;
     public Text[] noteButtonsLimiterTexts;
     // congratsMessage
     public Animator congratsMessageAnimator;
@@ -89,8 +90,8 @@ public class CombatSystem : MonoBehaviour
         state = CombatState.NONE;
         combatData = CombatData.instance; playerStats = PlayerStats.instance; combatAssets = CombatAssets.instance;
         gameManager = GameManager.instance; audioManager = AudioManager.instance;
-        musicalNotes = new List<Sound[]>(audioManager.musicalNotes);
-        enemyMusicalNotes = new List<Sound[]>(audioManager.enemyMusicalNotes);
+        //musicalNotes = new List<Sound[]>(audioManager.musicalNotes);
+        //enemyMusicalNotes = new List<Sound[]>(audioManager.enemyMusicalNotes);
         enemyRequestImage.sprite = combatAssets.GetEnemyImage(combatData.GetEnemyToCombat().enemyType);
 
         timer.OnTimerEnd += RequestTimeEnd;
@@ -387,7 +388,7 @@ public class CombatSystem : MonoBehaviour
     IEnumerator PlayerAction()
     {
         yield return new WaitForSeconds(0.2f);
-        audioManager.Play("CorrectAnswer");
+        audioManager.PlaySound("CorrectAnswer");
         TriggerStartAnimationAndSetupCongratsMessage();
         yield return new WaitForSeconds(1.2f);
         TriggerEndAnimationOfHUDElements();
@@ -410,7 +411,7 @@ public class CombatSystem : MonoBehaviour
         for (int i = 0; i < musicalFiguresInput.Count; i++)
         {
             //Sound[] noteArray = musicalNotes[Random.Range(0, 8)];
-            Sound[] noteArray = musicalNotes[notesInput[i]];
+            Sound[] noteArray = audioManager.musicalNotes[notesInput[i]];
             switch (musicalFiguresInput[i]) 
             {
                 case 1f: 
@@ -485,7 +486,7 @@ public class CombatSystem : MonoBehaviour
             GameObject audioHelper = Instantiate(combatAssets.audioHelper, enemyEnemyComp.gameObject.transform.position, Quaternion.identity);
             SceneManager.MoveGameObjectToScene(audioHelper, SceneManager.GetSceneByName("CombatLevel"));
             AudioSource aS = audioHelper.GetComponent<AudioSource>();
-            aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip; aS.Play();
+            aS.clip = enemyEnemyComp.gameObject.GetComponent<AudioSource>().clip; aS.volume = audioManager.sfxVolume; aS.Play();
             /*******************************/
             enemyEnemyComp.gameObject.GetComponent<Animator>().SetTrigger("death");
             yield return new WaitForSeconds(1f);
@@ -496,7 +497,7 @@ public class CombatSystem : MonoBehaviour
             winnerMessage.SetInteger("state", 1);
             backOverlay.SetInteger("state", 1);
             StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
-            audioManager.Play("CombatWon");
+            audioManager.PlaySound("CombatWon");
             yield return new WaitForSeconds(0.5f);
             winnerMessageContTitle.SetActive(true);
             yield return new WaitForSeconds(0.5f);
@@ -549,7 +550,7 @@ public class CombatSystem : MonoBehaviour
         StartCoroutine(audioManager.FadeVolumeDown("Combat" + gameManager.savedSceneName));
         for (int i = 0; i < enemyNotes.Count; i++)
         {
-            Sound[] noteArray = enemyMusicalNotes[Random.Range(0, 8)];
+            Sound[] noteArray = audioManager.enemyMusicalNotes[Random.Range(0, 8)];
             switch (enemyNotes[i])
             {
                 case 1f:
@@ -699,10 +700,7 @@ public class CombatSystem : MonoBehaviour
 
     private void DestroyInstantiatedNotesInPentagram()
     {
-        foreach(GameObject gO in instantiatedPentagramNotes) 
-        {
-            Destroy(gO);
-        }
+        foreach(GameObject gO in instantiatedPentagramNotes) Destroy(gO);
         instantiatedPentagramNotes.Clear();
     }
 
@@ -912,17 +910,17 @@ public class CombatSystem : MonoBehaviour
         playerGO.GetComponent<PlayerMovement>().SetInCombat(true);
         /**/
 
-        foreach (Sound[] sArray in musicalNotes)
+        foreach (Sound[] sArray in audioManager.musicalNotes)
         {
             foreach (Sound s in sArray)
             {
                 s.source = playerGO.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
-                //s.source.volume = s.volume;
-                s.source.volume = 1f;
+                s.source.volume = audioManager.sfxVolume;
                 s.source.pitch = s.pitch;
                 s.source.loop = s.loop;
-                s.source.spatialBlend = 0.5f;
+                s.source.panStereo = -0.2f;
+                s.source.spatialBlend = 0.25f;
                 s.source.playOnAwake = s.playOnAwake;
             }
         }
@@ -932,26 +930,26 @@ public class CombatSystem : MonoBehaviour
             {
                 s.source = playerGO.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
-                //s.source.volume = s.volume;
-                s.source.volume = 0.85f;
+                s.source.volume = audioManager.sfxVolume;
                 s.source.pitch = s.pitch;
                 s.source.loop = s.loop;
-                s.source.spatialBlend = 0.5f;
+                s.source.panStereo = -0.2f;
+                s.source.spatialBlend = 0.25f;
                 hitOnPlayer = s.source;
             }
         }
 
-        foreach (Sound[] sArray in enemyMusicalNotes)
+        foreach (Sound[] sArray in audioManager.enemyMusicalNotes)
         {
             foreach (Sound s in sArray)
             {
                 s.source = enemyGO.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
-                //s.source.volume = s.volume;
-                s.source.volume = 1f;
+                s.source.volume = audioManager.sfxVolume;
                 s.source.pitch = s.pitch;
                 s.source.loop = s.loop;
-                s.source.spatialBlend = 0.4f;
+                s.source.panStereo = 0.2f;
+                s.source.spatialBlend = 0.25f;
                 s.source.playOnAwake = s.playOnAwake;
             }
         }
@@ -961,34 +959,21 @@ public class CombatSystem : MonoBehaviour
             {
                 s.source = enemyGO.AddComponent<AudioSource>();
                 s.source.clip = s.clip;
-                //s.source.volume = s.volume;
-                s.source.volume = 0.85f;
+                s.source.volume = audioManager.sfxVolume;
                 s.source.pitch = s.pitch;
                 s.source.loop = s.loop;
-                s.source.spatialBlend = 0.4f;
+                s.source.panStereo = 0.2f;
+                s.source.spatialBlend = 0.25f;
                 hitOnEnemy = s.source;
             }
         }
 
         /**/
 
-        /* Create AudioSources For Buttons */
-
-        AudioClip mFAC = audioManager.GetAudioClip("MusicalFigureButtonClick");
-        AudioClip bSAC = audioManager.GetAudioClip("BackSpaceButtonClick");
-        for (int i = 0; i < noteButtonsAndDeleteButton.Length; i++)
+        foreach (Sound s in audioManager.sounds)
         {
-            noteButtonsAndDeleteButtonAudioSources[i] = noteButtonsAndDeleteButton[i].gameObject.AddComponent<AudioSource>();
-            if (i == 4)
-            {
-                noteButtonsAndDeleteButtonAudioSources[i].clip = bSAC;
-            }
-            else
-            {
-                noteButtonsAndDeleteButtonAudioSources[i].clip = mFAC;
-            }
-            noteButtonsAndDeleteButtonAudioSources[i].volume = 0.6f;
-            noteButtonsAndDeleteButtonAudioSources[i].playOnAwake = false;
+            if (s.name == "MusicalFigureButtonClick") noteButtonsAS = s.source;
+            if (s.name == "BackSpaceButtonClick") deleteButtonAS = s.source;
         }
 
         /**/
@@ -1035,11 +1020,11 @@ public class CombatSystem : MonoBehaviour
     {
         switch (b.name)
         {
-            case "Redonda": { noteButtonsAndDeleteButtonAudioSources[0].Play(); break; }
-            case "Blanca": { noteButtonsAndDeleteButtonAudioSources[1].Play(); break; }
-            case "Negra": { noteButtonsAndDeleteButtonAudioSources[2].Play(); break; }
-            case "Corchea": { noteButtonsAndDeleteButtonAudioSources[3].Play(); break; }
-            case "BackSpace": { noteButtonsAndDeleteButtonAudioSources[4].Play(); break; }
+            case "Redonda": { noteButtonsAS.Play(); break; }
+            case "Blanca": { noteButtonsAS.Play(); break; }
+            case "Negra": { noteButtonsAS.Play(); break; }
+            case "Corchea": { noteButtonsAS.Play(); break; }
+            case "BackSpace": { deleteButtonAS.Play(); break; }
         }
     }
 }

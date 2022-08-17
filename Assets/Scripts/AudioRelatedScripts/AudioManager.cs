@@ -7,8 +7,10 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
-    public float musicVolume = 0.8f;
-    public float sfxVolume = 0.8f;
+    public float musicVolume;
+    public float sfxVolume;
+
+    public Sound[] songs;
     public Sound[] sounds;
 
     [Header("PlayerSingingNotes")]
@@ -32,7 +34,7 @@ public class AudioManager : MonoBehaviour
     public Sound[] EBNote;
     public Sound[] ECOctaveNote;
     public List<Sound[]> enemyMusicalNotes = new();
-    
+
     private void Awake()
     {
         if (instance != null)
@@ -47,7 +49,17 @@ public class AudioManager : MonoBehaviour
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
-            s.source.volume = s.volume;
+            s.source.volume = sfxVolume;
+            s.source.pitch = s.pitch;
+            s.source.loop = s.loop;
+            s.source.playOnAwake = s.playOnAwake;
+        }
+
+        foreach (Sound s in songs)
+        {
+            s.source = gameObject.AddComponent<AudioSource>();
+            s.source.clip = s.clip;
+            s.source.volume = musicVolume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.playOnAwake = s.playOnAwake;
@@ -72,18 +84,29 @@ public class AudioManager : MonoBehaviour
         enemyMusicalNotes.Add(ECOctaveNote);
     }
 
-    private void Start()
+    /*private void Start()
     {
         //gameManager = GameManager.instance;
         //Play(gameManager.savedSceneName);
+    }*/
+
+    public void PlaySong(string name)
+    {
+        Sound s = Array.Find(songs, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Song: " + name + " not found!");
+            return;
+        }
+        s.source.Play();
     }
 
-    public void Play(string name)
+    public void PlaySound(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        if(s == null)
+        if (s == null)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
+            Debug.LogWarning("Song: " + name + " not found!");
             return;
         }
         s.source.Play();
@@ -97,8 +120,8 @@ public class AudioManager : MonoBehaviour
 
     public IEnumerator Crossfade(string song1, string song2)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == song1);
-        Sound s2 = Array.Find(sounds, sound => sound.name == song2);
+        Sound s = Array.Find(songs, sound => sound.name == song1);
+        Sound s2 = Array.Find(songs, sound => sound.name == song2);
         float currentTime = 0;
         float sourceVolume = s.source.volume;
         while (currentTime < 1f)
@@ -114,12 +137,12 @@ public class AudioManager : MonoBehaviour
 
     public IEnumerator FadeVolumeDown(string song)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == song);
+        Sound s = Array.Find(songs, sound => sound.name == song);
         float currentTime = 0;
         float sourceVolume = s.source.volume;
         while (currentTime < 0.5f)
         {
-            s.source.volume = Mathf.Lerp(sourceVolume, 0.1f, currentTime / 0.5f);
+            s.source.volume = Mathf.Lerp(sourceVolume, sourceVolume * 0.3f, currentTime / 0.5f);
             currentTime += Time.deltaTime;
             yield return null;
         }
@@ -127,10 +150,10 @@ public class AudioManager : MonoBehaviour
 
     public IEnumerator FadeVolumeUp(string song)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == song);
+        Sound s = Array.Find(songs, sound => sound.name == song);
         float currentTime = 0;
         float sourceVolume = s.source.volume;
-        float targetVolume = s.volume;
+        float targetVolume = musicVolume;
         while (currentTime < 0.5f)
         {
             s.source.volume = Mathf.Lerp(sourceVolume, targetVolume, currentTime / 0.5f);
@@ -143,7 +166,7 @@ public class AudioManager : MonoBehaviour
     public void AdjustMusicVolume(float _musicVolume)
     {
         musicVolume = _musicVolume;
-        foreach (Sound s in sounds)
+        foreach (Sound s in songs)
         {
             if (s.source) s.source.volume = musicVolume;
         }

@@ -30,7 +30,7 @@ public class PlayerCollisions : MonoBehaviour
             //CherryItemWorld itemWorld = gO.GetComponent<CherryItemWorld>();
             if (playerInventory)
             {
-                audioManager.Play("ItemCollected");
+                audioManager.PlaySound("ItemCollected");
                 /*playerInventory.AddItem(itemWorld.healerObject); itemWorld.DestroySelf();*/
                 playerInventory.AddItem(gO.GetComponent<CherryItemWorld>().healerObject);
                 gO.GetComponent<Animator>().SetInteger("state", 1);
@@ -42,7 +42,7 @@ public class PlayerCollisions : MonoBehaviour
             {
                 if (gO.transform.Find("DoorBlock").gameObject.activeInHierarchy)
                 {
-                    audioManager.Play("DoorOpen");
+                    audioManager.PlaySound("DoorOpen");
                 }
                 StartCoroutine(gameManager.AdvanceToNextLevel());
             }
@@ -80,7 +80,7 @@ public class PlayerCollisions : MonoBehaviour
         else if (gO.CompareTag("Key"))
         {
             playerInventory.AddKey(gameManager.savedSceneName);
-            audioManager.Play("ItemCollected");
+            audioManager.PlaySound("ItemCollected");
             Destroy(gO);
         }
     }

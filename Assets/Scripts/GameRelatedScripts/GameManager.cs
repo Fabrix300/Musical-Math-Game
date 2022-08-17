@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         AsyncOperation progress = SceneManager.LoadSceneAsync(savedSceneName, LoadSceneMode.Additive);
         progress.completed += (op) =>
         {
-            audioManager.Play(savedSceneName);
+            audioManager.PlaySong(savedSceneName);
             int actualLevelNumber = int.Parse(savedSceneName[5..]);
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
