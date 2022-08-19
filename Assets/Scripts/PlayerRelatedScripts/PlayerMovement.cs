@@ -153,6 +153,10 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector2.up * jumpForce);
             //OnPlayerJump?.Invoke(transform.position);
         }
+        if (inCombat == true && DialogueManager.instance.onConversation)
+        {
+            DialogueManager.instance.DisplayNextSentence();
+        }
     }
 
     public void StopMoving()

@@ -77,7 +77,9 @@ public class GameManager : MonoBehaviour
             int actualLevelNumber = int.Parse(savedSceneName[5..]);
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
-            playerControls.SetPlayer(player.GetComponent<PlayerMovement>());
+            PlayerMovement pM = player.GetComponent<PlayerMovement>();
+            DialogueManager.instance.SetPlayerMovement(pM);
+            playerControls.SetPlayer(pM);
             gameCamera.GetComponent<CameraMovement>().SetPlayer(player.transform);
             playerState = new PlayerStateHolder
             (
@@ -92,6 +94,7 @@ public class GameManager : MonoBehaviour
                 Quaternion.Euler(0, 0, 0)
             );
             crossFadeTransition.speed = 1f;
+            GameObject.Find("DialogueTest").GetComponent<DialogueTrigger>().TriggerDialogue();
         };
     }
 
@@ -110,7 +113,9 @@ public class GameManager : MonoBehaviour
         {
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber]);
             player = GameObject.Find("Player");
-            playerControls.SetPlayer(player.GetComponent<PlayerMovement>());
+            PlayerMovement pM = player.GetComponent<PlayerMovement>();
+            DialogueManager.instance.SetPlayerMovement(pM);
+            playerControls.SetPlayer(pM);
             gameCamera.GetComponent<CameraMovement>().SetPlayer(player.transform);
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (
@@ -148,7 +153,9 @@ public class GameManager : MonoBehaviour
         {
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber - 2]);
             player = GameObject.Find("Player");
-            playerControls.SetPlayer(player.GetComponent<PlayerMovement>());
+            PlayerMovement pM = player.GetComponent<PlayerMovement>();
+            DialogueManager.instance.SetPlayerMovement(pM);
+            playerControls.SetPlayer(pM);
             gameCamera.GetComponent<CameraMovement>().SetPlayer(player.transform);
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (
@@ -277,7 +284,9 @@ public class GameManager : MonoBehaviour
             gameCamera.GetComponent<CameraMovement>().inCombat = false;
             gameCamera.GetComponent<CameraMovement>().SetCameraLimits(levelCameraLimitsArray[actualLevelNumber-1]);
             player = GameObject.Find("Player");
-            playerControls.SetPlayer(player.GetComponent<PlayerMovement>());
+            PlayerMovement pM = player.GetComponent<PlayerMovement>();
+            DialogueManager.instance.SetPlayerMovement(pM);
+            playerControls.SetPlayer(pM);
             gameCamera.GetComponent<CameraMovement>().SetPlayer(player.transform);
             player.GetComponent<PlayerMovement>().ActivateAndMovePlayerOnLevelPass
             (

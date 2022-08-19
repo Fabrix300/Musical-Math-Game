@@ -3190,7 +3190,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &682488715
 MonoBehaviour:
@@ -3896,7 +3896,7 @@ RectTransform:
   m_Children:
   - {fileID: 1882925143}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4238,7 +4238,7 @@ Transform:
   m_Children:
   - {fileID: 1940236323}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1101825469
 GameObject:
@@ -4334,7 +4334,7 @@ RectTransform:
   m_Children:
   - {fileID: 179222943}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4983,7 +4983,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1332508231
 MonoBehaviour:
@@ -6594,7 +6594,7 @@ Transform:
   - {fileID: 188585718}
   - {fileID: 2035603664}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1852596648
 GameObject:
@@ -7184,6 +7184,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8084baba8e3df42bcc5156ad24dd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueBoxAnim: {fileID: 179222944}
+  dialogueBoxCharacterName: {fileID: 1690788146}
+  dialogueBoxCharacterImage: {fileID: 1556819522}
+  dialogueBoxSentenceBox: {fileID: 1104589530}
+  playerControls: {fileID: 1882925144}
+  onConversation: 0
 --- !u!4 &1946703903
 Transform:
   m_ObjectHideFlags: 0
@@ -7191,13 +7197,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1946703901}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 273.91003, y: 298.32367, z: 0.037799537}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1960896573
 GameObject:
@@ -7341,6 +7347,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1850311039}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2056050968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2056050970}
+  - component: {fileID: 2056050969}
+  m_Layer: 0
+  m_Name: DialogueTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2056050969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056050968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594f26b38ae62a449a0714f4f6219b40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+  - characterName: Ayka
+    characterImage: {fileID: 21300000, guid: 18d948542dd98d8459d18d1271e39515, type: 3}
+    sentences:
+    - Hola, Me llamo Ayka.
+    - "\xBFComo estas?"
+  - characterName: Madeline
+    characterImage: {fileID: 21300000, guid: d27e869675908f74589f9a08e9d8c2e4, type: 3}
+    sentences:
+    - Hola, me llamo Madeline
+    - "Yo bien, \xBFy tu?"
+--- !u!4 &2056050970
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056050968}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 279.97607, y: 246.18362, z: -0.050339073}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2082301945
 GameObject:
