@@ -47,12 +47,16 @@ public class AudioManager : MonoBehaviour
 
         foreach (Sound s in sounds)
         {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            s.source.volume = sfxVolume;
-            s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
-            s.source.playOnAwake = s.playOnAwake;
+            /*En este if poner los nombres de los sonidos a los cuales no se les asignará nada*/
+            if (s.name != "Jump" || s.name != "CherryEat" || s.name != "CharacterExplosion")
+            {
+                s.source = gameObject.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                s.source.volume = sfxVolume;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.playOnAwake = s.playOnAwake;
+            }
         }
 
         foreach (Sound s in songs)

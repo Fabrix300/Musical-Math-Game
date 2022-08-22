@@ -12,9 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public Animator healEffectAnimator;
 
     /*Audio*/
-    public AudioSource jumpAS;
-    public AudioSource cherryEatAS;
-    public AudioSource characterExplosion;
+    [HideInInspector] public AudioSource jumpAS;
+    [HideInInspector] public AudioSource cherryEatAS;
+    [HideInInspector] public AudioSource characterExplosion;
 
     /*testing bunny Jumping*/
     //public event Action<Vector3> OnPlayerJump;
@@ -43,6 +43,41 @@ public class PlayerMovement : MonoBehaviour
 
         /*MOBILE*/
         dirX = 0f;
+
+        /*AudioSources of player*/
+        foreach (Sound s in AudioManager.instance.sounds)
+        {
+            if (s.name == "Jump")
+            {
+                s.source = gameObject.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                s.source.volume = AudioManager.instance.sfxVolume;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.playOnAwake = s.playOnAwake;
+                jumpAS = s.source;
+            }
+            else if (s.name == "CherryEat")
+            {
+                s.source = gameObject.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                s.source.volume = AudioManager.instance.sfxVolume;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.playOnAwake = s.playOnAwake;
+                cherryEatAS = s.source;
+            }
+            else if (s.name == "CharacterExplosion")
+            {
+                s.source = gameObject.AddComponent<AudioSource>();
+                s.source.clip = s.clip;
+                s.source.volume = AudioManager.instance.sfxVolume;
+                s.source.pitch = s.pitch;
+                s.source.loop = s.loop;
+                s.source.playOnAwake = s.playOnAwake;
+                characterExplosion = s.source;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -58,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }*/
 
-        if(inCombat == false) UpdateAnimation();
+        if(!inCombat) UpdateAnimation();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerStats.NumbPlayer(2f);

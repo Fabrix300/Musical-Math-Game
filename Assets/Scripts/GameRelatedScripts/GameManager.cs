@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private readonly LevelCameraLimits[] levelCameraLimitsArray = new LevelCameraLimits[6]
     {
-        new LevelCameraLimits("Level1", 0f, 18f, 0f, 0f, new Vector3(0f, 0f, 0f)),
+        new LevelCameraLimits("Level1", -47f, 18f, 0f, 5f, new Vector3(0f, 0f, 0f)),
         new LevelCameraLimits("Level2", -2.5f, 60.5f, -30f, 20f, new Vector3(0f, 1f, 0f)),
         new LevelCameraLimits("Level3", -2.5f, 51.5f, -30f, 20f, new Vector3(0f, 1f, 0f)),
         new LevelCameraLimits("Level4", -2.5f, 67.6f, -100f, 100f, new Vector3(0f, 1f, 0f)),
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
                 Quaternion.Euler(0, 0, 0)
             );
             crossFadeTransition.speed = 1f;
-            GameObject.Find("DialogueTest").GetComponent<DialogueTrigger>().TriggerDialogue();
+            //GameObject.Find("DialogueTest").GetComponent<DialogueTrigger>().TriggerDialogue();
         };
     }
 

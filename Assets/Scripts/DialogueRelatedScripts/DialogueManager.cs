@@ -42,6 +42,8 @@ public class DialogueManager : MonoBehaviour
         //playerControls.gameObject.SetActive(false);
         onConversation = true;
         playerMovement.SetInCombat(true);
+        playerMovement.StopMoving();
+        playerMovement.gameObject.GetComponent<Animator>().SetInteger("state", 0);
         dialoguesQueue.Clear();
         foreach (Dialogue d in dialogueArray)
         {
@@ -59,8 +61,8 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         Dialogue dialogue = dialoguesQueue.Dequeue();
-        dialogueBoxCharacterName.text = dialogue.characterName;
-        dialogueBoxCharacterImage.sprite = dialogue.characterImage;
+        dialogueBoxCharacterName.text = dialogue.dialogueCharacter.characterName;
+        dialogueBoxCharacterImage.sprite = dialogue.dialogueCharacter.characterImage;
         sentencesQueue.Clear();
         foreach (string sentence in dialogue.sentences)
         {
